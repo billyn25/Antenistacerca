@@ -1,0 +1,10 @@
+[
+  {
+    "provincia": "Bizkaia",
+    "provinciaSlug": "bizkaia",
+    "localidad": "Galdakao",
+    "slug": "galdakao",
+    "descripcion": "Instalación y reparación de antenas TDT, parabólicas, porteros y videoporteros en Galdakao y alrededores.",
+    "cercanas": ["Basauri", "Zaratamo", "Bedia", "Lemoa", "Amorebieta-Etxano", "Arrigorriaga"]
+  }
+]
