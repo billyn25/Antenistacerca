@@ -1,9 +1,6 @@
 {
-  "name": "antenistacerca",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "node generator.js"
-  }
+  "name":"antenistacerca",
+  "private":true,
+  "type":"module",
+  "scripts":{"build":"node generator.js"}
 }

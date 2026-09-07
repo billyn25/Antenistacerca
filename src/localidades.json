@@ -1,58 +1,9 @@
 [
-  {
-    "provincia": "Bizkaia",
-    "provinciaSlug": "bizkaia",
-    "localidad": "Galdakao",
-    "slug": "galdakao",
-    "descripcion": "Instalación y reparación de antenas TDT, parabólicas, porteros y videoporteros en Galdakao y alrededores.",
-    "cercanas": ["Basauri", "Bedia", "Lemoa", "Zaratamo", "Arrigorriaga", "Ugao-Miraballes", "Etxebarri", "Amorebieta-Etxano"]
-  },
-  {
-    "provincia": "Bizkaia",
-    "provinciaSlug": "bizkaia",
-    "localidad": "Basauri",
-    "slug": "basauri",
-    "descripcion": "Instalación y reparación de antenas TDT, parabólicas, porteros y videoporteros en Basauri y alrededores.",
-    "cercanas": ["Galdakao", "Etxebarri", "Arrigorriaga", "Bilbao", "Zaratamo", "Ugao-Miraballes"]
-  },
-  {
-    "provincia": "Bizkaia",
-    "provinciaSlug": "bizkaia",
-    "localidad": "Etxebarri",
-    "slug": "etxebarri",
-    "descripcion": "Instalación y reparación de antenas TDT, parabólicas, porteros y videoporteros en Etxebarri y alrededores.",
-    "cercanas": ["Basauri", "Bilbao", "Galdakao", "Arrigorriaga", "Zaratamo", "Sondika"]
-  },
-  {
-    "provincia": "Bizkaia",
-    "provinciaSlug": "bizkaia",
-    "localidad": "Arrigorriaga",
-    "slug": "arrigorriaga",
-    "descripcion": "Instalación y reparación de antenas TDT, parabólicas, porteros y videoporteros en Arrigorriaga y alrededores.",
-    "cercanas": ["Basauri", "Ugao-Miraballes", "Zaratamo", "Galdakao", "Etxebarri", "Bilbao"]
-  },
-  {
-    "provincia": "Bizkaia",
-    "provinciaSlug": "bizkaia",
-    "localidad": "Amorebieta-Etxano",
-    "slug": "amorebieta-etxano",
-    "descripcion": "Instalación y reparación de antenas TDT, parabólicas, porteros y videoporteros en Amorebieta-Etxano y alrededores.",
-    "cercanas": ["Lemoa", "Bedia", "Galdakao", "Iurreta", "Durango", "Muxika"]
-  },
-  {
-    "provincia": "Bizkaia",
-    "provinciaSlug": "bizkaia",
-    "localidad": "Lezama",
-    "slug": "lezama",
-    "descripcion": "Instalación y reparación de antenas TDT, parabólicas, porteros y videoporteros en Lezama y alrededores.",
-    "cercanas": ["Larrabetzu", "Zamudio", "Derio", "Galdakao", "Sondika", "Gamiz-Fika"]
-  },
-  {
-    "provincia": "Bizkaia",
-    "provinciaSlug": "bizkaia",
-    "localidad": "Larrabetzu",
-    "slug": "larrabetzu",
-    "descripcion": "Instalación y reparación de antenas TDT, parabólicas, porteros y videoporteros en Larrabetzu y alrededores.",
-    "cercanas": ["Lezama", "Galdakao", "Amorebieta-Etxano", "Gamiz-Fika", "Zamudio", "Bedia"]
-  }
+{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Galdakao","slug":"galdakao","descripcion":"Antenista en Galdakao. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Galdakao y alrededores.","cercanas":["Basauri","Bedia","Lemoa","Zaratamo","Arrigorriaga","Ugao-Miraballes","Etxebarri","Amorebieta-Etxano"]},
+{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Basauri","slug":"basauri","descripcion":"Antenista en Basauri. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Basauri y alrededores.","cercanas":["Galdakao","Etxebarri","Arrigorriaga"]},
+{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Etxebarri","slug":"etxebarri","descripcion":"Antenista en Etxebarri. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Etxebarri y alrededores.","cercanas":["Basauri","Galdakao","Arrigorriaga"]},
+{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Arrigorriaga","slug":"arrigorriaga","descripcion":"Antenista en Arrigorriaga. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Arrigorriaga y alrededores.","cercanas":["Basauri","Galdakao","Etxebarri"]},
+{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Amorebieta-Etxano","slug":"amorebieta-etxano","descripcion":"Antenista en Amorebieta-Etxano. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Amorebieta-Etxano y alrededores.","cercanas":["Galdakao","Larrabetzu"]},
+{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Lezama","slug":"lezama","descripcion":"Antenista en Lezama. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Lezama y alrededores.","cercanas":["Larrabetzu","Galdakao"]},
+{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Larrabetzu","slug":"larrabetzu","descripcion":"Antenista en Larrabetzu. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Larrabetzu y alrededores.","cercanas":["Lezama","Galdakao","Amorebieta-Etxano"]}
 ]

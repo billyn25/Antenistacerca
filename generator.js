@@ -2,19 +2,88 @@ import fs from 'node:fs';
 import path from 'node:path';
 import localidades from './src/localidades.json' with { type: 'json' };
 
-const OUT='public';
-const phoneDisplay='641 589 394';
-const phone='34641589394';
-const domain='https://www.antenistacerca.es';
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const logo=`<span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M11 43c12-12 30-12 42 0M17 35c9-9 21-9 30 0M25 27c4-4 10-4 14 0" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="M32 31v22M23 53h18" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></span>`;
-function shell({title,description,canonical,body}){return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="robots" content="noindex,nofollow"><link rel="canonical" href="${canonical}"><link rel="preconnect" href="https://images.unsplash.com"><link rel="stylesheet" href="/assets/styles.css"><meta name="theme-color" content="#0b2f57"></head><body>${body}<div class="mobile-bar"><a href="tel:+${phone}">☎ Llamar</a><a href="https://wa.me/${phone}">WhatsApp</a></div></body></html>`}
-function header(){return `<div class="topbar"><div class="wrap"><span>Servicio de antenas, TDT, parabólicas y porteros</span><span><strong>Atención directa:</strong> ${phoneDisplay}</span></div></div><header class="header"><div class="wrap"><a class="brand" href="/"><span>${logo}</span><span class="brand-text"><b>ANTENISTA CERCA</b><span>Tu antenista de confianza</span></span></a><nav class="nav"><a href="#inicio">Inicio</a><a href="#servicios">Servicios</a><a href="#zona">Zona</a><a href="#preguntas">Preguntas</a><a href="#contacto">Contacto</a></nav><div class="head-actions"><a class="btn btn-phone" href="tel:+${phone}">☎ ${phoneDisplay}</a><a class="btn btn-wa" href="https://wa.me/${phone}">WhatsApp</a></div></div></header>`}
-function footer(){return `<footer class="footer"><div class="wrap"><div class="footer-grid"><div><a class="brand" href="/"><span>${logo}</span><span class="brand-text"><b style="color:#fff">ANTENISTA CERCA</b><span style="color:#aebfd0">Tu antenista de confianza</span></span></a><p>Instalación, orientación y reparación de sistemas de televisión, parabólicas, porteros y videoporteros.</p></div><div><h4>Servicios</h4><p><a href="#tdt">Antenas TDT</a><br><a href="#parabolicas">Parabólicas</a><br><a href="#porteros">Porteros y videoporteros</a></p></div><div><h4>Contacto</h4><p><a href="tel:+${phone}">${phoneDisplay}</a><br><a href="https://wa.me/${phone}">WhatsApp</a></p></div></div><div class="footer-bottom">© ${new Date().getFullYear()} Antenista Cerca · Web en fase de desarrollo</div></div></footer>`}
-function townPage(d){const town=esc(d.localidad), prov=esc(d.provincia); const near=d.cercanas.map(n=>`<span class="town">${esc(n)}</span>`).join(''); const schema=JSON.stringify({'@context':'https://schema.org','@type':'Service','name':`Antenista en ${d.localidad}`,'areaServed':{'@type':'City','name':d.localidad},'serviceType':['Reparación de antenas','Instalación TDT','Antenas parabólicas','Porteros y videoporteros']}); const body=`${header()}<main><div class="wrap breadcrumb"><a href="/">Inicio</a> › <a href="/${d.provinciaSlug}/">${prov}</a> › ${town}</div><section class="hero" id="inicio"><div class="wrap hero-grid"><div><span class="eyebrow">📍 Servicio local en ${town}</span><h1>Antenista en <span>${town}</span></h1><p class="lead">¿Problemas de señal o necesitas una instalación? Servicio de antenista en ${town} para viviendas, comunidades y negocios.</p><ul class="ticks"><li>Antenas TDT y televisión</li><li>Parabólicas y orientación</li><li>Porteros y videoporteros</li><li>Reparación y diagnóstico</li></ul><div class="hero-actions"><a class="btn btn-phone" href="tel:+${phone}">☎ Llamar ${phoneDisplay}</a><a class="btn btn-wa" href="https://wa.me/${phone}">WhatsApp</a></div></div><div class="hero-card"><div class="hero-photo"><img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1200&q=82" alt="Técnico realizando una instalación" width="900" height="1000"></div><div class="floating"><div class="icon">✓</div><div><b>Atención directa</b><span>Cuéntanos qué ocurre y te orientamos</span></div></div></div></div></section><section class="section" id="servicios"><div class="wrap"><div class="section-head"><span class="mini">Servicios de antenista</span><h2>Soluciones claras para recuperar la señal</h2><p>Desde una avería puntual hasta una instalación completa, con un enfoque práctico y cercano.</p></div><div class="cards"><article class="card" id="tdt"><div class="card-icon">📡</div><h3>Antenas TDT</h3><p>Instalación, ajuste, orientación y solución de problemas de recepción de televisión.</p></article><article class="card" id="parabolicas"><div class="card-icon">🛰️</div><h3>Parabólicas</h3><p>Montaje y orientación de antenas parabólicas y revisión de instalaciones existentes.</p></article><article class="card" id="porteros"><div class="card-icon">🔔</div><h3>Porteros y videoporteros</h3><p>Instalación, sustitución y diagnóstico de porteros automáticos y videoporteros.</p></article><article class="card" id="reparacion"><div class="card-icon">🛠️</div><h3>Reparación</h3><p>Diagnóstico de señal, cableado, tomas, amplificación y elementos de la instalación.</p></article></div></div></section><section class="section soft" id="zona"><div class="wrap local-grid"><div class="local-photo"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" alt="Zona urbana y viviendas" width="1000" height="700"></div><div class="local-copy"><span class="eyebrow">Servicio en ${town} y alrededores</span><h2>Un antenista cerca cuando tienes un problema de señal</h2><p>La página está pensada específicamente para usuarios que buscan un profesional en ${town}, sin obligarles a navegar por directorios genéricos.</p><div class="trust"><div class="trust-item"><span>📍</span><div><b>Enfoque local</b><span>${town} y municipios próximos</span></div></div><div class="trust-item"><span>📞</span><div><b>Contacto sencillo</b><span>Llamada o WhatsApp</span></div></div><div class="trust-item"><span>📺</span><div><b>TV y señal</b><span>TDT, distribución y tomas</span></div></div><div class="trust-item"><span>🏢</span><div><b>Viviendas y comunidades</b><span>Instalaciones individuales y colectivas</span></div></div></div></div></div></section><section class="section"><div class="wrap"><div class="section-head"><span class="mini">Qué hacemos</span><h2>Reparación e instalación de antenas en ${town}</h2><p>Una estructura completa para responder a las búsquedas reales del usuario sin llenar la página de palabras repetidas.</p></div><div class="detail-grid"><article class="detail"><h3>Reparación de antenas en ${town}</h3><p>Revisión de pérdidas de señal, pixelaciones, ausencia de canales, tomas interiores, cableado, conectores, amplificación y elementos de cabecera.</p></article><article class="detail"><h3>Instalación de antenas TDT</h3><p>Montaje y ajuste de instalaciones individuales o colectivas, buscando una recepción estable y una distribución correcta de señal.</p></article><article class="detail"><h3>Antenas parabólicas</h3><p>Instalación, orientación y comprobación de parabólicas, LNB, cableado y señal de satélite.</p></article><article class="detail"><h3>Porteros y videoporteros</h3><p>Revisión, sustitución e instalación de equipos de acceso para viviendas, portales y comunidades.</p></article></div></div></section><section class="section soft"><div class="wrap"><div class="section-head"><span class="mini">Municipios cercanos</span><h2>También trabajamos alrededor de ${town}</h2><p>Enlazado local pensado para que cada municipio tenga su propia página útil.</p></div><div class="towns">${near}<a class="town" href="/${d.provinciaSlug}/">Ver municipios de ${prov} →</a></div></div></section><section class="section" id="preguntas"><div class="wrap"><div class="section-head"><span class="mini">Preguntas frecuentes</span><h2>Dudas habituales antes de llamar</h2></div><div class="faq"><details><summary>¿Qué podéis revisar si la televisión se pixela?</summary><p>Se puede comprobar el nivel y calidad de señal, conexiones, cableado, tomas, amplificación y el estado general de la instalación para localizar el origen del fallo.</p></details><details><summary>¿Trabajáis con comunidades de vecinos?</summary><p>La web contempla tanto instalaciones individuales como colectivas. Al contactar, indica si se trata de una vivienda, local o comunidad.</p></details><details><summary>¿También instaláis parabólicas?</summary><p>Sí, dentro de los servicios previstos están la instalación y orientación de antenas parabólicas y la revisión de sus componentes.</p></details><details><summary>¿Puedo contactar por WhatsApp?</summary><p>Sí. Puedes explicar el problema por WhatsApp o llamar directamente al ${phoneDisplay}.</p></details></div></div></section><section class="section" id="contacto"><div class="wrap"><div class="cta"><div><h2>¿Necesitas un antenista en ${town}?</h2><p>Cuéntanos el problema y te indicamos el siguiente paso.</p></div><div class="cta-actions"><a class="btn btn-phone" href="tel:+${phone}">☎ ${phoneDisplay}</a><a class="btn btn-wa" href="https://wa.me/${phone}">WhatsApp</a></div></div></div></section></main>${footer()}<script type="application/ld+json">${schema}</script>`; return shell({title:`Antenista en ${d.localidad} | Reparación e Instalación de Antenas`,description:d.descripcion,canonical:`${domain}/${d.provinciaSlug}/${d.slug}/`,body});}
-function provincePage(prov,slug,items){const links=items.map(x=>`<a class="card" href="/${slug}/${x.slug}/"><div class="card-icon">📍</div><h3>Antenista en ${esc(x.localidad)}</h3><p>Ver servicios, contacto y municipios cercanos.</p></a>`).join('');return shell({title:`Antenistas en ${prov} | Antenista Cerca`,description:`Encuentra páginas locales de Antenista Cerca en ${prov}.`,canonical:`${domain}/${slug}/`,body:`${header()}<main><section class="hero"><div class="wrap hero-grid"><div><span class="eyebrow">📍 Provincia</span><h1>Antenistas en <span>${esc(prov)}</span></h1><p class="lead">Accede directamente a la página de tu municipio.</p></div></div></section><section class="section"><div class="wrap"><div class="cards">${links}</div></div></section></main>${footer()}`});}
-function home(){return shell({title:'Antenista Cerca | Antenas, TDT, Parabólicas y Porteros',description:'Antenista Cerca: instalación y reparación de antenas TDT, parabólicas, porteros y videoporteros.',canonical:`${domain}/`,body:`${header()}<main><section class="hero" id="inicio"><div class="wrap hero-grid"><div><span class="eyebrow">📡 Antenistas por localidad</span><h1>Tu antenista, <span>más cerca</span></h1><p class="lead">Encuentra servicio de antenas, TDT, parabólicas y porteros en tu localidad con una web clara, rápida y pensada para móvil.</p><div class="hero-actions"><a class="btn btn-phone" href="tel:+${phone}">☎ ${phoneDisplay}</a><a class="btn btn-wa" href="https://wa.me/${phone}">WhatsApp</a></div></div><div class="hero-card"><div class="hero-photo"><img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1200&q=82" alt="Profesional de instalaciones" width="900" height="1000"></div></div></div></section><section class="section" id="servicios"><div class="wrap"><div class="section-head"><span class="mini">Antenista Cerca</span><h2>Una web local para encontrar el servicio que necesitas</h2><p>Selecciona tu provincia y entra en la página de tu municipio.</p></div><div class="cards"><a class="card" href="/bizkaia/"><div class="card-icon">📍</div><h3>Bizkaia</h3><p>Ver localidades disponibles.</p></a><div class="card"><div class="card-icon">📍</div><h3>Álava</h3><p>Próximamente.</p></div><div class="card"><div class="card-icon">📍</div><h3>Burgos</h3><p>Próximamente.</p></div><div class="card"><div class="card-icon">📍</div><h3>Cantabria y Gipuzkoa</h3><p>Próximamente.</p></div></div></div></section></main>${footer()}`});}
-fs.mkdirSync(OUT,{recursive:true});fs.writeFileSync(path.join(OUT,'index.html'),home());
-const groups=new Map();for(const d of localidades){const dir=path.join(OUT,d.provinciaSlug,d.slug);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),townPage(d));if(!groups.has(d.provinciaSlug))groups.set(d.provinciaSlug,{name:d.provincia,items:[]});groups.get(d.provinciaSlug).items.push(d)}
-for(const [slug,g] of groups){const dir=path.join(OUT,slug);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),provincePage(g.name,slug,g.items))}
-const urls=[`${domain}/`,...Array.from(groups.keys()).map(s=>`${domain}/${s}/`),...localidades.map(d=>`${domain}/${d.provinciaSlug}/${d.slug}/`)];fs.writeFileSync(path.join(OUT,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u=>`  <url><loc>${u}</loc></url>`).join('\n')}\n</urlset>`);fs.writeFileSync(path.join(OUT,'robots.txt'),'User-agent: *\nDisallow: /\n');console.log(`Generadas ${localidades.length} localidades + ${groups.size} provincias.`);
+const OUT = 'public';
+const TEMPLATE = fs.readFileSync('src/template.html','utf8');
+const DOMAIN = 'https://www.antenistacerca.es';
+const PHONE = '641 589 394';
+const PHONE_E164 = '34641589394';
+
+const esc = (s='') => String(s).replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const slugify = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const byName = new Map(localidades.map(x=>[x.localidad.toLowerCase(),x]));
+
+function nearbyLinks(d){
+  return `<div class="nearby-links">${d.cercanas.map(name=>{
+    const target=byName.get(name.toLowerCase());
+    if(target) return `<a href="/${target.provinciaSlug}/${target.slug}/">${esc(name)}</a>`;
+    return `<span>${esc(name)}</span>`;
+  }).join('')}</div><p style="margin-top:14px"><a href="/${d.provinciaSlug}/"><strong>Ver localidades de ${esc(d.provincia)} →</strong></a></p>`;
+}
+
+function schema(d){
+  return JSON.stringify({
+    '@context':'https://schema.org',
+    '@graph':[
+      {
+        '@type':'WebPage',
+        '@id':`${DOMAIN}/${d.provinciaSlug}/${d.slug}/#webpage`,
+        url:`${DOMAIN}/${d.provinciaSlug}/${d.slug}/`,
+        name:`Antenista en ${d.localidad} | Reparación e Instalación de Antenas`,
+        description:d.descripcion,
+        inLanguage:'es-ES'
+      },
+      {
+        '@type':'Service',
+        '@id':`${DOMAIN}/${d.provinciaSlug}/${d.slug}/#service`,
+        name:`Servicio de antenista en ${d.localidad}`,
+        serviceType:['Reparación de antenas','Instalación de antenas TDT','Antenas parabólicas','Porteros y videoporteros'],
+        areaServed:{'@type':'AdministrativeArea',name:d.localidad}
+      },
+      {
+        '@type':'BreadcrumbList',
+        itemListElement:[
+          {'@type':'ListItem',position:1,name:'Inicio',item:`${DOMAIN}/`},
+          {'@type':'ListItem',position:2,name:d.provincia,item:`${DOMAIN}/${d.provinciaSlug}/`},
+          {'@type':'ListItem',position:3,name:d.localidad,item:`${DOMAIN}/${d.provinciaSlug}/${d.slug}/`}
+        ]
+      }
+    ]
+  }).replace(/</g,'\\u003c');
+}
+
+function renderTown(d){
+  let html=TEMPLATE
+    .replaceAll('{{LOCALIDAD}}', esc(d.localidad))
+    .replaceAll('{{PROVINCIA}}', esc(d.provincia))
+    .replaceAll('{{CANONICAL}}', `${DOMAIN}/${d.provinciaSlug}/${d.slug}/`)
+    .replaceAll('{{PUEBLOS_CERCANOS}}', nearbyLinks(d));
+
+  html=html.replace('</head>', `<meta property="og:locale" content="es_ES"><meta property="og:type" content="website"><meta property="og:title" content="Antenista en ${esc(d.localidad)} | Antenista Cerca"><meta property="og:description" content="${esc(d.descripcion)}"><meta property="og:url" content="${DOMAIN}/${d.provinciaSlug}/${d.slug}/"><meta name="twitter:card" content="summary"><script type="application/ld+json">${schema(d)}</script></head>`);
+  return html;
+}
+
+function provincePage(provincia, slug, items){
+  const links=items.sort((a,b)=>a.localidad.localeCompare(b.localidad,'es')).map(x=>`<li><a href="/${slug}/${x.slug}/">Antenista en ${esc(x.localidad)}</a></li>`).join('');
+  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Antenistas en ${esc(provincia)} | Antenista Cerca</title><meta name="description" content="Localidades con servicio de instalación y reparación de antenas, TDT, parabólicas, porteros y videoporteros en ${esc(provincia)}."><meta name="robots" content="noindex,nofollow"><link rel="canonical" href="${DOMAIN}/${slug}/"><style>body{font-family:Arial,sans-serif;margin:0;color:#10243a}main{max-width:980px;margin:auto;padding:48px 22px}a{color:#0a3f73;text-decoration:none}h1{font-size:42px;margin:0 0 10px}p{font-size:18px;line-height:1.6}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;padding:0;list-style:none}.grid a{display:block;padding:18px;border:1px solid #dbe4eb;border-radius:12px;font-weight:700;background:#f8fbfd}</style></head><body><main><p><a href="/">← Inicio</a></p><h1>Antenistas en ${esc(provincia)}</h1><p>Selecciona tu localidad. Cada municipio dispone de una página completa con servicios, contacto, preguntas frecuentes y enlaces a poblaciones próximas.</p><ul class="grid">${links}</ul></main></body></html>`;
+}
+
+fs.rmSync(OUT,{recursive:true,force:true});
+fs.mkdirSync(OUT,{recursive:true});
+const groups=new Map();
+for(const d of localidades){
+  const dir=path.join(OUT,d.provinciaSlug,d.slug);
+  fs.mkdirSync(dir,{recursive:true});
+  fs.writeFileSync(path.join(dir,'index.html'),renderTown(d));
+  if(!groups.has(d.provinciaSlug)) groups.set(d.provinciaSlug,{provincia:d.provincia,items:[]});
+  groups.get(d.provinciaSlug).items.push(d);
+}
+for(const [slug,g] of groups){
+  const dir=path.join(OUT,slug); fs.mkdirSync(dir,{recursive:true});
+  fs.writeFileSync(path.join(dir,'index.html'),provincePage(g.provincia,slug,g.items));
+}
+const galdakao=localidades.find(x=>x.slug==='galdakao') || localidades[0];
+fs.writeFileSync(path.join(OUT,'index.html'),renderTown(galdakao));
+const urls=[`${DOMAIN}/`,...localidades.map(d=>`${DOMAIN}/${d.provinciaSlug}/${d.slug}/`),...groups.keys()].map(x=>typeof x==='string'&&x.startsWith('http')?x:`${DOMAIN}/${x}/`);
+fs.writeFileSync(path.join(OUT,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(u=>`<url><loc>${u}</loc></url>`).join('')}</urlset>`);
+fs.writeFileSync(path.join(OUT,'robots.txt'),`User-agent: *\nDisallow: /\n\nSitemap: ${DOMAIN}/sitemap.xml\n`);
+console.log(`Generadas ${localidades.length} localidades + ${groups.size} provincia(s). Raíz: ${galdakao.localidad}.`);
