@@ -14,7 +14,7 @@ const esc = (s = '') => String(s).replace(/[&<>"']/g, c => ({
 }[c]));
 
 const byName = new Map(localidades.map(x => [x.localidad.toLowerCase(), x]));
-const images = [...TEMPLATE.matchAll(/data:image\/jpeg;base64,[^"')]+/g)].map(x => x[0]);
+const images = [...TEMPLATE.matchAll(/<img\b[^>]*\bsrc=["']([^"']+)["']/gi)].map(x => x[1]).filter(Boolean);
 const groups = new Map();
 
 for (const d of localidades) {
