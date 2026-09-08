@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const OUT='public';
-const HERO='/assets/hero-antennista.jpg';
+const HERO='/assets/hero-antennista.png';
 const PUEBLO='https://images.pexels.com/photos/33057075/pexels-photo-33057075.jpeg?cs=srgb&fm=jpg';
 
 function walk(dir){
