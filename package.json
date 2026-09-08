@@ -2,5 +2,5 @@
   "name":"antenistacerca",
   "private":true,
   "type":"module",
-  "scripts":{"build":"node generator.js && mkdir -p public/assets && cp -R src/assets/. public/assets/ && node patch-images.js"}
+  "scripts":{"build":"node generator.js && mkdir -p public/assets && cp -R src/assets/. public/assets/ && node patch-images.js && node finalize.js"}
 }
