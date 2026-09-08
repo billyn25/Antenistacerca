@@ -1,9 +1,86 @@
 [
-{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Galdakao","slug":"galdakao","descripcion":"Antenista en Galdakao. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Galdakao y alrededores.","cercanas":["Basauri","Bedia","Lemoa","Zaratamo","Arrigorriaga","Ugao-Miraballes","Etxebarri","Amorebieta-Etxano"]},
-{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Basauri","slug":"basauri","descripcion":"Antenista en Basauri. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Basauri y alrededores.","cercanas":["Galdakao","Etxebarri","Arrigorriaga"]},
-{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Etxebarri","slug":"etxebarri","descripcion":"Antenista en Etxebarri. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Etxebarri y alrededores.","cercanas":["Basauri","Galdakao","Arrigorriaga"]},
-{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Arrigorriaga","slug":"arrigorriaga","descripcion":"Antenista en Arrigorriaga. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Arrigorriaga y alrededores.","cercanas":["Basauri","Galdakao","Etxebarri"]},
-{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Amorebieta-Etxano","slug":"amorebieta-etxano","descripcion":"Antenista en Amorebieta-Etxano. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Amorebieta-Etxano y alrededores.","cercanas":["Galdakao","Larrabetzu"]},
-{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Lezama","slug":"lezama","descripcion":"Antenista en Lezama. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Lezama y alrededores.","cercanas":["Larrabetzu","Galdakao"]},
-{"provincia":"Bizkaia","provinciaSlug":"bizkaia","localidad":"Larrabetzu","slug":"larrabetzu","descripcion":"Antenista en Larrabetzu. Reparación e instalación de antenas TDT, parabólicas, porteros y videoporteros. Atención directa en Larrabetzu y alrededores.","cercanas":["Lezama","Galdakao","Amorebieta-Etxano"]}
+  {
+    "provincia":"Bizkaia",
+    "provinciaSlug":"bizkaia",
+    "localidad":"Galdakao",
+    "slug":"galdakao",
+    "descripcion":"Antenista en Galdakao para averías de señal, TDT, parabólicas, porteros y videoporteros. Servicio cercano con atención en Galdakao y localidades próximas.",
+    "introLocal":"En Galdakao atendemos avisos relacionados con pérdida de señal, antenas desorientadas, instalaciones TDT y parabólicas, además de porteros y videoporteros. Al trabajar por zonas podemos organizar los desplazamientos de forma más cercana y responder con rapidez cuando surge una avería.",
+    "zonaLocal":"También damos servicio en localidades próximas como Basauri, Bedia, Lemoa, Zaratamo, Arrigorriaga, Ugao-Miraballes, Etxebarri y Amorebieta-Etxano. Si el problema está en una vivienda, comunidad o negocio, puedes contarnos qué ocurre por teléfono o WhatsApp antes de la visita.",
+    "faqPregunta":"¿Atendéis averías de antena en Galdakao y alrededores?",
+    "faqRespuesta":"Sí. Organizamos el servicio por zonas y atendemos Galdakao junto con municipios cercanos. Si nos explicas el fallo de señal o la instalación que necesitas, podemos orientar mejor la visita desde el primer contacto.",
+    "cercanas":["Basauri","Bedia","Lemoa","Zaratamo","Arrigorriaga","Ugao-Miraballes","Etxebarri","Amorebieta-Etxano"]
+  },
+  {
+    "provincia":"Bizkaia",
+    "provinciaSlug":"bizkaia",
+    "localidad":"Basauri",
+    "slug":"basauri",
+    "descripcion":"Antenista en Basauri para reparar problemas de recepción, instalar TDT o parabólicas y solucionar incidencias de porteros y videoporteros.",
+    "introLocal":"En Basauri trabajamos tanto en reparaciones de señal como en instalaciones nuevas. Es habitual que una avería aparezca de repente en una vivienda o afecte a varios vecinos de una comunidad; por eso priorizamos una atención directa y cercana desde el primer aviso.",
+    "zonaLocal":"La cobertura de Basauri se conecta con avisos en Galdakao, Etxebarri y Arrigorriaga. Esta proximidad permite agrupar rutas y reducir desplazamientos innecesarios para poder atender antes las incidencias de antena y telecomunicaciones.",
+    "faqPregunta":"¿Podéis revisar una avería de televisión en Basauri aunque no se sepa dónde está el fallo?",
+    "faqRespuesta":"Sí. Puedes explicar los síntomas por teléfono o WhatsApp y, a partir de ahí, revisar la instalación para localizar si el problema está en la antena, la amplificación, el cableado o la señal recibida.",
+    "cercanas":["Galdakao","Etxebarri","Arrigorriaga"]
+  },
+  {
+    "provincia":"Bizkaia",
+    "provinciaSlug":"bizkaia",
+    "localidad":"Etxebarri",
+    "slug":"etxebarri",
+    "descripcion":"Antenista en Etxebarri para TDT, parabólicas, porteros y videoporteros, con servicio cercano para viviendas, comunidades y negocios.",
+    "introLocal":"En Etxebarri damos servicio para fallos de televisión, revisiones de antenas y trabajos de portero o videoportero. Cuando una instalación empieza a perder canales, aparecen cortes o deja de funcionar por completo, lo importante es revisar el origen del problema antes de sustituir equipos sin necesidad.",
+    "zonaLocal":"Atendemos Etxebarri junto con Basauri, Galdakao y Arrigorriaga. Tener varias localidades próximas dentro de la misma zona de trabajo ayuda a organizar mejor las visitas y mantener una respuesta ágil sin prometer tiempos irreales.",
+    "faqPregunta":"¿Trabajáis también en comunidades de vecinos de Etxebarri?",
+    "faqRespuesta":"Sí. Podemos revisar instalaciones colectivas, problemas de señal compartida, amplificación, distribución y trabajos de portero o videoportero en comunidades.",
+    "cercanas":["Basauri","Galdakao","Arrigorriaga"]
+  },
+  {
+    "provincia":"Bizkaia",
+    "provinciaSlug":"bizkaia",
+    "localidad":"Arrigorriaga",
+    "slug":"arrigorriaga",
+    "descripcion":"Antenista en Arrigorriaga para reparación de señal, orientación de antenas, TDT, parabólicas, porteros y videoporteros.",
+    "introLocal":"En Arrigorriaga atendemos desde averías sencillas de recepción hasta revisiones completas de instalaciones de antena. Si faltan canales, la imagen se corta o una instalación antigua necesita una puesta a punto, buscamos primero la causa para aplicar una solución proporcionada.",
+    "zonaLocal":"Arrigorriaga forma parte de una ruta de servicio que también cubre Basauri, Galdakao y Etxebarri. Esa cercanía entre avisos facilita una atención más rápida y permite dar continuidad al servicio en municipios próximos.",
+    "faqPregunta":"¿Reparáis antenas antiguas en Arrigorriaga o solo hacéis instalaciones nuevas?",
+    "faqRespuesta":"Reparamos y revisamos instalaciones existentes siempre que tenga sentido hacerlo. Si la antena o algún componente está deteriorado, se valora si conviene ajustar, reparar o sustituir solo la parte necesaria.",
+    "cercanas":["Basauri","Galdakao","Etxebarri"]
+  },
+  {
+    "provincia":"Bizkaia",
+    "provinciaSlug":"bizkaia",
+    "localidad":"Amorebieta-Etxano",
+    "slug":"amorebieta-etxano",
+    "descripcion":"Antenista en Amorebieta-Etxano para instalaciones y averías de TDT, parabólicas, porteros y videoporteros con atención cercana.",
+    "introLocal":"En Amorebieta-Etxano atendemos trabajos de antena para viviendas, comunidades y pequeños negocios. Podemos revisar problemas de señal, orientar una antena, ajustar una parabólica o intervenir en instalaciones de portero y videoportero cuando presentan fallos.",
+    "zonaLocal":"La zona de Amorebieta-Etxano se coordina con servicios en Galdakao y Larrabetzu. Cuando nos contactas, conocer el tipo de instalación y los síntomas ayuda a preparar mejor la visita y evitar desplazamientos innecesarios.",
+    "faqPregunta":"¿Puedo enviar por WhatsApp una foto de la instalación antes de la visita en Amorebieta-Etxano?",
+    "faqRespuesta":"Sí. Una foto o una explicación breve del problema puede ayudar a identificar el tipo de antena, portero o equipo y preparar mejor la intervención, aunque el diagnóstico definitivo se haga al revisar la instalación.",
+    "cercanas":["Galdakao","Larrabetzu"]
+  },
+  {
+    "provincia":"Bizkaia",
+    "provinciaSlug":"bizkaia",
+    "localidad":"Lezama",
+    "slug":"lezama",
+    "descripcion":"Antenista en Lezama para averías de televisión, TDT, parabólicas, porteros y videoporteros, con servicio próximo y atención directa.",
+    "introLocal":"En Lezama ofrecemos un servicio de antenista pensado para resolver averías sin complicar la instalación más de lo necesario. Revisamos fallos de señal, ajustes de antena, instalaciones TDT y parabólicas y problemas en porteros o videoporteros.",
+    "zonaLocal":"Lezama se atiende dentro de la misma zona de trabajo que Larrabetzu y Galdakao. Al movernos entre localidades cercanas podemos organizar mejor las rutas y tratar de llegar pronto cuando aparece una incidencia.",
+    "faqPregunta":"¿Atendéis Lezama aunque la avería sea solo de una vivienda?",
+    "faqRespuesta":"Sí. Atendemos viviendas particulares, además de comunidades y negocios. Puedes indicar si el fallo afecta a un solo televisor, a varias tomas o a toda la instalación para orientar mejor la revisión.",
+    "cercanas":["Larrabetzu","Galdakao"]
+  },
+  {
+    "provincia":"Bizkaia",
+    "provinciaSlug":"bizkaia",
+    "localidad":"Larrabetzu",
+    "slug":"larrabetzu",
+    "descripcion":"Antenista en Larrabetzu para problemas de señal, antenas TDT y parabólicas, porteros y videoporteros, con cobertura también en zonas próximas.",
+    "introLocal":"En Larrabetzu realizamos reparaciones y revisiones de instalaciones de televisión y telecomunicaciones domésticas. Si la señal es inestable, faltan canales o un portero deja de funcionar, revisamos la instalación para encontrar el punto que está provocando el fallo.",
+    "zonaLocal":"La cobertura de Larrabetzu incluye desplazamientos coordinados con Lezama, Galdakao y Amorebieta-Etxano. Este trabajo por proximidad ayuda a mantener una atención ágil y a concentrar las visitas dentro de la misma zona.",
+    "faqPregunta":"¿Qué información conviene dar antes de una visita de antenista en Larrabetzu?",
+    "faqRespuesta":"Resulta útil indicar desde cuándo ocurre el problema, si afecta a todos los televisores o solo a uno y si la instalación es individual o comunitaria. Con esos datos se puede preparar mejor la revisión.",
+    "cercanas":["Lezama","Galdakao","Amorebieta-Etxano"]
+  }
 ]
