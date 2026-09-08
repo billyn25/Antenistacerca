@@ -49,7 +49,6 @@ for (const file of htmlFiles) {
   h = h.replaceAll('Reparación de porteros y videoporteros', 'Reparación de porteros automáticos y videoporteros');
   h = h.replaceAll('porteros y videoporteros', 'porteros automáticos y videoporteros');
 
-  // 6 tarjetas: en móvil quedan 2x3 y en PC 3x2, sin una tarjeta huérfana.
   if (!h.includes('href="#telefonia-movil"')) {
     h = h.replace(
       '</div></section>\n<section class="local wrap">',
@@ -72,7 +71,6 @@ for (const file of htmlFiles) {
     h = h.replace('<section class="zone wrap" id="zona">', electricBlock + '<section class="zone wrap" id="zona">');
   }
 
-  // Más ancho en PC y seis servicios equilibrados en 3 columnas; móvil permanece en 2 columnas.
   if (!h.includes('data-layout-services="6"')) {
     h = h.replace('</head>', `<style data-layout-services="6">@media (min-width:1000px){.wrap{width:min(1280px,calc(100% - 48px))}.cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card img{height:175px}}@media (max-width:640px){.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{min-width:0}.card h3{overflow-wrap:anywhere}}</style></head>`);
   }
@@ -100,6 +98,30 @@ for (const file of htmlFiles) {
   townCount++;
 }
 
+// Portada: sincronizar los mismos seis servicios y el mismo equilibrio visual.
+const homeFile = path.join(ROOT, 'index.html');
+if (fs.existsSync(homeFile)) {
+  let h = fs.readFileSync(homeFile, 'utf8');
+
+  h = h.replaceAll('Porteros y videoporteros', 'Porteros automáticos y videoporteros');
+
+  h = h.replace(
+    /<article class="card"><img src="[^"]+" alt="Reparación de antenas"><div><h3>Comunidades<\/h3><p>Instalaciones colectivas, amplificación y señal\.<\/p><\/div><\/article>/,
+    `<article class="card"><img src="${MOBILE_IMAGE}" alt="Reparación de antenas"><div><h3>Reparación de antenas</h3><p>Averías, señal, amplificadores y cableado.</p></div></article>`
+  );
+
+  if (!h.includes('<h3>Cobertura móvil</h3>')) {
+    const extraCards = `<article class="card"><img src="${MOBILE_IMAGE}" alt="Antena para mejorar cobertura móvil"><div><h3>Cobertura móvil</h3><p>Antenas para mejorar la señal de telefonía móvil en viviendas unifamiliares.</p></div></article><article class="card"><img src="${ELECTRIC_IMAGE}" alt="Cuadro eléctrico de vivienda"><div><h3>Reparaciones eléctricas</h3><p>Instalación y reparación de automáticos en cuadros eléctricos de vivienda.</p></div></article>`;
+    h = h.replace(/(<\/div><\/div><\/section><section id="zonas")/, `${extraCards}$1`);
+  }
+
+  if (!h.includes('data-home-services="6"')) {
+    h = h.replace('</head>', `<style data-home-services="6">@media (min-width:1000px){.w{width:min(1280px,calc(100% - 48px))}.cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}@media (max-width:850px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}</style></head>`);
+  }
+
+  fs.writeFileSync(homeFile, h);
+}
+
 const failures = [];
 for (const file of htmlFiles) {
   const h = fs.readFileSync(file, 'utf8');
@@ -113,4 +135,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Audited ${townCount} town pages: six service cards, local SEO and responsive layout updated.`);
+console.log(`Audited ${townCount} town pages and synchronized six homepage services.`);
