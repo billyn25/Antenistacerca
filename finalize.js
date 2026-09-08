@@ -39,8 +39,32 @@ for (const file of htmlFiles) {
   );
 
   h = h.replace(
-    /(<div class="localpic"><img src=")[^"]+(" alt="Vista de [^"]+">)/i,
+    /(<div class="localpic"><img src=")[^"]+(" alt="[^"]+">)/i,
     `$1${TOWN_IMAGE}$2`
+  );
+
+  h = h.replaceAll('Porteros y videoporteros', 'Porteros automáticos y videoporteros');
+  h = h.replaceAll('Reparación de porteros y videoporteros', 'Reparación de porteros automáticos y videoporteros');
+  h = h.replaceAll('porteros y videoporteros', 'porteros automáticos y videoporteros');
+
+  const mobileBlock = `<section class="twocol wrap" id="telefonia-movil"><div><div class="kicker">Cobertura móvil</div><h2>Antenas de telefonía móvil en ${town}</h2><p>Instalamos soluciones de antena para mejorar la cobertura de telefonía móvil en viviendas unifamiliares con señal débil o sin cobertura en determinadas zonas de la vivienda.</p></div><aside class="sidebox"><strong>Mejora de cobertura</strong><p>Estudiamos la señal disponible y la instalación necesaria antes de proponer una solución, sin prometer resultados que no puedan comprobarse.</p></aside></section>`;
+
+  if (!h.includes('id="telefonia-movil"')) {
+    const marker = '<section class="band" id="porteros">';
+    h = h.replace(marker, mobileBlock + marker);
+  }
+
+  h = h.replace(
+    /(<meta name="description" content=")([^"]*)(">)/i,
+    (all,a,desc,c) => {
+      const extra = ` Porteros automáticos, videoporteros y soluciones de cobertura móvil en ${town}.`;
+      return desc.toLowerCase().includes('porteros automáticos') ? all : `${a}${desc.replace(/\.?$/, '.')}${extra}${c}`;
+    }
+  );
+
+  h = h.replace(
+    /("serviceType"\s*:\s*\[)([^\]]*)(\])/i,
+    (all,a,list,c) => list.includes('Antenas de telefonía móvil') ? all : `${a}${list},"Antenas de telefonía móvil","Porteros automáticos"${c}`
   );
 
   fs.writeFileSync(file, h);
@@ -60,4 +84,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Audited ${townCount} town pages: filler removed and town image updated.`);
+console.log(`Audited ${townCount} town pages: local SEO and service coverage updated.`);
