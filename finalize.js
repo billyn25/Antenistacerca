@@ -47,12 +47,8 @@ for (const file of htmlFiles) {
   h = h.replaceAll('Reparación de porteros y videoporteros', 'Reparación de porteros automáticos y videoporteros');
   h = h.replaceAll('porteros y videoporteros', 'porteros automáticos y videoporteros');
 
-  const mobileBlock = `<section class="twocol wrap" id="telefonia-movil"><div><div class="kicker">Cobertura móvil</div><h2>Antenas de telefonía móvil en ${town}</h2><p>Instalamos soluciones de antena para mejorar la cobertura de telefonía móvil en viviendas unifamiliares con señal débil o sin cobertura en determinadas zonas de la vivienda.</p></div><aside class="sidebox"><strong>Mejora de cobertura</strong><p>Estudiamos la señal disponible y la instalación necesaria antes de proponer una solución, sin prometer resultados que no puedan comprobarse.</p></aside></section>`;
-
-  if (!h.includes('id="telefonia-movil"')) {
-    const marker = '<section class="band" id="porteros">';
-    h = h.replace(marker, mobileBlock + marker);
-  }
+  // El bloque de telefonía móvil ya vive en la plantilla central.
+  // Aquí no se crea otro para evitar contenido duplicado.
 
   h = h.replace(
     /(<meta name="description" content=")([^"]*)(">)/i,
