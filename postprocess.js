@@ -34,8 +34,19 @@ for(const f of html){let s=fs.readFileSync(f,'utf8');
     const i=hash(f)%porteroVariants.length;
     if(!s.includes('brands-note antenna-brands')) s=s.replace(/(<section class="band" id="reparacion">[\s\S]*?<p>)([\s\S]*?)(<\/p>)/i,`$1$2</p><p class="brands-note antenna-brands">${antennaVariants[i]}</p>`);
     if(!s.includes('brands-note portero-brands')) s=s.replace(/(<section class="band" id="porteros">[\s\S]*?<p>)([\s\S]*?)(<\/p>)/i,`$1$2</p><p class="brands-note portero-brands">${porteroVariants[i]}</p>`);
+
+    const locality=(s.match(/<h1>\s*Antenista en ([^<]+)<\/h1>/i)||[])[1]?.trim();
+    if(locality){
+      s=s.replace(/alt="Antena TDT"/g,`alt="Antena TDT para instalación y reparación en ${locality}"`);
+      s=s.replace(/alt="Antena parabólica"/g,`alt="Antena parabólica para instalación y reparación en ${locality}"`);
+      s=s.replace(/alt="Portero automático y videoportero"/g,'alt="Placas de portero automático Fermax y Tegui"');
+      s=s.replace(/alt="Reparación de antenas"/g,`alt="Cabecera y amplificación monocanal para antena TDT en ${locality}"`);
+      s=s.replace(/alt="Antena de telefonía móvil instalada en vivienda"/g,`alt="Solución de cobertura móvil para vivienda en ${locality}"`);
+      s=s.replace(/alt="Cuadro eléctrico de vivienda"/g,`alt="Reparación eléctrica doméstica en ${locality}"`);
+    }
+
     if(!s.includes('.brands-note{')) s=s.replace('</head>',css+'</head>');
   }
   fs.writeFileSync(f,s);
 }
-console.log('Postprocesado de contenido, servicios, fotos y marcas completado.');
+console.log('Postprocesado de contenido, servicios, fotos, marcas y ALT localizados completado.');
