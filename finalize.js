@@ -3,6 +3,8 @@ import path from 'node:path';
 
 const ROOT = 'public';
 const TOWN_IMAGE = 'https://images.unsplash.com/photo-1541698265912-0a5606dcf0f8?auto=format&fit=crop&fm=jpg&q=82&w=1600';
+const MOBILE_IMAGE = 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1200';
+const ELECTRIC_IMAGE = 'https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1200';
 const forbidden = [
   'Una página completa para cada localidad',
   'Todo en el mismo HTML',
@@ -47,8 +49,33 @@ for (const file of htmlFiles) {
   h = h.replaceAll('Reparación de porteros y videoporteros', 'Reparación de porteros automáticos y videoporteros');
   h = h.replaceAll('porteros y videoporteros', 'porteros automáticos y videoporteros');
 
-  // El bloque de telefonía móvil ya vive en la plantilla central.
-  // Aquí no se crea otro para evitar contenido duplicado.
+  // 6 tarjetas: en móvil quedan 2x3 y en PC 3x2, sin una tarjeta huérfana.
+  if (!h.includes('href="#telefonia-movil"')) {
+    h = h.replace(
+      '</div></section>\n<section class="local wrap">',
+      `<a class="card" href="#telefonia-movil"><img src="${MOBILE_IMAGE}" alt="Antena para mejorar cobertura móvil"><h3>Cobertura móvil</h3><p>Antenas de telefonía móvil para viviendas con señal débil.</p></a><a class="card" href="#reparaciones-electricas"><img src="${ELECTRIC_IMAGE}" alt="Cuadro eléctrico de vivienda"><h3>Reparaciones eléctricas</h3><p>Instalación y reparación de automáticos en cuadros eléctricos de vivienda.</p></a></div></section>\n<section class="local wrap">`
+    );
+  } else if (!h.includes('href="#reparaciones-electricas"')) {
+    h = h.replace(
+      '</div></section>\n<section class="local wrap">',
+      `<a class="card" href="#reparaciones-electricas"><img src="${ELECTRIC_IMAGE}" alt="Cuadro eléctrico de vivienda"><h3>Reparaciones eléctricas</h3><p>Instalación y reparación de automáticos en cuadros eléctricos de vivienda.</p></a></div></section>\n<section class="local wrap">`
+    );
+  }
+
+  if (!h.includes('id="telefonia-movil"')) {
+    const mobileBlock = `<section class="twocol wrap" id="telefonia-movil"><div><div class="kicker">Cobertura móvil</div><h2>Antenas de telefonía móvil en ${town}</h2><p>Instalamos antenas exteriores y soluciones de recepción para mejorar la cobertura de telefonía móvil en viviendas unifamiliares con señal débil o zonas interiores con poca cobertura. Primero comprobamos la señal disponible para recomendar una solución adecuada.</p></div><aside class="sidebox"><strong>Mejor señal en casa</strong><p>Orientación, cableado y ubicación de la antena adaptados a la vivienda y a la cobertura disponible en la zona.</p></aside></section>`;
+    h = h.replace('<section class="band" id="porteros">', mobileBlock + '<section class="band" id="porteros">');
+  }
+
+  if (!h.includes('id="reparaciones-electricas"')) {
+    const electricBlock = `<section class="twocol wrap" id="reparaciones-electricas"><div><div class="kicker">Electricidad en el hogar</div><h2>Reparaciones eléctricas en el hogar en ${town}</h2><p>Realizamos pequeñas reparaciones eléctricas en viviendas, incluida la instalación y sustitución de automáticos, magnetotérmicos y otros elementos del cuadro eléctrico doméstico.</p></div><aside class="sidebox"><strong>Cuadros eléctricos de vivienda</strong><p>Revisamos el problema antes de sustituir componentes y actuamos sobre protecciones y elementos del cuadro cuando la intervención corresponde a una instalación doméstica.</p></aside></section>`;
+    h = h.replace('<section class="zone wrap" id="zona">', electricBlock + '<section class="zone wrap" id="zona">');
+  }
+
+  // Más ancho en PC y seis servicios equilibrados en 3 columnas; móvil permanece en 2 columnas.
+  if (!h.includes('data-layout-services="6"')) {
+    h = h.replace('</head>', `<style data-layout-services="6">@media (min-width:1000px){.wrap{width:min(1280px,calc(100% - 48px))}.cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card img{height:175px}}@media (max-width:640px){.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{min-width:0}.card h3{overflow-wrap:anywhere}}</style></head>`);
+  }
 
   h = h.replace(
     /(<meta name="description" content=")([^"]*)(">)/i,
@@ -60,7 +87,13 @@ for (const file of htmlFiles) {
 
   h = h.replace(
     /("serviceType"\s*:\s*\[)([^\]]*)(\])/i,
-    (all,a,list,c) => list.includes('Antenas de telefonía móvil') ? all : `${a}${list},"Antenas de telefonía móvil","Porteros automáticos"${c}`
+    (all,a,list,c) => {
+      let next = list;
+      if (!next.includes('Antenas de telefonía móvil')) next += ',"Antenas de telefonía móvil"';
+      if (!next.includes('Porteros automáticos')) next += ',"Porteros automáticos"';
+      if (!next.includes('Reparaciones eléctricas en el hogar')) next += ',"Reparaciones eléctricas en el hogar"';
+      return `${a}${next}${c}`;
+    }
   );
 
   fs.writeFileSync(file, h);
@@ -80,4 +113,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Audited ${townCount} town pages: local SEO and service coverage updated.`);
+console.log(`Audited ${townCount} town pages: six service cards, local SEO and responsive layout updated.`);
