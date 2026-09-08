@@ -14,7 +14,7 @@ const MOBILE='/assets/cobertura-movil.png';
 const ELECTRIC='https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1200';
 const TOWN='https://images.unsplash.com/photo-1541698265912-0a5606dcf0f8?auto=format&fit=crop&fm=jpg&q=82&w=1600';
 
-const esc=(s='')=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const esc=(s='')=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
 const images=[...IMAGE_SOURCE.matchAll(/<img\b[^>]*\bsrc=["']([^"']+)["']/gi)].map(x=>x[1]).filter(Boolean);
 const byName=new Map(localidades.map(x=>[x.localidad.toLowerCase(),x]));
 const groups=new Map();
@@ -42,7 +42,7 @@ function town(d){let h=TEMPLATE.replaceAll('{{LOCALIDAD}}',esc(d.localidad)).rep
   const electricBlock=`<section class="twocol wrap" id="reparaciones-electricas"><div><div class="kicker">Electricidad en el hogar</div><h2>Reparaciones eléctricas en el hogar en ${esc(d.localidad)}</h2><p>Realizamos pequeñas reparaciones eléctricas en viviendas, incluida la instalación y sustitución de automáticos, magnetotérmicos y otros elementos del cuadro eléctrico doméstico.</p></div><aside class="sidebox"><strong>Cuadros eléctricos de vivienda</strong><p>Revisamos el problema antes de sustituir componentes y actuamos sobre protecciones y elementos del cuadro cuando la intervención corresponde a una instalación doméstica.</p></aside></section>`;
   h=h.replace('<section class="band" id="porteros">',mobileBlock+'<section class="band" id="porteros">');
   h=h.replace('<section class="zone wrap" id="zona">',electricBlock+'<section class="zone wrap" id="zona">');
-  h=h.replace('</head>',`<style>@media(min-width:1000px){.wrap{width:min(1280px,calc(100% - 48px));max-width:1280px}.cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card img{height:175px}}@media(max-width:900px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:640px){.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}</style></head>`);
+  h=h.replace('</head>',`<style>@media(min-width:1000px){.wrap{width:min(1280px,calc(100% - 48px));max-width:1280px}.cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card img{height:175px}}@media(max-width:900px){.cards{grid-template-columns:repeat(2,minmax(0,1fr));}.twocol{grid-template-columns:1fr!important;gap:14px}.twocol .sidebox{width:100%;margin-top:0}}@media(max-width:640px){.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.twocol{grid-template-columns:1fr!important;gap:12px;padding:26px 0}.twocol .sidebox{width:100%;margin-top:4px;padding:16px}.twocol .sidebox strong{font-size:18px}}</style></head>`);
   h=h.replaceAll('Porteros y videoporteros','Porteros automáticos y videoporteros').replaceAll('Reparación de porteros y videoporteros','Reparación de porteros automáticos y videoporteros').replaceAll('porteros y videoporteros','porteros automáticos y videoporteros');
   const cards=(h.match(/class="card"/g)||[]).length;const mobileCount=(h.match(/id="telefonia-movil"/g)||[]).length;if(!h.includes('<header')||cards!==6||mobileCount!==1)throw new Error(`Página ${d.localidad} inválida: header=${h.includes('<header')} cards=${cards} mobile=${mobileCount}`);
   return h}
