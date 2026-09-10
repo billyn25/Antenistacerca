@@ -17,8 +17,8 @@ const brands=`<div class="home-brands" aria-label="Marcas habituales"><div class
 
 h=h.replace('<div class="kicker">Técnico de antenas cerca de ti</div>','<div class="kicker">Hoy estamos cerca de tu casa</div>');
 
-// SOLO el hero principal del index: no tocar otros H1/H2 de la página.
-h=h.replace(/(<div class="hero-copy">[\s\S]*?<h1>)[\s\S]*?(<\/h1>\s*<h2>)[\s\S]*?(<\/h2>)/i,
+// El hero REAL del index usa class="copy" (no hero-copy).
+h=h.replace(/(<div class="copy">[\s\S]*?<h1>)[\s\S]*?(<\/h1>\s*<h2>)[\s\S]*?(<\/h2>)/i,
   '$1Antenista cerca de tu vivienda$2Instalación, reparación y mantenimiento de antenas, porteros automáticos y videoporteros$3');
 
 h=h.replace('<strong>Trato directo con el técnico</strong>','<strong>Atención sin intermediarios</strong>');
@@ -29,4 +29,4 @@ h=h.replace(/<p class="brand-list">[\s\S]*?<\/p>/gi,'');
 if(!h.includes('id="home-polish"')) h=h.replace('</head>',css+'</head>');
 if(!h.includes('class="trust-home"')) h=h.replace('<section id="contacto"',trust+'<section id="contacto"');
 fs.writeFileSync(file,h);
-console.log('Portada afinada: hero principal corregido sin tocar bloques inferiores.');
+console.log('Portada afinada: hero real del index corregido por .copy.');
