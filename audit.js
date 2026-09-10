@@ -51,6 +51,10 @@ for(const f of html){
     if(!s.includes('BreadcrumbList'))errors.push(`${rel}: falta BreadcrumbList`);
     if(!s.includes('areaServed'))errors.push(`${rel}: falta areaServed`);
     if(!s.includes('Service'))errors.push(`${rel}: falta schema Service`);
+    const porteros=(s.match(/<section class="band" id="porteros">([\s\S]*?)<\/section>/i)||[])[1]||'';
+    if(!porteros.includes('class="doorphone-brands"'))errors.push(`${rel}: falta bloque visual de marcas de porteros`);
+    if(!porteros.includes('Bticino')||!porteros.includes('Legrand'))errors.push(`${rel}: faltan Bticino/Legrand en porteros`);
+    if(/class="brands-note"/.test(porteros))errors.push(`${rel}: sigue apareciendo el párrafo antiguo de marcas en porteros`);
   }
 }
 
