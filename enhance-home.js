@@ -16,8 +16,8 @@ const trust=`<section class="trust-home" aria-labelledby="trust-title"><div clas
 const brands=`<div class="home-brands" aria-label="Marcas habituales"><div class="home-brands-kicker">Experiencia con equipos antiguos y actuales</div><h3>Marcas con las que trabajamos</h3><p class="home-brands-intro">Equipos habituales en instalaciones de antena, amplificación, porteros automáticos y videoporteros.</p><div class="home-brand-group"><span class="home-brand-title">Antenas y amplificación</span><div class="home-brand-list"><span class="home-brand">Televés</span><span class="home-brand">Alcad</span><span class="home-brand">Ikusi</span><span class="home-brand">Fagor</span><span class="home-brand">Rover</span><span class="home-brand">EK</span><span class="home-brand">FTE Maximal</span><span class="home-brand">Fringe</span></div></div><div class="home-brand-group"><span class="home-brand-title">Porteros y videoporteros</span><div class="home-brand-list"><span class="home-brand">Fermax</span><span class="home-brand">Tegui</span><span class="home-brand">Golmar</span><span class="home-brand">Comelit</span><span class="home-brand">Bticino</span><span class="home-brand">Legrand</span><span class="home-brand">Fringe</span><span class="home-brand">Galak</span></div></div></div>`;
 
 h=h.replace('<div class="kicker">Técnico de antenas cerca de ti</div>','<div class="kicker">Hoy estamos cerca de tu casa</div>');
-h=h.replace('<h1>Antenista cerca de ti</h1>','<h1>Instalación, reparación y mantenimiento de antenas, porteros automáticos y videoporteros</h1>');
-h=h.replace('<h2>Instalación, reparación y mantenimiento de antenas, porteros automáticos y videoporteros</h2>','<h2>Un antenista cerca cuando lo necesitas</h2>');
+h=h.replace(/<h1>Instalación, reparación y mantenimiento de antenas, porteros automáticos y videoporteros<\/h1>|<h1>Antenista cerca de ti<\/h1>/i,'<h1>Antenista cerca de tu vivienda</h1>');
+h=h.replace(/<h2>Un antenista cerca cuando lo necesitas<\/h2>|<h2>Instalación, reparación y mantenimiento de antenas, porteros automáticos y videoporteros<\/h2>/i,'<h2>Instalación, reparación y mantenimiento de antenas, porteros automáticos y videoporteros</h2>');
 h=h.replace('<strong>Trato directo con el técnico</strong>','<strong>Atención sin intermediarios</strong>');
 h=h.replace('Te atiende una persona que conoce el trabajo desde el primer contacto, sin centralitas ni intermediarios.','Hablas directamente con quien conoce el trabajo y puede orientarte desde el primer contacto.');
 h=h.replace(/<div class="brands-strip">[\s\S]*?<\/div>/i,brands);
@@ -26,4 +26,4 @@ h=h.replace(/<p class="brand-list">[\s\S]*?<\/p>/gi,'');
 if(!h.includes('id="home-polish"')) h=h.replace('</head>',css+'</head>');
 if(!h.includes('class="trust-home"')) h=h.replace('<section id="contacto"',trust+'<section id="contacto"');
 fs.writeFileSync(file,h);
-console.log('Portada afinada: titular principal corregido y bloque de proximidad restaurado.');
+console.log('Portada afinada: hero principal corregido.');
