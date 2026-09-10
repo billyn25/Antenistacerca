@@ -6,33 +6,13 @@ const PHONE='641 589 394';
 const TEL='+34641589394';
 const WA='34641589394';
 const hash=s=>[...s].reduce((a,c)=>(a+c.charCodeAt(0))%997,0);
-const headings=[
-  l=>`Servicio técnico de antenas en ${l} y alrededores`,
-  l=>`Técnico de antenas en ${l}: atención directa`,
-  l=>`Antenista en ${l} para instalación y reparación`,
-  l=>`Atención técnica de antenas en ${l}`
-];
-const intros=[
-  'Atención para viviendas y comunidades, con contacto directo para explicar la avería o instalación que necesitas.',
-  'Servicio de proximidad para averías e instalaciones de antena, con atención directa desde el primer contacto.',
-  'Soluciones para recepción de TV, instalaciones colectivas y sistemas de acceso en viviendas y comunidades.',
-  'Cuéntanos el problema y recibe atención directa para valorar la reparación o instalación necesaria.'
-];
-const css=`<style id="town-trust-style">
-.town-trust{padding:8px 0 34px}.town-trust-card{text-align:center;padding:28px 24px;border:1px solid #dce5ec;border-radius:15px;background:linear-gradient(135deg,#f8fbfd,#eef6fb);box-shadow:0 9px 24px rgba(16,45,72,.07)}.town-trust-stars{color:#e6a800;font-size:25px;letter-spacing:4px;line-height:1;margin-bottom:10px}.town-trust h2{margin:0 0 8px;color:#0a3f73}.town-trust-lead{max-width:790px;margin:0 auto;color:#536373}.town-trust-points{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 11px;margin:18px auto 20px}.town-trust-points span{padding:8px 11px;border:1px solid #d7e4ed;border-radius:999px;background:#fff;color:#29465f;font-size:13px;font-weight:700}.town-trust-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}.town-trust-phone{font-size:24px;font-weight:900;color:#d92128!important}@media(hover:hover) and (pointer:fine){.town-trust-card,.town-trust-points span,.town-trust-phone{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.town-trust-card:hover{box-shadow:0 12px 28px rgba(16,45,72,.10)}.town-trust-points span:hover{transform:translateY(-1px);border-color:#bfd4e3}.town-trust-phone:hover{transform:translateY(-1px)}}@media(max-width:640px){.town-trust{padding:2px 0 24px}.town-trust-card{padding:23px 13px;border-radius:13px}.town-trust-stars{font-size:22px;letter-spacing:3px}.town-trust h2{font-size:24px}.town-trust-lead{font-size:14px}.town-trust-points{gap:7px;margin:15px 0 18px}.town-trust-points span{font-size:12px;padding:7px 9px}.town-trust-phone{font-size:21px}}@media(prefers-reduced-motion:reduce){.town-trust-card,.town-trust-points span,.town-trust-phone{transition:none!important}}
-</style>`;
-
+const headings=[l=>`Servicio técnico de antenas en ${l} y alrededores`,l=>`Técnico de antenas en ${l}: atención directa`,l=>`Antenista en ${l} para instalación y reparación`,l=>`Atención técnica de antenas en ${l}`];
+const intros=['Atención para viviendas y comunidades, con contacto directo para explicar la avería o instalación que necesitas.','Servicio de proximidad para averías e instalaciones de antena, con atención directa desde el primer contacto.','Soluciones para recepción de TV, instalaciones colectivas y sistemas de acceso en viviendas y comunidades.','Cuéntanos el problema y recibe atención directa para valorar la reparación o instalación necesaria.'];
+const css=`<style id="town-trust-style">.town-trust{padding:8px 0 34px}.town-trust-card{text-align:center;padding:28px 24px;border:1px solid #dce5ec;border-radius:15px;background:linear-gradient(135deg,#f8fbfd,#eef6fb);box-shadow:0 9px 24px rgba(16,45,72,.07)}.town-trust-stars{color:#e6a800;font-size:25px;letter-spacing:4px;line-height:1;margin-bottom:10px}.town-trust h2{margin:0 0 8px;color:#0a3f73}.town-trust-lead{max-width:790px;margin:0 auto;color:#536373}.town-trust-points{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 11px;margin:18px auto 20px}.town-trust-points span{padding:8px 11px;border:1px solid #d7e4ed;border-radius:999px;background:#fff;color:#29465f;font-size:13px;font-weight:700}.town-trust-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}.town-trust-phone{font-size:24px;font-weight:900;color:#d92128!important}@media(hover:hover) and (pointer:fine){.town-trust-card,.town-trust-points span,.town-trust-phone{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.town-trust-card:hover{box-shadow:0 12px 28px rgba(16,45,72,.10)}.town-trust-points span:hover{transform:translateY(-1px);border-color:#bfd4e3}.town-trust-phone:hover{transform:translateY(-1px)}}@media(max-width:640px){.town-trust{padding:2px 0 24px}.town-trust-card{padding:23px 13px;border-radius:13px}.town-trust-stars{font-size:22px;letter-spacing:3px}.town-trust h2{font-size:24px}.town-trust-lead{font-size:14px}.town-trust-points{gap:7px;margin:15px 0 18px}.town-trust-points span{font-size:12px;padding:7px 9px}.town-trust-phone{font-size:21px}}@media(prefers-reduced-motion:reduce){.town-trust-card,.town-trust-points span,.town-trust-phone{transition:none!important}}</style>`;
 for(const d of localidades){
-  const file=path.join('public',d.provinciaSlug,d.slug,'index.html');
-  let h=fs.readFileSync(file,'utf8');
-  const v=hash(`${d.provinciaSlug}/${d.slug}`)%headings.length;
-  const block=`<section class="town-trust" aria-label="Servicio técnico en ${d.localidad}"><div class="wrap"><div class="town-trust-card"><div class="town-trust-stars" aria-hidden="true">★★★★★</div><h2>${headings[v](d.localidad)}</h2><p class="town-trust-lead">${intros[v]}</p><div class="town-trust-points"><span>✓ Antenas individuales y colectivas</span><span>✓ Instalación y reparación TDT</span><span>✓ Porteros automáticos y videoporteros</span><span>✓ Averías y falta de señal</span></div><div class="town-trust-actions"><a class="town-trust-phone" href="tel:${TEL}">☎ ${PHONE}</a><a class="btn green" href="https://wa.me/${WA}">WhatsApp</a></div></div></div></section>`;
-  if(!h.includes('id="town-trust-style"')) h=h.replace('</head>',css+'</head>');
-  if(!h.includes('class="town-trust"')){
-    if(h.includes('<section class="contact"')) h=h.replace('<section class="contact"',block+'<section class="contact"');
-    else if(h.includes('<footer')) h=h.replace('<footer',block+'<footer');
-    else h=h.replace('</main>',block+'</main>');
-  }
-  fs.writeFileSync(file,h);
+ const file=path.join('public',d.provinciaSlug,d.slug,'index.html');let h=fs.readFileSync(file,'utf8');const v=hash(`${d.provinciaSlug}/${d.slug}`)%headings.length;
+ h=h.replace(`<div class="kicker">Técnico de antenas en ${d.localidad}</div>`,'<div class="kicker">Hoy estamos cerca de tu casa</div>');
+ const block=`<section class="town-trust" aria-label="Servicio técnico en ${d.localidad}"><div class="wrap"><div class="town-trust-card"><div class="town-trust-stars" aria-hidden="true">★★★★★</div><h2>${headings[v](d.localidad)}</h2><p class="town-trust-lead">${intros[v]}</p><div class="town-trust-points"><span>✓ Antenas individuales y colectivas</span><span>✓ Instalación y reparación TDT</span><span>✓ Porteros automáticos y videoporteros</span><span>✓ Averías y falta de señal</span></div><div class="town-trust-actions"><a class="town-trust-phone" href="tel:${TEL}">☎ ${PHONE}</a><a class="btn green" href="https://wa.me/${WA}">WhatsApp</a></div></div></div></section>`;
+ if(!h.includes('id="town-trust-style"'))h=h.replace('</head>',css+'</head>');if(!h.includes('class="town-trust"')){if(h.includes('<section class="contact"'))h=h.replace('<section class="contact"',block+'<section class="contact"');else if(h.includes('<footer'))h=h.replace('<footer',block+'<footer');else h=h.replace('</main>',block+'</main>')}fs.writeFileSync(file,h);
 }
-console.log(`Bloque local de confianza añadido a ${localidades.length} localidades.`);
+console.log(`Proximidad y confianza añadidas a ${localidades.length} localidades.`);
