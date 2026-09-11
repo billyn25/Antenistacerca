@@ -44,21 +44,28 @@ function externalDimensions(src){
   if(src.includes('images.unsplash.com/')) return {width:1600,height:1000};
   return null;
 }
+function setAttr(tag,name,value){
+  const re=new RegExp(`\\s+${name}=["'][^"']*["']`,'i');
+  return re.test(tag)?tag.replace(re,` ${name}="${value}"`):tag.replace(/<img\b/i,`<img ${name}="${value}"`);
+}
 function enrichImg(tag){
-  if(/\bwidth=["']?\d+/i.test(tag)&&/\bheight=["']?\d+/i.test(tag)) return tag;
   const src=tag.match(/\bsrc=["']([^"']+)["']/i)?.[1];
   if(!src) return tag;
+  let out=tag;
   const dims=localDimensions(src)||externalDimensions(src);
-  if(!dims) return tag;
-  let out=tag.replace(/\s+width=["']?\d+["']?/i,'').replace(/\s+height=["']?\d+["']?/i,'');
-  return out.replace(/<img\b/i,`<img width="${dims.width}" height="${dims.height}"`);
+  if(dims){out=setAttr(out,'width',dims.width);out=setAttr(out,'height',dims.height);}
+  out=setAttr(out,'decoding','async');
+  const hero=/\/assets\/hero-antennista\.(?:png|jpe?g)(?:[?#]|$)/i.test(src);
+  if(hero){out=setAttr(out,'loading','eager');out=setAttr(out,'fetchpriority','high');}
+  else if(!/\bloading=["']eager["']/i.test(out)){out=setAttr(out,'loading','lazy');}
+  return out;
 }
 
 if(!fs.existsSync(ROOT)) throw new Error('image-metadata: falta public/');
 let changed=0,images=0;
 for(const file of walk(ROOT).filter(f=>f.endsWith('.html'))){
-  let html=fs.readFileSync(file,'utf8');
+  const html=fs.readFileSync(file,'utf8');
   const next=html.replace(/<img\b[^>]*>/gi,tag=>{images++;const enriched=enrichImg(tag);if(enriched!==tag)changed++;return enriched;});
   if(next!==html) fs.writeFileSync(file,next);
 }
-console.log(`Imágenes revisadas: ${images}; dimensiones añadidas: ${changed}.`);
+console.log(`Imágenes revisadas: ${images}; etiquetas optimizadas: ${changed}.`);
