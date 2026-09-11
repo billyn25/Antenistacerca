@@ -3,8 +3,9 @@
   "private":true,
   "type":"module",
   "scripts":{
-    "build":"node generator.js && mkdir -p public/assets && cp -R src/assets/. public/assets/ && node finalize.js && node audit.js",
-    "audit:seo":"node audit.js",
-    "audit:seo:prod":"SEO_MODE=production node audit.js"
+    "build":"node generator.js && mkdir -p public/assets && cp -R src/assets/. public/assets/ && node finalize.js && node seo-output.js test && node audit.js test",
+    "build:prod":"node generator.js && mkdir -p public/assets && cp -R src/assets/. public/assets/ && node finalize.js && node seo-output.js production && node audit.js production",
+    "audit:seo":"node audit.js test",
+    "audit:seo:prod":"node audit.js production"
   }
 }
