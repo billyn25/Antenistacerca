@@ -1,41 +1,218 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import localidades from './src/localidades.json' with { type: 'json' };
 
-const root='public';
-const DOMAIN='https://www.antenistacerca.es';
-const PHONE='641 589 394';
-const TEL='+34641589394';
-const TEST_MODE=process.env.SEO_MODE!=='production';
+const ROOT = 'public';
+const DOMAIN = 'https://www.antenistacerca.es';
+const PHONE = '641 589 394';
+const TEL = '+34641589394';
+const MODE = (process.argv[2] || process.env.SEO_MODE || 'test').toLowerCase();
+const PRODUCTION = MODE === 'production' || MODE === 'prod';
+const EXPECTED_ROBOTS = PRODUCTION ? 'index,follow,max-image-preview:large' : 'noindex,nofollow';
+const errors = [];
+const warnings = [];
 
-const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);
-const html=walk(root).filter(f=>f.endsWith('.html'));
-const seenCanonical=new Map(),seenTitle=new Map(),seenDescription=new Map(),localAssetRefs=new Set();
-const errors=[],warnings=[],localPages=[],canonicals=[];
-const visibleText=s=>s.replace(/<script\b[\s\S]*?<\/script>/gi,' ').replace(/<style\b[\s\S]*?<\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/&[a-z0-9#]+;/gi,' ').toLowerCase().replace(/\s+/g,' ').trim();
-const words=s=>new Set(visibleText(s).split(/[^a-záéíóúüñ0-9]+/i).filter(w=>w.length>3));
-const jaccard=(a,b)=>{let common=0;for(const x of a)if(b.has(x))common++;const union=a.size+b.size-common;return union?common/union:1};
-const hasAny=(s,list)=>list.some(x=>s.includes(x));
-const count=(s,re)=>(s.match(re)||[]).length;
-const hasCss=(s,name)=>new RegExp(`href=["']\\/assets\\/${name.replace('.', '\\.')}(?:\\?[^"']*)?["']`,'i').test(s);
+const townByFile = new Map(localidades.map((d) => [`${d.provinciaSlug}/${d.slug}/index.html`, d]));
+const provinceByFile = new Map();
+for (const d of localidades) provinceByFile.set(`${d.provinciaSlug}/index.html`, d.provincia);
+const expectedFiles = new Set(['index.html', ...provinceByFile.keys(), ...townByFile.keys()]);
 
-for(const f of html){
- const s=fs.readFileSync(f,'utf8'),rel=path.relative(root,f),text=visibleText(s);
- const titles=[...s.matchAll(/<title>([^<]+)<\/title>/gi)].map(m=>m[1].trim());
- const descriptions=[...s.matchAll(/<meta\s+name="description"\s+content="([^"]*)"/gi)].map(m=>m[1].trim());
- const canon=[...s.matchAll(/<link\s+rel="canonical"\s+href="([^"]+)"/gi)].map(m=>m[1].trim());
- const h1s=[...s.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map(m=>visibleText(m[1]));
- const robots=[...s.matchAll(/<meta\s+name="robots"\s+content="([^"]*)"/gi)].map(m=>m[1].toLowerCase());
- if(titles.length!==1)errors.push(`${rel}: title=${titles.length}`);if(descriptions.length!==1)errors.push(`${rel}: meta description=${descriptions.length}`);if(canon.length!==1)errors.push(`${rel}: canonical=${canon.length}`);if(h1s.length!==1)errors.push(`${rel}: h1=${h1s.length}`);if(robots.length!==1)errors.push(`${rel}: meta robots=${robots.length}`);if(s.includes('{{'))errors.push(`${rel}: quedan placeholders sin resolver`);
- if(TEST_MODE&&!robots.some(x=>x.includes('noindex')))errors.push(`${rel}: falta noindex durante fase de pruebas`);if(!TEST_MODE&&robots.some(x=>x.includes('noindex')))errors.push(`${rel}: noindex activo en producción`);
- if(titles[0]&&(titles[0].length<30||titles[0].length>65))warnings.push(`${rel}: title fuera de rango recomendado (${titles[0].length})`);if(descriptions[0]&&(descriptions[0].length<120||descriptions[0].length>165))warnings.push(`${rel}: description fuera de rango recomendado (${descriptions[0].length})`);
- if(canon[0]&&!canon[0].startsWith(DOMAIN+'/'))errors.push(`${rel}: canonical fuera del dominio principal: ${canon[0]}`);if(canon[0]&&(/[?#]/.test(canon[0])||canon[0].endsWith('.html')))warnings.push(`${rel}: canonical no limpio: ${canon[0]}`);
- if(canon[0]){canonicals.push(canon[0]);if(seenCanonical.has(canon[0]))errors.push(`${rel}: canonical duplicado con ${seenCanonical.get(canon[0])}`);else seenCanonical.set(canon[0],rel)}if(titles[0]){if(seenTitle.has(titles[0]))errors.push(`${rel}: title duplicado con ${seenTitle.get(titles[0])}`);else seenTitle.set(titles[0],rel)}if(descriptions[0]){if(seenDescription.has(descriptions[0]))errors.push(`${rel}: description duplicada con ${seenDescription.get(descriptions[0])}`);else seenDescription.set(descriptions[0],rel)}
- for(const m of s.matchAll(/(?:src|href)="(\/assets\/[^"?#]+)["?#]/gi))localAssetRefs.add(m[1]);for(const m of s.matchAll(/(?:src|href)="(\/assets\/[^"?#]+)"/gi))localAssetRefs.add(m[1]);for(const m of s.matchAll(/<img\b[^>]*>/gi))if(!/\balt="[^"]*"/i.test(m[0]))errors.push(`${rel}: imagen sin atributo alt`);for(const m of s.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/gi)){try{JSON.parse(m[1])}catch{errors.push(`${rel}: JSON-LD inválido`)}}
- const ids=[...s.matchAll(/\bid="([^"]+)"/gi)].map(m=>m[1]);const seenIds=new Set();for(const id of ids){if(seenIds.has(id))errors.push(`${rel}: id duplicado #${id}`);seenIds.add(id)}
- const parts=rel.split(path.sep);if(parts.length===3&&parts[2]==='index.html'){const provinceSlug=parts[0],townSlug=parts[1];localPages.push({rel,set:words(s),chars:text.length,bytes:Buffer.byteLength(s,'utf8')});if(!s.includes(`tel:${TEL}`))errors.push(`${rel}: falta enlace al teléfono fijo ${PHONE}`);if(!text.includes(PHONE.toLowerCase()))errors.push(`${rel}: teléfono no visible`);if(!hasAny(text,['antenista','técnico de antenas','tecnico de antenas']))errors.push(`${rel}: falta intención principal técnico/antenista`);if(!text.includes('antenas individuales')||!text.includes('colectivas'))errors.push(`${rel}: falta intención antenas individuales/colectivas`);if(!text.includes('porteros automáticos')||!text.includes('videoporteros'))errors.push(`${rel}: falta intención porteros/videoporteros`);if(!text.includes('repar'))warnings.push(`${rel}: poca señal semántica de reparación`);if(!text.includes('instala'))warnings.push(`${rel}: poca señal semántica de instalación`);if(!s.includes(`href="/${provinceSlug}/"`))warnings.push(`${rel}: no se detecta enlace de retorno a provincia`);if(!s.includes('BreadcrumbList'))errors.push(`${rel}: falta BreadcrumbList`);if(!s.includes('areaServed'))errors.push(`${rel}: falta areaServed`);if(!s.includes('Service'))errors.push(`${rel}: falta schema Service`);if(titles[0]&&!titles[0].toLowerCase().includes(townSlug.split('-')[0]))warnings.push(`${rel}: revisar relación title/localidad`);if(s.includes('id="shared-ui"'))errors.push(`${rel}: shared-ui sigue inline en vez de cacheado`);if(s.includes('id="town-trust-style"'))errors.push(`${rel}: estilos de mejoras siguen inline`);if(!hasCss(s,'shared-ui.css'))errors.push(`${rel}: falta shared-ui.css`);if(!hasCss(s,'town-enhancements.css'))errors.push(`${rel}: falta town-enhancements.css`);const porteros=(s.match(/<section class="band" id="porteros">([\s\S]*?)<\/section>/i)||[])[1]||'';if(!porteros.includes('class="doorphone-brands"'))errors.push(`${rel}: falta bloque visual de marcas de porteros`);if(!porteros.includes('Bticino')||!porteros.includes('Legrand'))errors.push(`${rel}: faltan Bticino/Legrand en porteros`);if(/class="brands-note"/.test(porteros))errors.push(`${rel}: sigue apareciendo el párrafo antiguo de marcas en porteros`)}
+const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+  const full = path.join(dir, entry.name);
+  return entry.isDirectory() ? walk(full) : [full];
+});
+const textOnly = (html) => html
+  .replace(/<script\b[\s\S]*?<\/script>/gi, ' ')
+  .replace(/<style\b[\s\S]*?<\/style>/gi, ' ')
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/&[a-z0-9#]+;/gi, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+const normalizedWords = (html) => new Set(textOnly(html).toLowerCase().split(/[^a-záéíóúüñ0-9]+/i).filter((word) => word.length > 3));
+const jaccard = (a, b) => {
+  let common = 0;
+  for (const value of a) if (b.has(value)) common += 1;
+  const union = a.size + b.size - common;
+  return union ? common / union : 1;
+};
+const all = (html, regex) => [...html.matchAll(regex)].map((match) => match[1]?.trim() ?? '');
+const meta = (html, name, attribute = 'name') => {
+  const safe = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`<meta\\s+${attribute}=["']${safe}["']\\s+content=["']([^"']*)["'][^>]*>`, 'i');
+  return html.match(regex)?.[1] ?? '';
+};
+const expectedTownDescription = (name) => `Antenista en ${name} para reparación e instalación de antenas TDT, parabólicas, amplificadores, porteros automáticos y videoporteros. ${PHONE}.`;
+const expectedProvinceDescription = (name) => `Antenistas en municipios de ${name} para reparar e instalar antenas TDT, parabólicas, amplificadores, porteros automáticos y videoporteros. ${PHONE}.`;
+const expectedMetadata = (rel) => {
+  const town = townByFile.get(rel);
+  if (town) return {
+    title: `Reparación de antenas en ${town.localidad} | ${PHONE}`,
+    description: expectedTownDescription(town.localidad),
+    canonical: `${DOMAIN}/${town.provinciaSlug}/${town.slug}/`
+  };
+  const province = provinceByFile.get(rel);
+  if (province) return {
+    title: `Antenistas en ${province} | Reparación de antenas | ${PHONE}`,
+    description: expectedProvinceDescription(province),
+    canonical: `${DOMAIN}/${rel.split('/')[0]}/`
+  };
+  return {
+    title: `Antenista Cerca | Reparación de antenas | ${PHONE}`,
+    description: `Reparación e instalación de antenas TDT y parabólicas, amplificadores, porteros automáticos y videoporteros. Atención directa: ${PHONE}.`,
+    canonical: `${DOMAIN}/`
+  };
+};
+
+if (!fs.existsSync(ROOT)) throw new Error('SEO AUDIT: no existe public/.');
+const htmlFiles = walk(ROOT).filter((file) => file.endsWith('.html'));
+const actualFiles = new Set(htmlFiles.map((file) => path.relative(ROOT, file).split(path.sep).join('/')));
+for (const rel of expectedFiles) if (!actualFiles.has(rel)) errors.push(`falta página esperada: ${rel}`);
+for (const rel of actualFiles) if (!expectedFiles.has(rel)) warnings.push(`HTML no previsto: ${rel}`);
+
+const seenTitles = new Map();
+const seenDescriptions = new Map();
+const seenCanonicals = new Map();
+const canonicalList = [];
+const localPages = [];
+const assetRefs = new Set();
+
+for (const file of htmlFiles) {
+  const rel = path.relative(ROOT, file).split(path.sep).join('/');
+  const html = fs.readFileSync(file, 'utf8');
+  const visible = textOnly(html);
+  const visibleLower = visible.toLowerCase();
+  const expected = expectedMetadata(rel);
+  const titles = all(html, /<title>([\s\S]*?)<\/title>/gi);
+  const descriptions = all(html, /<meta\s+name=["']description["']\s+content=["']([^"']*)["'][^>]*>/gi);
+  const canonicals = all(html, /<link\s+rel=["']canonical["']\s+href=["']([^"']+)["'][^>]*>/gi);
+  const h1s = all(html, /<h1\b[^>]*>([\s\S]*?)<\/h1>/gi).map((heading) => textOnly(heading));
+  const robots = meta(html, 'robots');
+
+  if (titles.length !== 1) errors.push(`${rel}: debe haber un solo title`);
+  if (descriptions.length !== 1) errors.push(`${rel}: debe haber una sola meta description`);
+  if (canonicals.length !== 1) errors.push(`${rel}: debe haber un solo canonical`);
+  if (h1s.length !== 1) errors.push(`${rel}: debe haber un solo H1`);
+  if (html.includes('{{')) errors.push(`${rel}: quedan placeholders sin resolver`);
+  if (/&quot(?!;)/.test(html)) errors.push(`${rel}: entidad &quot sin cerrar`);
+
+  const title = titles[0] || '';
+  const description = descriptions[0] || '';
+  const canonical = canonicals[0] || '';
+  if (title !== expected.title) errors.push(`${rel}: title fuera del patrón de intención local`);
+  if (description !== expected.description) errors.push(`${rel}: meta description fuera del patrón aprobado`);
+  if (canonical !== expected.canonical) errors.push(`${rel}: canonical incorrecto (${canonical})`);
+  if (robots !== EXPECTED_ROBOTS) errors.push(`${rel}: robots debe ser ${EXPECTED_ROBOTS}`);
+  if (title.length < 30 || title.length > 65) errors.push(`${rel}: title fuera de 30-65 caracteres (${title.length})`);
+  if (description.length < 120 || description.length > 165) errors.push(`${rel}: description fuera de 120-165 caracteres (${description.length})`);
+  if (seenTitles.has(title)) errors.push(`${rel}: title duplicado con ${seenTitles.get(title)}`); else seenTitles.set(title, rel);
+  if (seenDescriptions.has(description)) errors.push(`${rel}: description duplicada con ${seenDescriptions.get(description)}`); else seenDescriptions.set(description, rel);
+  if (seenCanonicals.has(canonical)) errors.push(`${rel}: canonical duplicado con ${seenCanonicals.get(canonical)}`); else seenCanonicals.set(canonical, rel);
+  canonicalList.push(canonical);
+
+  if (meta(html, 'og:title', 'property') !== title) errors.push(`${rel}: og:title no coincide con title`);
+  if (meta(html, 'og:description', 'property') !== description) errors.push(`${rel}: og:description no coincide con description`);
+  if (meta(html, 'og:url', 'property') !== canonical) errors.push(`${rel}: og:url no coincide con canonical`);
+  if (meta(html, 'twitter:card') !== 'summary_large_image') errors.push(`${rel}: falta twitter:card`);
+
+  const jsonLd = [...html.matchAll(/<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/gi)];
+  if (!jsonLd.length) errors.push(`${rel}: falta JSON-LD`);
+  for (const item of jsonLd) {
+    try { JSON.parse(item[1]); } catch { errors.push(`${rel}: JSON-LD inválido`); }
+  }
+
+  const ids = [...html.matchAll(/\bid=["']([^"']+)["']/gi)].map((match) => match[1]);
+  const seenIds = new Set();
+  for (const id of ids) {
+    if (seenIds.has(id)) errors.push(`${rel}: id duplicado #${id}`);
+    seenIds.add(id);
+  }
+  for (const image of html.matchAll(/<img\b[^>]*>/gi)) {
+    if (!/\balt=["'][^"']+["']/i.test(image[0])) errors.push(`${rel}: imagen sin alt descriptivo`);
+    if (!/\bwidth=["']?\d+/i.test(image[0]) || !/\bheight=["']?\d+/i.test(image[0])) warnings.push(`${rel}: imágenes sin width/height explícitos`);
+  }
+  for (const ref of html.matchAll(/(?:src|href)=["'](\/assets\/[^"'?#]+)/gi)) assetRefs.add(ref[1]);
+
+  const forbidden = [
+    /hemos realizado\s+\d+\s+servicios/i,
+    /llegamos[^.]{0,80}\d+\s+minutos/i,
+    /direcci[oó]n aproximada/i,
+    /reparamos (?:lavadoras|frigor[ií]ficos?)/i,
+    /personas que viven en/i
+  ];
+  if (forbidden.some((regex) => regex.test(visible))) errors.push(`${rel}: contiene afirmaciones locales automáticas o no verificadas`);
+
+  const town = townByFile.get(rel);
+  if (town) {
+    localPages.push({ rel, words: normalizedWords(html), chars: visible.length });
+    const nameLower = town.localidad.toLowerCase();
+    if (!title.toLowerCase().startsWith(`reparación de antenas en ${nameLower}`)) errors.push(`${rel}: la intención principal no abre el title`);
+    if (!h1s[0]?.toLowerCase().includes(nameLower)) errors.push(`${rel}: H1 sin localidad`);
+    if (!description.toLowerCase().includes(nameLower)) errors.push(`${rel}: description sin localidad`);
+    if (!html.includes(`tel:${TEL}`) || !visible.includes(PHONE)) errors.push(`${rel}: teléfono ausente`);
+    if (!visibleLower.includes('reparación') || !visibleLower.includes('instalación')) errors.push(`${rel}: faltan reparación/instalación`);
+    if (!visibleLower.includes('antenas individuales') || !visibleLower.includes('colectivas')) errors.push(`${rel}: faltan antenas individuales/colectivas`);
+    if (!visibleLower.includes('porteros automáticos') || !visibleLower.includes('videoporteros')) errors.push(`${rel}: falta intención de porteros/videoporteros`);
+    if (!html.includes('BreadcrumbList') || !html.includes('areaServed') || !html.includes('Service')) errors.push(`${rel}: schema local incompleto`);
+    if (!html.includes(`href="/${town.provinciaSlug}/"`)) warnings.push(`${rel}: falta retorno visible a provincia`);
+    if (!html.includes('class="direct-tech"')) errors.push(`${rel}: falta bloque de trato directo`);
+    if (!html.includes('class="old-doorphones"')) errors.push(`${rel}: falta galería de porteros antiguos`);
+    if (!html.includes('class="amp-gallery"')) errors.push(`${rel}: falta galería de amplificadores`);
+    if (!html.includes('class="town-trust"')) errors.push(`${rel}: falta bloque de confianza`);
+    if ((html.match(/class="card"/g) || []).length !== 6) errors.push(`${rel}: deben existir 6 tarjetas de servicio`);
+    if (!html.includes('/assets/shared-ui.css') || !html.includes('/assets/town-enhancements.css')) errors.push(`${rel}: CSS compartido incompleto`);
+    if (visible.length < 2200) warnings.push(`${rel}: contenido visible escaso (${visible.length} caracteres)`);
+  }
 }
-for(const asset of localAssetRefs){const p=path.join(root,asset.replace(/^\//,''));if(!fs.existsSync(p))errors.push(`asset ausente: ${asset}`)}localPages.sort((a,b)=>a.rel.localeCompare(b.rel));for(let i=0;i<localPages.length;i++){const a=localPages[i];if(a.chars<1800)warnings.push(`${a.rel}: poco contenido visible (${a.chars} caracteres`);for(const j of [i+1,i+7,i+31]){if(j>=localPages.length)continue;const b=localPages[j],sim=jaccard(a.set,b.set);if(sim>=0.90)errors.push(`${a.rel} ~ ${b.rel}: similitud textual muy alta ${(sim*100).toFixed(1)}%`);else if(sim>=0.82)warnings.push(`${a.rel} ~ ${b.rel}: similitud textual alta ${(sim*100).toFixed(1)}%`)}}
-const home=fs.readFileSync(path.join(root,'index.html'),'utf8');if(count(home,/id="servicios"/g)!==1)errors.push('index.html: bloque servicios duplicado');if(count(home,/class="extra-services"/g)!==1)errors.push('index.html: servicios adicionales ausentes o duplicados');if(count(home,/<li>Viviendas, comunidades y negocios<\/li>/g)!==1)errors.push('index.html: hero alterado');if(!home.includes(`tel:${TEL}`)||!visibleText(home).includes(PHONE.toLowerCase()))errors.push('index.html: teléfono fijo ausente');if(!home.includes('WebSite')||!home.includes('#negocio'))errors.push('index.html: schema de sitio/negocio incompleto');if(!home.includes('Antenista cerca de tu vivienda'))errors.push('index.html: H1 aprobado ausente');if(!home.includes('Instalación, reparación y mantenimiento de antenas, porteros automáticos y videoporteros'))errors.push('index.html: subtítulo hero aprobado ausente');if(!home.includes('Hoy estamos cerca de tu casa'))errors.push('index.html: mensaje de proximidad aprobado ausente');if(!home.includes('★★★★★'))errors.push('index.html: bloque de confianza con estrellas ausente');if(!home.includes('FTE Maximal'))errors.push('index.html: marca FTE Maximal ausente');if(home.includes('<span class="home-brand">FTE</span>')||home.includes('<span class="home-brand">Maximal</span>'))errors.push('index.html: FTE Maximal separada incorrectamente');
-const sitemapPath=path.join(root,'sitemap.xml');if(!fs.existsSync(sitemapPath))errors.push('sitemap.xml ausente');else{const sitemap=fs.readFileSync(sitemapPath,'utf8');const urls=[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);if(new Set(urls).size!==urls.length)errors.push('sitemap.xml: URLs duplicadas');for(const c of canonicals)if(!urls.includes(c))errors.push(`sitemap.xml: falta canonical ${c}`);for(const u of urls)if(!seenCanonical.has(u))warnings.push(`sitemap.xml: URL sin canonical HTML detectado ${u}`)}
-const robotsPath=path.join(root,'robots.txt');if(!fs.existsSync(robotsPath))errors.push('robots.txt ausente');else{const robots=fs.readFileSync(robotsPath,'utf8');if(TEST_MODE&&!/Disallow:\s*\//i.test(robots))errors.push('robots.txt: durante pruebas debe bloquear rastreo');if(!TEST_MODE&&/Disallow:\s*\/$/im.test(robots))errors.push('robots.txt: sigue bloqueando todo en producción');if(!robots.includes(`${DOMAIN}/sitemap.xml`))errors.push('robots.txt: falta referencia al sitemap')}
-if(warnings.length){console.warn(`\nSEO AUDIT WARNINGS (${warnings.length})`);for(const w of warnings.slice(0,80))console.warn(`- ${w}`);if(warnings.length>80)console.warn(`- ... y ${warnings.length-80} avisos más`)}if(errors.length){console.error(`\nSEO AUDIT FAILED (${errors.length})`);for(const e of errors.slice(0,120))console.error(`- ${e}`);if(errors.length>120)console.error(`- ... y ${errors.length-120} errores más`);process.exit(1)}const totalTownBytes=localPages.reduce((a,x)=>a+x.bytes,0);console.log(`SEO AUDIT OK [${TEST_MODE?'PRUEBAS':'PRODUCCIÓN'}]: ${html.length} HTML, ${localPages.length} localidades, ${seenCanonical.size} canonicals únicos, ${localAssetRefs.size} assets comprobados, teléfono ${PHONE} validado.`);console.log(`Peso HTML localidades: ${(totalTownBytes/1024).toFixed(1)} KB total, ${localPages.length?(totalTownBytes/localPages.length/1024).toFixed(1):'0.0'} KB de media.`);
+
+for (const asset of assetRefs) {
+  if (!fs.existsSync(path.join(ROOT, asset.replace(/^\//, '')))) errors.push(`asset local ausente: ${asset}`);
+}
+for (let first = 0; first < localPages.length; first += 1) {
+  for (let second = first + 1; second < localPages.length; second += 1) {
+    const similarity = jaccard(localPages[first].words, localPages[second].words);
+    if (similarity >= 0.97) errors.push(`${localPages[first].rel} y ${localPages[second].rel}: similitud extrema ${(similarity * 100).toFixed(1)}%`);
+    else if (similarity >= 0.92) warnings.push(`${localPages[first].rel} y ${localPages[second].rel}: similitud alta ${(similarity * 100).toFixed(1)}%`);
+  }
+}
+
+const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+for (const required of ['Antenista cerca de tu vivienda', 'Instalación, reparación y mantenimiento de antenas, porteros automáticos y videoporteros', 'Hoy estamos cerca de tu casa', '★★★★★', 'FTE Maximal']) {
+  if (!home.includes(required)) errors.push(`index.html: falta bloque aprobado: ${required}`);
+}
+if ((home.match(/id="servicios"/g) || []).length !== 1) errors.push('index.html: servicios duplicados');
+if ((home.match(/class="extra-services"/g) || []).length !== 1) errors.push('index.html: servicios adicionales ausentes o duplicados');
+
+const sitemapPath = path.join(ROOT, 'sitemap.xml');
+if (!fs.existsSync(sitemapPath)) errors.push('falta sitemap.xml');
+else {
+  const sitemap = fs.readFileSync(sitemapPath, 'utf8');
+  const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  const expectedUrls = new Set([...expectedFiles].map((rel) => rel === 'index.html' ? `${DOMAIN}/` : `${DOMAIN}/${rel.replace(/index\.html$/, '')}`));
+  if (new Set(urls).size !== urls.length) errors.push('sitemap.xml: URLs duplicadas');
+  for (const url of expectedUrls) if (!urls.includes(url)) errors.push(`sitemap.xml: falta ${url}`);
+  for (const url of urls) if (!expectedUrls.has(url)) warnings.push(`sitemap.xml: URL inesperada ${url}`);
+  for (const canonical of canonicalList) if (!urls.includes(canonical)) errors.push(`sitemap.xml: falta canonical ${canonical}`);
+}
+
+const robotsPath = path.join(ROOT, 'robots.txt');
+if (!fs.existsSync(robotsPath)) errors.push('falta robots.txt');
+else {
+  const robots = fs.readFileSync(robotsPath, 'utf8');
+  if (PRODUCTION && !/^Allow:\s*\/$/mi.test(robots)) errors.push('robots.txt: producción no está abierta');
+  if (PRODUCTION && /^Disallow:\s*\/$/mi.test(robots)) errors.push('robots.txt: producción bloquea todo');
+  if (!PRODUCTION && !/^Disallow:\s*\/$/mi.test(robots)) errors.push('robots.txt: pruebas no bloquean todo');
+  if (!robots.includes(`${DOMAIN}/sitemap.xml`)) errors.push('robots.txt: falta sitemap');
+}
+
+const uniqueWarnings = [...new Set(warnings)];
+const uniqueErrors = [...new Set(errors)];
+if (uniqueWarnings.length) {
+  console.warn(`\nSEO AUDIT AVISOS (${uniqueWarnings.length})`);
+  for (const warning of uniqueWarnings.slice(0, 80)) console.warn(`- ${warning}`);
+}
+if (uniqueErrors.length) {
+  console.error(`\nSEO AUDIT FALLIDO (${uniqueErrors.length})`);
+  for (const error of uniqueErrors.slice(0, 140)) console.error(`- ${error}`);
+  process.exit(1);
+}
+console.log(`SEO AUDIT PRO OK [${PRODUCTION ? 'PRODUCCIÓN' : 'PRUEBAS'}]: ${htmlFiles.length} páginas, ${localPages.length} localidades, ${seenCanonicals.size} canonicals únicos y ${assetRefs.size} assets locales comprobados.`);
