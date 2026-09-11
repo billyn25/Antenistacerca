@@ -3,7 +3,7 @@
   "private":true,
   "type":"module",
   "scripts":{
-    "build":"node generator.js && mkdir -p public/assets && cp -R src/assets/. public/assets/ && node enhance-home.js && node enhance-towns.js && node audit.js",
+    "build":"node generator.js && mkdir -p public/assets && cp -R src/assets/. public/assets/ && node finalize.js && node audit.js",
     "audit:seo":"node audit.js"
   }
 }
