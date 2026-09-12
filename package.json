@@ -3,8 +3,8 @@
   "private":true,
   "type":"module",
   "scripts":{
-    "build":"node generator.js && mkdir -p public/assets && cp -R src/assets/. public/assets/ && node finalize.js && node local-content.js && node seo-output.js test && node image-metadata.js && node audit.js test",
-    "build:prod":"node generator.js && mkdir -p public/assets && cp -R src/assets/. public/assets/ && node finalize.js && node local-content.js && node seo-output.js production && node image-metadata.js && node audit.js production",
+    "build":"node generator.js && mkdir -p public/assets && cp -R src/assets/. public/assets/ && node finalize.js && node local-content.js && node home-extras.js && node seo-output.js test && node image-metadata.js && node audit.js test",
+    "build:prod":"node generator.js && mkdir -p public/assets && cp -R src/assets/. public/assets/ && node finalize.js && node local-content.js && node home-extras.js && node seo-output.js production && node image-metadata.js && node audit.js production",
     "audit:seo":"node audit.js test",
     "audit:seo:prod":"node audit.js production"
   }
