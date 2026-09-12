@@ -3,6 +3,7 @@ import path from 'node:path';
 import localidades from './src/localidades.json' with { type: 'json' };
 
 const ROOT='public';
+const HERO_SUBTITLE='Técnico en instalación, reparación y mantenimiento de antenas, porteros automáticos y videoporteros';
 const hash=s=>[...s].reduce((a,c)=>(a*33+c.charCodeAt(0))>>>0,5381);
 const pick=(arr,key,salt='')=>arr[hash(`${key}|${salt}`)%arr.length];
 const esc=(s='')=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -59,11 +60,20 @@ function rewriteSection(html,id,text){
   const re=new RegExp(`(<section\\b[^>]*id=["']${id}["'][^>]*>[\\s\\S]*?<\\/section>)`,'i');
   return html.replace(re,m=>replaceFirstParagraph(m,text));
 }
+function setHeroSubtitle(html){
+  return html.replace(/(<div class="copy">[\s\S]*?<h1>[\s\S]*?<\/h1>\s*<h2>)[\s\S]*?(<\/h2>)/i,`$1${HERO_SUBTITLE}$2`);
+}
+
+const homeFile=path.join(ROOT,'index.html');
+if(fs.existsSync(homeFile)){
+  const home=setHeroSubtitle(fs.readFileSync(homeFile,'utf8'));
+  fs.writeFileSync(homeFile,home);
+}
 
 for(const d of localidades){
   const file=path.join(ROOT,d.provinciaSlug,d.slug,'index.html');
   if(!fs.existsSync(file)) throw new Error(`Contenido local: falta ${file}`);
-  let html=fs.readFileSync(file,'utf8');
+  let html=setHeroSubtitle(fs.readFileSync(file,'utf8'));
   const key=`${d.provinciaSlug}/${d.slug}`;
   html=rewriteSection(html,'reparacion',pick(copy.reparacion,key,'reparacion')(d.localidad));
   html=rewriteSection(html,'tdt',pick(copy.tdt,key,'tdt')(d.localidad));
