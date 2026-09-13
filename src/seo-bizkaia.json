@@ -1,0 +1,30 @@
+{
+  "bilbao": {
+    "descripcion": "Técnico de antenas en Bilbao para TDT, antenas colectivas, parabólicas, cabeceras, amplificación, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Bilbao atendemos averías de televisión e instalaciones de antena en viviendas y comunidades, desde pérdidas de canales y señal inestable hasta problemas de cabecera, amplificación, distribución o cableado. También revisamos parabólicas y sistemas de portero automático y videoportero.",
+    "zonaLocal": "Bilbao actúa como nodo principal del área metropolitana y se relaciona con Barakaldo, Erandio, Leioa, Getxo y Alonsotegi. La estructura interna prioriza municipios próximos para reforzar búsquedas locales sin mezclar zonas alejadas.",
+    "faqPregunta": "¿Revisáis cabeceras, amplificadores y antenas colectivas en Bilbao?",
+    "faqRespuesta": "Sí. Medimos la señal en recepción y distribución y comprobamos cabecera, fuentes, amplificadores, derivadores, cableado y tomas para localizar el origen de la avería antes de sustituir equipos."
+  },
+  "getxo": {
+    "descripcion": "Antenista en Getxo para reparación de TDT, antenas colectivas, parabólicas, amplificadores, porteros automáticos y videoporteros. 641 589 394.",
+    "introLocal": "En Getxo revisamos antenas individuales y colectivas, problemas de señal TDT, parabólicas, amplificación y distribución en viviendas y comunidades. También diagnosticamos porteros y videoporteros, incluidos equipos antiguos que todavía pueden repararse.",
+    "zonaLocal": "Getxo se integra en la margen derecha y se conecta con Leioa, Erandio, Berango y otros municipios próximos. Los enlaces internos siguen esa proximidad para reforzar la relevancia local de cada página.",
+    "faqPregunta": "¿Podéis revisar una comunidad de Getxo si unas viviendas reciben peor señal que otras?",
+    "faqRespuesta": "Sí. Comprobamos cabecera, amplificación y distribución por tramos para saber si el desequilibrio está en derivadores, cableado, repartidores o tomas concretas."
+  },
+  "barakaldo": {
+    "descripcion": "Técnico antenista en Barakaldo para TDT, antenas colectivas, parabólicas, amplificación, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Barakaldo atendemos averías de antena en viviendas y comunidades, pérdidas de canales, problemas de amplificación y fallos de distribución. También trabajamos con parabólicas y sistemas de portero automático y videoportero.",
+    "zonaLocal": "Barakaldo forma parte de Ezkerraldea y se relaciona con Sestao, Portugalete, Bilbao y Valle de Trápaga-Trapagaran. La página enlaza principalmente con esas localidades para mantener una estructura territorial coherente.",
+    "faqPregunta": "¿Reparáis instalaciones colectivas de antena en Barakaldo sin cambiar toda la cabecera?",
+    "faqRespuesta": "Sí. Revisamos recepción, módulos, fuentes, amplificación y distribución y actuamos sobre el componente que realmente está causando el fallo cuando la instalación permite reparación."
+  },
+  "galdakao": {
+    "descripcion": "Antenista en Galdakao para reparación de antenas TDT, colectivas, parabólicas, amplificación, porteros automáticos y videoporteros. 641 589 394.",
+    "introLocal": "En Galdakao realizamos diagnóstico de señal y reparación de antenas en viviendas y comunidades. Revisamos TDT, amplificadores, cableado, repartidores y tomas, además de parabólicas y sistemas de portero automático o videoportero.",
+    "zonaLocal": "Galdakao se conecta con Basauri, Bedia, Lemoa, Usansolo y Zaratamo dentro del entorno de Nerbioi-Ibaizabal y Arratia. Esa red se utiliza para reforzar enlaces internos entre localidades próximas.",
+    "faqPregunta": "¿Qué comprobáis si faltan canales o hay pixelaciones en Galdakao?",
+    "faqRespuesta": "Medimos nivel y calidad de señal y revisamos recepción, amplificación, cableado y distribución. Así se puede saber si el problema está en antena, cabecera, amplificador o en una parte concreta de la instalación."
+  }
+}
