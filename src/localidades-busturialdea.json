@@ -1,0 +1,22 @@
+[
+  {"localidad":"Ajangiz","slug":"ajangiz","comarca":"Busturialdea","cercanas":["Gernika-Lumo","Mendata","Muxika","Arratzu"]},
+  {"localidad":"Arratzu","slug":"arratzu","comarca":"Busturialdea","cercanas":["Ajangiz","Gernika-Lumo","Kortezubi","Nabarniz"]},
+  {"localidad":"Bermeo","slug":"bermeo","comarca":"Busturialdea","cercanas":["Mundaka","Busturia","Sukarrieta","Murueta"]},
+  {"localidad":"Busturia","slug":"busturia","comarca":"Busturialdea","cercanas":["Mundaka","Sukarrieta","Murueta","Forua"]},
+  {"localidad":"Ea","slug":"ea","comarca":"Busturialdea","cercanas":["Ibarrangelu","Elantxobe","Ispaster","Ereño"]},
+  {"localidad":"Elantxobe","slug":"elantxobe","comarca":"Busturialdea","cercanas":["Ibarrangelu","Ea","Ereño","Gautegiz Arteaga"]},
+  {"localidad":"Ereño","slug":"ereno","comarca":"Busturialdea","cercanas":["Nabarniz","Kortezubi","Gautegiz Arteaga","Ibarrangelu"]},
+  {"localidad":"Errigoiti","slug":"errigoiti","comarca":"Busturialdea","cercanas":["Morga","Muxika","Gernika-Lumo","Forua"]},
+  {"localidad":"Forua","slug":"forua","comarca":"Busturialdea","cercanas":["Gernika-Lumo","Murueta","Busturia","Errigoiti"]},
+  {"localidad":"Gautegiz Arteaga","slug":"gautegiz-arteaga","comarca":"Busturialdea","cercanas":["Kortezubi","Ibarrangelu","Ereño","Gernika-Lumo"]},
+  {"localidad":"Gernika-Lumo","slug":"gernika-lumo","comarca":"Busturialdea","cercanas":["Forua","Ajangiz","Muxika","Kortezubi"]},
+  {"localidad":"Ibarrangelu","slug":"ibarrangelu","comarca":"Busturialdea","cercanas":["Elantxobe","Ea","Gautegiz Arteaga","Ereño"]},
+  {"localidad":"Kortezubi","slug":"kortezubi","comarca":"Busturialdea","cercanas":["Gernika-Lumo","Gautegiz Arteaga","Arratzu","Ereño"]},
+  {"localidad":"Mendata","slug":"mendata","comarca":"Busturialdea","cercanas":["Muxika","Ajangiz","Morga","Gernika-Lumo"]},
+  {"localidad":"Morga","slug":"morga","comarca":"Busturialdea","cercanas":["Errigoiti","Muxika","Mendata","Gernika-Lumo"]},
+  {"localidad":"Mundaka","slug":"mundaka","comarca":"Busturialdea","cercanas":["Bermeo","Sukarrieta","Busturia","Murueta"]},
+  {"localidad":"Murueta","slug":"murueta","comarca":"Busturialdea","cercanas":["Forua","Busturia","Sukarrieta","Gernika-Lumo"]},
+  {"localidad":"Muxika","slug":"muxika","comarca":"Busturialdea","cercanas":["Gernika-Lumo","Mendata","Morga","Ajangiz"]},
+  {"localidad":"Nabarniz","slug":"nabarniz","comarca":"Busturialdea","cercanas":["Ereño","Arratzu","Kortezubi","Aulesti"]},
+  {"localidad":"Sukarrieta","slug":"sukarrieta","comarca":"Busturialdea","cercanas":["Busturia","Mundaka","Murueta","Bermeo"]}
+]
