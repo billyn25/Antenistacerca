@@ -1,7 +1,10 @@
 import fs from 'node:fs';
 
 const BASE='src/localidades.json';
-const EXTRAS=['src/localidades-mungialdea.json'];
+const EXTRAS=[
+  'src/localidades-mungialdea.json',
+  'src/localidades-uribe-kosta.json'
+];
 
 const base=JSON.parse(fs.readFileSync(BASE,'utf8'));
 let merged=[...base];
