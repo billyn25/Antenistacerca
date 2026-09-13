@@ -1,0 +1,15 @@
+[
+  {
+    "provincia": "Álava",
+    "provinciaSlug": "alava",
+    "localidad": "Yécora-Iekora",
+    "slug": "yecora-iekora",
+    "comarca": "Rioja Alavesa",
+    "descripcion": "Técnico de antenas en Yécora-Iekora para averías de TDT, instalación y reparación de antenas, parabólicas, amplificación, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Yécora-Iekora atendemos instalaciones de televisión en viviendas y comunidades, desde pérdidas de canales o señal TDT hasta revisión de antenas, amplificadores, cableado y distribución. También trabajamos con antenas parabólicas y con averías o renovaciones de porteros automáticos y videoporteros.",
+    "zonaLocal": "Yécora-Iekora se encuentra en Rioja Alavesa, en el entorno de Oyón-Oion, Lanciego-Lantziego, Kripan y Elvillar-Bilar. Esta relación territorial permite conectar la página con otros municipios próximos de la comarca sin recurrir a ubicaciones, tiempos de llegada ni trabajos realizados que no estén verificados.",
+    "faqPregunta": "¿Revisáis una antena con pérdida de señal o canales en Yécora-Iekora?",
+    "faqRespuesta": "Sí. Antes de sustituir equipos comprobamos la recepción TDT, conexiones, amplificación, cableado, repartidores y tomas para localizar dónde se origina la pérdida de señal. Si se trata de una instalación colectiva, revisamos también la distribución para distinguir una avería general de un problema limitado a una vivienda.",
+    "cercanas": ["Oyón-Oion", "Lanciego-Lantziego", "Kripan", "Elvillar-Bilar"]
+  }
+]
