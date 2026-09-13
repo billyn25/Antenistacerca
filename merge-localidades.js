@@ -5,7 +5,8 @@ const EXTRAS=[
   'src/localidades-mungialdea.json',
   'src/localidades-uribe-kosta.json',
   'src/localidades-durangaldea-extra.json',
-  'src/localidades-enkarterri.json'
+  'src/localidades-enkarterri.json',
+  'src/localidades-metro-bizkaia.json'
 ];
 
 const base=JSON.parse(fs.readFileSync(BASE,'utf8'));
