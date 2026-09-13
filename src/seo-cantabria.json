@@ -26,5 +26,33 @@
     "zonaLocal": "Laredo forma parte de la Costa Oriental y se relaciona con Colindres, Limpias, Liendo y Santoña. La página enlaza con esas localidades para construir una cobertura SEO comarcal coherente.",
     "faqPregunta": "¿Revisáis amplificadores y distribución comunitaria en Laredo?",
     "faqRespuesta": "Sí. Medimos la señal y comprobamos amplificación, derivadores, repartidores, cableado y tomas para saber si la incidencia está en la cabecera o en un tramo concreto de la red."
+  },
+  "camargo": {
+    "descripcion": "Técnico de antenas en Camargo para TDT, parabólicas, antenas colectivas, amplificadores, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Camargo atendemos pérdidas de señal, canales que desaparecen y averías de amplificación en viviendas y comunidades. Revisamos antenas TDT, distribución, cableado y también parabólicas, porteros automáticos y videoporteros.",
+    "zonaLocal": "Camargo se integra en el entorno de Santander y se relaciona con El Astillero, Piélagos y Santa Cruz de Bezana. La página enlaza con esos municipios para reforzar una cobertura local basada en proximidad real.",
+    "faqPregunta": "¿Podéis revisar una antena colectiva en Camargo si solo fallan algunas viviendas?",
+    "faqRespuesta": "Sí. Comprobamos la señal en cabecera y distribución y seguimos derivadores, repartidores y cableado para localizar si la avería está en una rama concreta del edificio."
+  },
+  "el-astillero": {
+    "descripcion": "Antenista en El Astillero para reparación de TDT, parabólicas, amplificación, porteros automáticos y videoporteros. 641 589 394.",
+    "introLocal": "En El Astillero revisamos instalaciones TDT, amplificadores, cableado y tomas cuando aparecen cortes o pérdida de canales. También trabajamos con parabólicas y sistemas de portero y videoportero en viviendas y comunidades.",
+    "zonaLocal": "El Astillero se relaciona directamente con Camargo, Villaescusa, Marina de Cudeyo y Santander. Esa proximidad se utiliza para mantener una estructura de enlaces internos coherente dentro del área de la bahía.",
+    "faqPregunta": "¿Qué comprobáis si la señal llega débil a varias tomas en El Astillero?",
+    "faqRespuesta": "Medimos niveles en distintos puntos y revisamos amplificación, repartidores, derivadores y cableado para saber si la pérdida se produce antes o después de la distribución principal."
+  },
+  "noja": {
+    "descripcion": "Técnico antenista en Noja para TDT, parabólicas, reparación de señal, amplificación, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Noja atendemos averías de recepción TDT, parabólicas, amplificadores y distribución interior en viviendas y comunidades. También revisamos porteros automáticos y videoporteros antes de decidir entre reparar o renovar.",
+    "zonaLocal": "Noja forma parte de Trasmiera y enlaza con Arnuero, Argoños, Meruelo y Bareyo. La página mantiene ese contexto comarcal para reforzar búsquedas locales y navegación entre municipios cercanos.",
+    "faqPregunta": "¿Podéis revisar una antena o parabólica con señal inestable en Noja?",
+    "faqRespuesta": "Sí. Comprobamos recepción, orientación cuando corresponde, amplificación, conectores, cableado y tomas para localizar si el problema está en captación o distribución."
+  },
+  "reinosa": {
+    "descripcion": "Antenista en Reinosa para reparación de antenas TDT, parabólicas, amplificadores, porteros automáticos y videoporteros. 641 589 394.",
+    "introLocal": "En Reinosa revisamos averías de señal, antenas TDT, amplificadores y distribución tanto en viviendas como en comunidades. También atendemos parabólicas y sistemas de portero automático y videoportero.",
+    "zonaLocal": "Reinosa actúa como referencia de Campoo y se relaciona con Campoo de Enmedio, Hermandad de Campoo de Suso, Campoo de Yuso y Las Rozas de Valdearroyo. Esa red guía el enlazado interno local.",
+    "faqPregunta": "¿Revisáis instalaciones de antena con pérdida de señal en Reinosa?",
+    "faqRespuesta": "Sí. Medimos nivel y calidad y comprobamos antena, amplificación, cableado, repartidores y tomas para localizar el punto donde empieza a degradarse la recepción."
   }
 }
