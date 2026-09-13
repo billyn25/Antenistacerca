@@ -23,9 +23,9 @@ if(!fs.existsSync(FILE)) throw new Error('Home extras: falta public/index.html')
 let html=fs.readFileSync(FILE,'utf8');
 if(!html.includes('id="contacto"')) throw new Error('Home extras: no encuentro el bloque de contacto donde insertar extras');
 if(!html.includes('<h3>Antenas colectivas y comunidades</h3>')){
-  const marker='<div class="brands-strip">';
-  if(!html.includes(marker)) throw new Error('Home extras: no encuentro el final de servicios principales');
-  html=html.replace(marker,extraMainServices+'</div>'+marker);
+  const servicesEnd='</div><div class="brands-strip">';
+  if(!html.includes(servicesEnd)) throw new Error('Home extras: no encuentro el grid de servicios principales');
+  html=html.replace(servicesEnd,extraMainServices+servicesEnd);
 }
 if(!html.includes(`id="${STYLE_ID}"`)) html=html.replace('</head>',css+'</head>');
 if(!html.includes('class="home-stats"')) html=html.replace('<section id="contacto"',statsBlock+'<section id="contacto"');
