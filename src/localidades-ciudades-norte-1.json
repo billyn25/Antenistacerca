@@ -1,0 +1,6 @@
+[
+  {"provincia":"Álava","provinciaSlug":"alava","localidad":"Vitoria-Gasteiz","slug":"vitoria-gasteiz","comarca":"Llanada Alavesa","cercanas":[]},
+  {"provincia":"Gipuzkoa","provinciaSlug":"gipuzkoa","localidad":"Donostia-San Sebastián","slug":"donostia-san-sebastian","comarca":"Donostialdea","cercanas":[]},
+  {"provincia":"Cantabria","provinciaSlug":"cantabria","localidad":"Santander","slug":"santander","comarca":"Área de Santander","cercanas":[]},
+  {"provincia":"Navarra","provinciaSlug":"navarra","localidad":"Pamplona-Iruña","slug":"pamplona-iruna","comarca":"Cuenca de Pamplona","cercanas":[]}
+]
