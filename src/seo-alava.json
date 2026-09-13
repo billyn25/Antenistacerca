@@ -26,5 +26,26 @@
     "zonaLocal": "Laguardia se sitúa en Rioja Alavesa y se relaciona con Elciego, Navaridas, Leza y Elvillar-Bilar. Esas localidades forman el núcleo de enlaces internos para reforzar búsquedas de servicio técnico en la comarca.",
     "faqPregunta": "¿Podéis revisar una parabólica con poca señal en Laguardia?",
     "faqRespuesta": "Sí. Comprobamos orientación, fijación, LNB, conectores y cableado y medimos la señal para determinar si basta con ajustar o reparar la instalación."
+  },
+  "agurain-salvatierra": {
+    "descripcion": "Técnico de antenas en Agurain-Salvatierra para TDT, parabólicas, amplificación, porteros automáticos y videoporteros. 641 589 394.",
+    "introLocal": "En Agurain-Salvatierra atendemos averías de recepción, antenas TDT, amplificadores y distribución tanto en viviendas como en pequeñas comunidades. También revisamos parabólicas y sistemas de portero y videoportero.",
+    "zonaLocal": "Agurain-Salvatierra forma parte de la Llanada Alavesa y se relaciona con Alegría-Dulantzi, Asparrena, San Millán-Donemiliaga y Barrundia. Esa red comarcal guía el enlazado interno de la página.",
+    "faqPregunta": "¿Revisáis una antena que pierde canales de forma intermitente en Agurain-Salvatierra?",
+    "faqRespuesta": "Sí. Medimos señal y calidad y comprobamos antena, amplificación, conexiones, cableado y tomas para localizar si el fallo está en recepción o en distribución."
+  },
+  "iruna-oka-iruna-de-oca": {
+    "descripcion": "Antenista en Iruña Oka-Iruña de Oca para TDT, parabólicas, amplificación, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Iruña Oka-Iruña de Oca revisamos instalaciones de televisión, señal TDT, amplificadores, cableado y reparto cuando aparecen cortes o faltan canales. También atendemos parabólicas, porteros automáticos y videoporteros.",
+    "zonaLocal": "Iruña Oka-Iruña de Oca se integra en Añana y enlaza con Vitoria-Gasteiz, Ribera Alta, Kuartango y Añana. La estructura territorial mantiene la página conectada con municipios próximos y con la capital alavesa.",
+    "faqPregunta": "¿Podéis comprobar una instalación TDT completa en Iruña Oka-Iruña de Oca?",
+    "faqRespuesta": "Sí. Revisamos recepción, amplificación, repartidores, cableado y tomas y comparamos niveles para saber en qué punto empieza a degradarse la señal."
+  },
+  "elciego": {
+    "descripcion": "Técnico antenista en Elciego para reparación de TDT, parabólicas, señal de TV, amplificación, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Elciego trabajamos sobre antenas TDT y parabólicas, pérdidas de señal, amplificación y distribución interior. También diagnosticamos porteros automáticos y videoporteros antes de decidir si procede reparación o renovación.",
+    "zonaLocal": "Elciego pertenece a Rioja Alavesa y se relaciona con Lapuebla de Labarca, Baños de Ebro-Mañueta, Navaridas y Laguardia. Esas conexiones crean un enlazado interno coherente dentro de la comarca.",
+    "faqPregunta": "¿Reparáis una antena o parabólica existente en Elciego antes de recomendar una nueva?",
+    "faqRespuesta": "Sí. Comprobamos estado, orientación cuando corresponde, señal, conectores, amplificación y cableado para valorar si la instalación puede recuperarse mediante ajuste o reparación."
   }
 }
