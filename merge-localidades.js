@@ -2,7 +2,7 @@ import fs from 'node:fs';
 
 const BASE='src/localidades.json';
 const EXTRAS=[
-  'src/localidades-mungialdea.json','src/localidades-uribe-kosta.json','src/localidades-durangaldea-extra.json','src/localidades-enkarterri.json','src/localidades-metro-bizkaia.json','src/localidades-busturialdea.json','src/localidades-lea-artibai.json','src/localidades-ciudades-norte-1.json'
+  'src/localidades-mungialdea.json','src/localidades-uribe-kosta.json','src/localidades-durangaldea-extra.json','src/localidades-enkarterri.json','src/localidades-metro-bizkaia.json','src/localidades-busturialdea.json','src/localidades-lea-artibai.json','src/localidades-ciudades-norte-1.json','src/localidades-alava-1.json'
 ];
 const hash=s=>[...String(s)].reduce((a,c)=>(a*33+c.charCodeAt(0))>>>0,5381);const pick=(a,k)=>a[hash(k)%a.length];const appendIfShort=(v,m,e)=>{v=String(v||'').trim();return v.length>=m?v:`${v}${v?' ':''}${e}`.trim()};
 function hydrate(input){
