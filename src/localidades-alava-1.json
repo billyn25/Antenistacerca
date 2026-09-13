@@ -1,0 +1,15 @@
+[
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Amurrio","slug":"amurrio","comarca":"Ayala","cercanas":["Laudio-Llodio","Artziniega","Ayala-Aiara","Okondo"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Laudio-Llodio","slug":"laudio-llodio","comarca":"Ayala","cercanas":["Amurrio","Okondo","Ayala-Aiara","Artziniega"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Artziniega","slug":"artziniega","comarca":"Ayala","cercanas":["Amurrio","Ayala-Aiara","Laudio-Llodio","Okondo"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Ayala-Aiara","slug":"ayala-aiara","comarca":"Ayala","cercanas":["Amurrio","Artziniega","Laudio-Llodio","Okondo"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Okondo","slug":"okondo","comarca":"Ayala","cercanas":["Laudio-Llodio","Amurrio","Ayala-Aiara","Artziniega"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Agurain-Salvatierra","slug":"agurain-salvatierra","comarca":"Llanada Alavesa","cercanas":["Alegría-Dulantzi","Asparrena","San Millán-Donemiliaga","Barrundia"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Alegría-Dulantzi","slug":"alegria-dulantzi","comarca":"Llanada Alavesa","cercanas":["Agurain-Salvatierra","Iruraiz-Gauna","Elburgo-Burgelu","Vitoria-Gasteiz"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Asparrena","slug":"asparrena","comarca":"Llanada Alavesa","cercanas":["Agurain-Salvatierra","San Millán-Donemiliaga","Zalduondo","Barrundia"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Barrundia","slug":"barrundia","comarca":"Llanada Alavesa","cercanas":["Agurain-Salvatierra","San Millán-Donemiliaga","Asparrena","Elburgo-Burgelu"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Elburgo-Burgelu","slug":"elburgo-burgelu","comarca":"Llanada Alavesa","cercanas":["Vitoria-Gasteiz","Alegría-Dulantzi","Iruraiz-Gauna","Barrundia"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Iruraiz-Gauna","slug":"iruraiz-gauna","comarca":"Llanada Alavesa","cercanas":["Alegría-Dulantzi","Agurain-Salvatierra","Elburgo-Burgelu","San Millán-Donemiliaga"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"San Millán-Donemiliaga","slug":"san-millan-donemiliaga","comarca":"Llanada Alavesa","cercanas":["Agurain-Salvatierra","Asparrena","Barrundia","Iruraiz-Gauna"]},
+ {"provincia":"Álava","provinciaSlug":"alava","localidad":"Zalduondo","slug":"zalduondo","comarca":"Llanada Alavesa","cercanas":["Asparrena","Agurain-Salvatierra","San Millán-Donemiliaga","Barrundia"]}
+]
