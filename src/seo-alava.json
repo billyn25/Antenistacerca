@@ -1,0 +1,30 @@
+{
+  "vitoria-gasteiz": {
+    "descripcion": "Técnico de antenas en Vitoria-Gasteiz para TDT, antenas colectivas, parabólicas, amplificación, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Vitoria-Gasteiz atendemos averías de televisión e instalaciones de antena en viviendas y comunidades, desde señal TDT inestable hasta problemas de cabecera, amplificación, distribución o cableado. También revisamos parabólicas y sistemas de portero automático y videoportero.",
+    "zonaLocal": "Vitoria-Gasteiz funciona como principal nodo de la Llanada Alavesa y se relaciona con Iruña Oka-Iruña de Oca, Alegría-Dulantzi, Arratzua-Ubarrundia, Zigoitia y Legutio. La malla interna prioriza municipios alaveses próximos en lugar de ciudades alejadas.",
+    "faqPregunta": "¿Revisáis antenas colectivas y cabeceras en comunidades de Vitoria-Gasteiz?",
+    "faqRespuesta": "Sí. Medimos recepción, cabecera, fuentes, amplificadores, distribución y tomas para localizar si la incidencia es general o afecta solo a una parte del edificio."
+  },
+  "amurrio": {
+    "descripcion": "Antenista en Amurrio para reparación de TDT, parabólicas, antenas colectivas, amplificadores, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Amurrio revisamos pérdidas de señal, canales inestables y averías de antena en viviendas y comunidades. Trabajamos sobre TDT, parabólicas, amplificación y distribución y también diagnosticamos porteros automáticos y videoporteros.",
+    "zonaLocal": "Amurrio se integra en Ayala y se conecta con Laudio-Llodio, Artziniega, Ayala-Aiara y Okondo. Esas relaciones se usan para reforzar la navegación y la relevancia local entre municipios cercanos.",
+    "faqPregunta": "¿Podéis revisar un amplificador de antena en Amurrio antes de sustituirlo?",
+    "faqRespuesta": "Sí. Comprobamos señal de entrada y salida, alimentación, conexiones y distribución para saber si el fallo está realmente en el amplificador o en otro punto de la instalación."
+  },
+  "laudio-llodio": {
+    "descripcion": "Técnico antenista en Laudio-Llodio para TDT, antenas colectivas, parabólicas, amplificación, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Laudio-Llodio atendemos averías de señal de televisión, antenas individuales y colectivas, parabólicas y problemas de amplificación o cableado. También revisamos porteros y videoporteros en viviendas y comunidades.",
+    "zonaLocal": "Laudio-Llodio forma parte de Ayala y mantiene relación directa con Amurrio, Okondo, Ayala-Aiara y Artziniega. La página enlaza con ese entorno para crear una estructura SEO comarcal coherente.",
+    "faqPregunta": "¿Qué revisáis si solo algunas viviendas pierden señal en Laudio-Llodio?",
+    "faqRespuesta": "Comprobamos distribución, derivadores, cableado y tomas por zonas. Si la cabecera entrega señal correcta, el problema puede estar limitado a una rama concreta del edificio."
+  },
+  "laguardia": {
+    "descripcion": "Antenista en Laguardia para TDT, parabólicas, reparación de señal, amplificadores, porteros automáticos y videoporteros. 641 589 394.",
+    "introLocal": "En Laguardia realizamos diagnóstico de antenas TDT y parabólicas, problemas de recepción, amplificación y distribución, además de averías de porteros automáticos y videoporteros. Revisamos la instalación antes de proponer sustituciones completas.",
+    "zonaLocal": "Laguardia se sitúa en Rioja Alavesa y se relaciona con Elciego, Navaridas, Leza y Elvillar-Bilar. Esas localidades forman el núcleo de enlaces internos para reforzar búsquedas de servicio técnico en la comarca.",
+    "faqPregunta": "¿Podéis revisar una parabólica con poca señal en Laguardia?",
+    "faqRespuesta": "Sí. Comprobamos orientación, fijación, LNB, conectores y cableado y medimos la señal para determinar si basta con ajustar o reparar la instalación."
+  }
+}
