@@ -5,7 +5,9 @@ const FILE='public/index.html';
 const STYLE_ID='home-extras-style';
 const SCRIPT_ID='home-extras-script';
 
-const statsBlock=`<section class="home-stats" aria-labelledby="home-stats-title"><div class="w"><div class="home-stats-head"><div class="kicker">ANTENISTA CERCA</div><h2 id="home-stats-title">Servicio técnico de proximidad</h2></div><div class="home-stats-grid"><div class="home-stat"><strong data-count="${localidades.length}">${localidades.length}</strong><span>Localidades preparadas</span></div><div class="home-stat"><strong>24H</strong><span>Atención de urgencias</span></div><div class="home-stat"><strong data-count="6">6</strong><span>Servicios principales</span></div><div class="home-stat"><strong>Directo</strong><span>Trato con el técnico</span></div></div></div></section>`;
+const statsBlock=`<section class="home-stats" aria-labelledby="home-stats-title"><div class="w"><div class="home-stats-head"><div class="kicker">ANTENISTA CERCA</div><h2 id="home-stats-title">Servicio técnico de proximidad</h2></div><div class="home-stats-grid"><div class="home-stat"><strong data-count="${localidades.length}">${localidades.length}</strong><span>Localidades preparadas</span></div><div class="home-stat"><strong>24H</strong><span>Atención de urgencias</span></div><div class="home-stat"><strong data-count="9">9</strong><span>Servicios principales</span></div><div class="home-stat"><strong>Directo</strong><span>Trato con el técnico</span></div></div></div></section>`;
+
+const extraMainServices=`<article><img src="/assets/antena.jpeg" alt="Antena colectiva para comunidad de propietarios"><div><h3>Antenas colectivas y comunidades</h3><p>Instalación y reparación de antenas comunitarias. Revisamos cabeceras, líneas, derivadores y señal cuando falla todo el edificio o solo algunas viviendas.</p></div></article><article><img src="/assets/monocanales-cabecera.jpeg" alt="Amplificadores, repartidores y distribución de señal de televisión"><div><h3>Amplificadores y distribución</h3><p>Diagnóstico y reparación de amplificadores, fuentes, repartidores y derivadores para recuperar nivel y calidad de señal en toda la instalación.</p></div></article><article><img src="/assets/parabolica.jpeg" alt="Cableado coaxial y tomas de televisión y satélite"><div><h3>Tomas, cableado TV y SAT</h3><p>Nuevas tomas, sustitución de cable coaxial, conectores y líneas de TV o satélite cuando hay pérdidas, cortes o puntos sin señal.</p></div></article>`;
 
 const css=`<style id="${STYLE_ID}">
 .home-stats{background:#0b1c31;color:#fff;padding:56px 0 52px;margin:12px 0 36px}
@@ -20,8 +22,13 @@ const js=`<script id="${SCRIPT_ID}">(()=>{const els=[...document.querySelectorAl
 if(!fs.existsSync(FILE)) throw new Error('Home extras: falta public/index.html');
 let html=fs.readFileSync(FILE,'utf8');
 if(!html.includes('id="contacto"')) throw new Error('Home extras: no encuentro el bloque de contacto donde insertar extras');
+if(!html.includes('<h3>Antenas colectivas y comunidades</h3>')){
+  const marker='<div class="brands-strip">';
+  if(!html.includes(marker)) throw new Error('Home extras: no encuentro el final de servicios principales');
+  html=html.replace(marker,extraMainServices+'</div>'+marker);
+}
 if(!html.includes(`id="${STYLE_ID}"`)) html=html.replace('</head>',css+'</head>');
 if(!html.includes('class="home-stats"')) html=html.replace('<section id="contacto"',statsBlock+'<section id="contacto"');
 if(!html.includes(`id="${SCRIPT_ID}"`)) html=html.replace('</body>',js+'</body>');
 fs.writeFileSync(FILE,html);
-console.log(`Extras de portada aplicados: cifras para ${localidades.length} localidades.`);
+console.log(`Extras de portada aplicados: ${localidades.length} localidades y 9 servicios principales.`);
