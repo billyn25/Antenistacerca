@@ -32,6 +32,5 @@
 {"provincia":"Cantabria","provinciaSlug":"cantabria","localidad":"Selaya","slug":"selaya","comarca":"Valles Pasiegos","cercanas":["Villacarriedo","Saro","San Roque de Riomiera","Vega de Pas"]},
 {"provincia":"Cantabria","provinciaSlug":"cantabria","localidad":"Vega de Pas","slug":"vega-de-pas","comarca":"Valles Pasiegos","cercanas":["San Pedro del Romeral","Selaya","Villacarriedo","Luena"]},
 {"provincia":"Cantabria","provinciaSlug":"cantabria","localidad":"Villacarriedo","slug":"villacarriedo","comarca":"Valles Pasiegos","cercanas":["Selaya","Saro","Santa María de Cayón","Vega de Pas"]},
-{"provincia":"Cantabria","provinciaSlug":"cantabria","localidad":"San Miguel de Aguayo","slug":"san-miguel-de-aguayo","comarca":"Campoo","cercanas":["Santiurde de Reinosa","Campoo de Yuso","Molledo"]},
-{"provincia":"Cantabria","provinciaSlug":"cantabria","localidad":"Vega de Liébana","slug":"vega-de-liebana","comarca":"Liébana","cercanas":["Potes","Cabezón de Liébana","Pesaguero","Camaleño"]}
+{"provincia":"Cantabria","provinciaSlug":"cantabria","localidad":"San Miguel de Aguayo","slug":"san-miguel-de-aguayo","comarca":"Campoo","cercanas":["Santiurde de Reinosa","Campoo de Yuso","Molledo"]}
 ]
