@@ -26,5 +26,33 @@
     "zonaLocal": "Galdakao se conecta con Basauri, Bedia, Lemoa, Usansolo y Zaratamo dentro del entorno de Nerbioi-Ibaizabal y Arratia. Esa red se utiliza para reforzar enlaces internos entre localidades próximas.",
     "faqPregunta": "¿Qué comprobáis si faltan canales o hay pixelaciones en Galdakao?",
     "faqRespuesta": "Medimos nivel y calidad de señal y revisamos recepción, amplificación, cableado y distribución. Así se puede saber si el problema está en antena, cabecera, amplificador o en una parte concreta de la instalación."
+  },
+  "portugalete": {
+    "descripcion": "Técnico de antenas en Portugalete para TDT, antenas colectivas, parabólicas, amplificación, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Portugalete atendemos problemas de recepción de televisión, antenas colectivas, amplificadores, cableado y distribución en edificios y viviendas. También revisamos parabólicas y sistemas de portero automático y videoportero.",
+    "zonaLocal": "Portugalete se integra en Ezkerraldea y mantiene relación directa con Sestao, Santurtzi, Barakaldo y Getxo. Esa proximidad se refleja en el enlazado interno para reforzar búsquedas del entorno de la ría.",
+    "faqPregunta": "¿Podéis localizar una pérdida de señal en una comunidad de Portugalete?",
+    "faqRespuesta": "Sí. Partimos de la cabecera y seguimos la señal por derivadores, repartidores, cableado y tomas hasta localizar el tramo donde se produce la pérdida."
+  },
+  "santurtzi": {
+    "descripcion": "Antenista en Santurtzi para reparación de TDT, parabólicas, antenas colectivas, amplificadores, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Santurtzi revisamos instalaciones de antena con cortes, pixelaciones o pérdida de canales y comprobamos recepción, amplificación y distribución antes de sustituir equipos. También atendemos parabólicas, porteros automáticos y videoporteros.",
+    "zonaLocal": "Santurtzi forma parte de Ezkerraldea y enlaza de forma natural con Portugalete, Sestao, Ortuella y Zierbena. La navegación mantiene una estructura local coherente alrededor de municipios realmente próximos.",
+    "faqPregunta": "¿Revisáis antenas colectivas antiguas en Santurtzi?",
+    "faqRespuesta": "Sí. Comprobamos estado de cabecera, fuentes, amplificadores y red de distribución para valorar si basta con reparar o ajustar antes de plantear una renovación completa."
+  },
+  "leioa": {
+    "descripcion": "Técnico antenista en Leioa para reparación de antenas TDT, parabólicas, amplificación, porteros automáticos y videoporteros. 641 589 394.",
+    "introLocal": "En Leioa trabajamos sobre instalaciones TDT individuales y colectivas, amplificadores, cable coaxial, repartidores y tomas cuando la recepción es inestable. También diagnosticamos averías de parabólicas, porteros y videoporteros.",
+    "zonaLocal": "Leioa se sitúa en la margen derecha y se relaciona con Getxo, Erandio, Berango y Bilbao. La página utiliza esas conexiones territoriales para reforzar la cobertura local y evitar enlaces artificiales.",
+    "faqPregunta": "¿Qué hacéis si una vivienda de Leioa recibe peor señal que el resto del edificio?",
+    "faqRespuesta": "Comprobamos la señal en la derivación, cableado y toma de esa vivienda y la comparamos con la distribución general para saber si el fallo es particular o comunitario."
+  },
+  "erandio": {
+    "descripcion": "Antenista en Erandio para TDT, parabólicas, antenas colectivas, amplificación, porteros automáticos y videoporteros. 641 589 394.",
+    "introLocal": "En Erandio revisamos averías de señal y distribución en viviendas y comunidades, antenas TDT, parabólicas, amplificadores y cableado. El servicio incluye también diagnóstico y renovación de porteros automáticos y videoporteros.",
+    "zonaLocal": "Erandio conecta con Leioa, Getxo, Bilbao y Sondika dentro del área metropolitana de Bizkaia. El enlazado entre esas páginas refuerza una arquitectura local basada en proximidad real.",
+    "faqPregunta": "¿Podéis revisar una cabecera comunitaria en Erandio si desaparecen algunos canales?",
+    "faqRespuesta": "Sí. Medimos la recepción y comprobamos módulos, fuentes, amplificación y distribución para distinguir un problema de cabecera de una incidencia en cableado o tomas."
   }
 }
