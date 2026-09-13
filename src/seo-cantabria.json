@@ -1,0 +1,30 @@
+{
+  "santander": {
+    "descripcion": "Técnico de antenas en Santander para TDT, antenas colectivas, parabólicas, cabeceras, amplificación, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Santander atendemos averías de televisión e instalaciones de antena en viviendas y comunidades, desde señal TDT inestable hasta problemas de cabecera, amplificación, distribución o cableado. También revisamos parabólicas y sistemas de portero automático y videoportero.",
+    "zonaLocal": "Santander funciona como nodo principal del área metropolitana y se conecta con Camargo, El Astillero, Santa Cruz de Bezana y otros municipios próximos. La estructura interna prioriza enlaces territoriales reales para reforzar búsquedas locales.",
+    "faqPregunta": "¿Revisáis antenas colectivas y cabeceras en comunidades de Santander?",
+    "faqRespuesta": "Sí. Medimos recepción, cabecera, fuentes, amplificadores, derivadores, cableado y tomas para determinar si la avería es general o está limitada a una parte del edificio."
+  },
+  "torrelavega": {
+    "descripcion": "Antenista en Torrelavega para reparación de TDT, antenas colectivas, parabólicas, amplificadores, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Torrelavega revisamos pérdidas de canales, problemas de señal TDT, amplificación y distribución en viviendas y comunidades. También trabajamos con parabólicas y sistemas de portero automático y videoportero.",
+    "zonaLocal": "Torrelavega actúa como referencia de Besaya y se relaciona con Cartes, Reocín, Polanco y Piélagos. Esas conexiones forman la base del enlazado interno local de la página.",
+    "faqPregunta": "¿Podéis localizar una avería de antena colectiva en Torrelavega si falla solo una zona?",
+    "faqRespuesta": "Sí. Comprobamos señal de cabecera y seguimos la distribución por líneas, derivadores y tomas para identificar en qué tramo aparece la pérdida antes de cambiar componentes."
+  },
+  "castro-urdiales": {
+    "descripcion": "Técnico antenista en Castro-Urdiales para TDT, parabólicas, antenas colectivas, amplificación, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Castro-Urdiales atendemos averías de antena, problemas de recepción TDT, parabólicas y fallos de amplificación o distribución. También revisamos porteros automáticos y videoporteros en viviendas y comunidades.",
+    "zonaLocal": "Castro-Urdiales se integra en la Costa Oriental y se conecta con Liendo, Guriezo y Laredo. La malla interna mantiene ese contexto territorial para reforzar la relevancia local de cada URL.",
+    "faqPregunta": "¿Qué revisáis si la señal de televisión se corta en Castro-Urdiales?",
+    "faqRespuesta": "Comprobamos nivel y calidad de señal, estado de antena, amplificación, conexiones, cableado y tomas para distinguir si el problema está en recepción o en distribución."
+  },
+  "laredo": {
+    "descripcion": "Antenista en Laredo para reparación de antenas TDT, parabólicas, amplificación, instalaciones colectivas, porteros y videoporteros. 641 589 394.",
+    "introLocal": "En Laredo realizamos diagnóstico de señal y reparación de antenas en viviendas y comunidades. Revisamos TDT, parabólicas, amplificadores, cableado, distribución y también sistemas de portero automático o videoportero.",
+    "zonaLocal": "Laredo forma parte de la Costa Oriental y se relaciona con Colindres, Limpias, Liendo y Santoña. La página enlaza con esas localidades para construir una cobertura SEO comarcal coherente.",
+    "faqPregunta": "¿Revisáis amplificadores y distribución comunitaria en Laredo?",
+    "faqRespuesta": "Sí. Medimos la señal y comprobamos amplificación, derivadores, repartidores, cableado y tomas para saber si la incidencia está en la cabecera o en un tramo concreto de la red."
+  }
+}
