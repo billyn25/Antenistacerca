@@ -1,0 +1,14 @@
+[
+  {"localidad":"Amoroto","slug":"amoroto","comarca":"Lea-Artibai","cercanas":["Lekeitio","Mendexa","Aulesti","Gizaburuaga"]},
+  {"localidad":"Aulesti","slug":"aulesti","comarca":"Lea-Artibai","cercanas":["Gizaburuaga","Amoroto","Munitibar-Arbatzegi Gerrikaitz","Nabarniz"]},
+  {"localidad":"Berriatua","slug":"berriatua","comarca":"Lea-Artibai","cercanas":["Ondarroa","Markina-Xemein","Etxebarria","Amoroto"]},
+  {"localidad":"Etxebarria","slug":"etxebarria","comarca":"Lea-Artibai","cercanas":["Markina-Xemein","Berriatua","Ziortza-Bolibar","Munitibar-Arbatzegi Gerrikaitz"]},
+  {"localidad":"Gizaburuaga","slug":"gizaburuaga","comarca":"Lea-Artibai","cercanas":["Aulesti","Amoroto","Lekeitio","Munitibar-Arbatzegi Gerrikaitz"]},
+  {"localidad":"Ispaster","slug":"ispaster","comarca":"Lea-Artibai","cercanas":["Lekeitio","Ea","Gizaburuaga","Amoroto"]},
+  {"localidad":"Lekeitio","slug":"lekeitio","comarca":"Lea-Artibai","cercanas":["Mendexa","Ispaster","Amoroto","Gizaburuaga"]},
+  {"localidad":"Markina-Xemein","slug":"markina-xemein","comarca":"Lea-Artibai","cercanas":["Etxebarria","Berriatua","Ziortza-Bolibar","Munitibar-Arbatzegi Gerrikaitz"]},
+  {"localidad":"Mendexa","slug":"mendexa","comarca":"Lea-Artibai","cercanas":["Lekeitio","Amoroto","Ispaster","Berriatua"]},
+  {"localidad":"Munitibar-Arbatzegi Gerrikaitz","slug":"munitibar-arbatzegi-gerrikaitz","comarca":"Lea-Artibai","cercanas":["Aulesti","Ziortza-Bolibar","Etxebarria","Muxika"]},
+  {"localidad":"Ondarroa","slug":"ondarroa","comarca":"Lea-Artibai","cercanas":["Berriatua","Markina-Xemein","Lekeitio","Mendexa"]},
+  {"localidad":"Ziortza-Bolibar","slug":"ziortza-bolibar","comarca":"Lea-Artibai","cercanas":["Markina-Xemein","Etxebarria","Munitibar-Arbatzegi Gerrikaitz","Aulesti"]}
+]
