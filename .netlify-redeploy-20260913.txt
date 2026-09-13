@@ -1,0 +1,2 @@
+Redeploy solicitado tras fallo temporal de acceso GitHub/Netlify.
+Commit funcional anterior: 8dbf70f59fcc4e572814db933bfce0da4680a31d
