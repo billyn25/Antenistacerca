@@ -4,6 +4,7 @@ import { buildNavarraSeo } from './seo-navarra-auto.js';
 const BASE='src/localidades.json';
 const raw=JSON.parse(fs.readFileSync(BASE,'utf8'));
 const batch=[
+['Pamplona-Iruña','pamplona-iruna','Cuenca de Pamplona',['Burlada-Burlata','Barañáin','Ansoáin-Antsoain','Berriozar']],
 ['Urrotz','urrotz','Norte de Navarra',['Doneztebe-Santesteban','Donamaria','Oitz','Labaien']],
 ['Hiriberri-Villanueva de Aezkoa','hiriberri-villanueva-de-aezkoa','Pirineo',['Aribe','Garaioa','Aria','Abaurregaina-Abaurrea Alta']],
 ['Valle de Arce-Artzibar','valle-de-arce-artzibar','Pirineo',['Aoiz-Agoitz','Oroz-Betelu','Erro','Lónguida-Longida']],
