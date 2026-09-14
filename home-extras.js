@@ -5,7 +5,7 @@ const FILE='public/index.html';
 const STYLE_ID='home-extras-style';
 const SCRIPT_ID='home-extras-script';
 
-const statsBlock=`<section class="home-stats" aria-labelledby="home-stats-title"><div class="w"><div class="home-stats-head"><div class="kicker">ANTENISTA CERCA</div><h2 id="home-stats-title">Servicio técnico de proximidad</h2></div><div class="home-stats-grid"><div class="home-stat"><strong data-count="${localidades.length}">${localidades.length}</strong><span>Localidades preparadas</span></div><div class="home-stat"><strong>24H</strong><span>Atención de urgencias</span></div><div class="home-stat"><strong data-count="9">9</strong><span>Servicios principales</span></div><div class="home-stat"><strong>Directo</strong><span>Trato con el técnico</span></div></div></div></section>`;
+const statsBlock=`<section class="home-stats" aria-labelledby="home-stats-title"><div class="w"><div class="home-stats-head"><div class="kicker">ANTENISTA CERCA</div><h2 id="home-stats-title">Servicio técnico de proximidad</h2></div><div class="home-stats-grid"><div class="home-stat"><strong data-count="${localidades.length}">${localidades.length}</strong><span>Localidades donde prestamos servicio</span></div><div class="home-stat"><strong>24H</strong><span>Atención de urgencias</span></div><div class="home-stat"><strong data-count="9">9</strong><span>Servicios principales</span></div><div class="home-stat"><strong>Directo</strong><span>Trato con el técnico</span></div></div></div></section>`;
 
 const css=`<style id="${STYLE_ID}">
 .home-stats{background:#0b1c31;color:#fff;padding:56px 0 52px;margin:12px 0 36px}
