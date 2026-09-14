@@ -17,9 +17,9 @@ for(let i=0;i<localidades.length;i++){
   }
   if(d.slug&&!slugRe.test(d.slug)) errors.push(`${label}: slug inválido (${d.slug})`);
   if(d.provinciaSlug&&!slugRe.test(d.provinciaSlug)) errors.push(`${label}: provinciaSlug inválido (${d.provinciaSlug})`);
-  const townKey=String(d.localidad||'').trim().toLowerCase();
-  if(townKey){
-    if(seenTown.has(townKey)) errors.push(`${label}: localidad duplicada con ${seenTown.get(townKey)}`);
+  const townKey=`${String(d.provinciaSlug||'').trim().toLowerCase()}::${String(d.localidad||'').trim().toLowerCase()}`;
+  if(String(d.localidad||'').trim()){
+    if(seenTown.has(townKey)) errors.push(`${label}: localidad duplicada con ${seenTown.get(townKey)} en la misma provincia`);
     else seenTown.set(townKey,label);
   }
   const pathKey=`${d.provinciaSlug||''}/${d.slug||''}`;
@@ -28,10 +28,11 @@ for(let i=0;i<localidades.length;i++){
   if(!Array.isArray(d.cercanas)) errors.push(`${label}: cercanas debe ser un array`);
   else {
     const localSeen=new Set();
+    const selfName=String(d.localidad||'').trim().toLowerCase();
     for(const c of d.cercanas){
       const ck=String(c).trim().toLowerCase();
       if(!ck) errors.push(`${label}: cercana vacía`);
-      if(ck===townKey) errors.push(`${label}: aparece como cercana de sí misma`);
+      if(ck===selfName) errors.push(`${label}: aparece como cercana de sí misma`);
       if(localSeen.has(ck)) errors.push(`${label}: cercana duplicada (${c})`);
       localSeen.add(ck);
       if(!byName.has(ck)) warnings.push(`${label}: cercana aún no generada (${c})`);
