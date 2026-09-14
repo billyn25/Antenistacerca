@@ -7,10 +7,13 @@ const DOMAIN='https://antenistacerca.es';
 const OLD_DOMAIN='https://www.antenistacerca.es';
 const GA='G-W8L23NJLP6';
 const TEL='+34641589394';
+const OLD_HERO='/assets/hero-antennista.png';
+const NEW_HERO='/assets/hero-antennista.webp';
 const errors=[];
 const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);
 const htmlFiles=walk(ROOT).filter(f=>f.endsWith('.html'));
 const provinceSlugs=[...new Set(localidades.map(x=>x.provinciaSlug))];
+const townFiles=new Set(localidades.map(x=>`${x.provinciaSlug}/${x.slug}/index.html`));
 const expectedCount=localidades.length+provinceSlugs.length+1;
 if(htmlFiles.length!==expectedCount) errors.push(`HTML: ${htmlFiles.length}; esperados ${expectedCount}`);
 
@@ -29,6 +32,12 @@ for(const file of htmlFiles){
   if(!h.includes("'click_llamada'")||!h.includes("'click_whatsapp'")) errors.push(`${rel}: eventos de contacto incompletos`);
   if(!tels.length||!tels.some(x=>x.includes(TEL))) errors.push(`${rel}: enlace de llamada ausente`);
   if(!was.length) errors.push(`${rel}: enlace WhatsApp ausente`);
+  if(rel==='index.html'||townFiles.has(rel)){
+    if(h.includes(OLD_HERO)) errors.push(`${rel}: sigue usando hero PNG antiguo`);
+    if(!h.includes(NEW_HERO)) errors.push(`${rel}: falta hero WebP nuevo`);
+    if(!h.includes('id="hero-refresh-css"')) errors.push(`${rel}: falta ajuste visual del hero`);
+    if(!h.includes('fetchpriority="high"')||!h.includes('loading="eager"')) errors.push(`${rel}: prioridad LCP del hero incompleta`);
+  }
 }
 
 // Las páginas provinciales deben conservar el hub SEO y el índice alfabético visible en el HTML final.
@@ -61,4 +70,4 @@ else {
 }
 
 if(errors.length){console.error(`\nAUDITORÍA FINAL FALLIDA (${errors.length})`);for(const e of errors.slice(0,200))console.error('- '+e);process.exit(2)}
-console.log(`AUDITORÍA FINAL OK: ${htmlFiles.length} páginas; dominio, canonical, sitemap, robots, GA4, llamadas, WhatsApp e índices provinciales validados sobre el HTML definitivo.`);
+console.log(`AUDITORÍA FINAL OK: ${htmlFiles.length} páginas; dominio, canonical, sitemap, robots, GA4, contactos, hero optimizado e índices provinciales validados.`);
