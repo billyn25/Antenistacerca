@@ -6,8 +6,6 @@ function write(f,h){fs.writeFileSync(f,h);}
 {
   const [f,html0]=read('villaescusa');
   let h=html0;
-  h=h.replace(/<title>[^<]*<\/title>/i,'<title>Antenista en Villaescusa, Zamora | Antenista Cerca</title>');
-  h=h.replace(/<meta\s+name=["']description["']\s+content=["'][^"']*["']\s*\/?>/i,'<meta name="description" content="Antenista en Villaescusa, Zamora. Instalación y reparación de antenas TDT, amplificadores, parabólicas, porteros y videoporteros en la zona." />');
   if(!h.includes('zamora-villaescusa-unique')){
     const marker='<section class="faq local-faq">';
     const block='<section class="zamora-villaescusa-unique"><div class="wrap"><h2>Servicio técnico de antenas en Villaescusa, Zamora</h2><p>En Villaescusa revisamos instalaciones de televisión cuando hay pérdida de canales, pixelaciones o diferencias de señal entre tomas. Comprobamos antena, orientación, amplificación, fuentes, repartidores, derivadores, conectores y cableado para localizar la avería antes de cambiar equipos.</p><p>También instalamos antenas TDT, amplificadores, parabólicas y equipos de portero o videoportero, valorando si conviene reparar la instalación existente o renovar únicamente los elementos que lo necesitan.</p></div></section>';
@@ -28,4 +26,4 @@ for(const [slug,block] of Object.entries(blocks)){
   if(!h.includes(marker))throw new Error(`Zamora SEO: falta FAQ en ${slug}`);
   h=h.replace(marker,block+marker);write(f,h);
 }
-console.log('SEO Zamora corregido: Villaescusa, Morales de Valverde y Tábara.');
+console.log('Contenido local Zamora reforzado sin modificar metadata SEO.');
