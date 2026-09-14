@@ -2,9 +2,9 @@ import fs from 'node:fs';
 import { buildNavarraSeo } from './seo-navarra-auto.js';
 
 const BASE='src/localidades.json';
+const CITY_EXTRA='src/localidades-ciudades-norte-1.json';
 const raw=JSON.parse(fs.readFileSync(BASE,'utf8'));
 const batch=[
-['Pamplona-Iruña','pamplona-iruna','Cuenca de Pamplona',['Burlada-Burlata','Barañáin','Ansoáin-Antsoain','Berriozar']],
 ['Urrotz','urrotz','Norte de Navarra',['Doneztebe-Santesteban','Donamaria','Oitz','Labaien']],
 ['Hiriberri-Villanueva de Aezkoa','hiriberri-villanueva-de-aezkoa','Pirineo',['Aribe','Garaioa','Aria','Abaurregaina-Abaurrea Alta']],
 ['Valle de Arce-Artzibar','valle-de-arce-artzibar','Pirineo',['Aoiz-Agoitz','Oroz-Betelu','Erro','Lónguida-Longida']],
@@ -39,7 +39,14 @@ for(const d of batch){
   existing.add(key);
   added++;
 }
-const navarraCount=raw.filter(d=>d.provinciaSlug==='navarra').length;
-if(navarraCount!==272) throw new Error(`Navarra incompleta tras cierre: ${navarraCount}/272 municipios`);
+
+const projected=new Set(raw.filter(d=>d.provinciaSlug==='navarra').map(d=>d.slug));
+if(fs.existsSync(CITY_EXTRA)){
+  for(const d of JSON.parse(fs.readFileSync(CITY_EXTRA,'utf8'))){
+    if(d.provinciaSlug==='navarra') projected.add(d.slug);
+  }
+}
+if(projected.size!==272) throw new Error(`Navarra incompleta tras cierre: ${projected.size}/272 municipios`);
+
 fs.writeFileSync(BASE,JSON.stringify(raw,null,2)+'\n');
-console.log(`Navarra cerrada: ${navarraCount}/272 municipios; ${added} añadidos en este build.`);
+console.log(`Navarra cerrada: ${projected.size}/272 municipios previstos; ${added} añadidos en este build.`);
