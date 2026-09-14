@@ -10,7 +10,8 @@ const TEL='+34641589394';
 const errors=[];
 const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);
 const htmlFiles=walk(ROOT).filter(f=>f.endsWith('.html'));
-const expectedCount=localidades.length+new Set(localidades.map(x=>x.provinciaSlug)).size+1;
+const provinceSlugs=[...new Set(localidades.map(x=>x.provinciaSlug))];
+const expectedCount=localidades.length+provinceSlugs.length+1;
 if(htmlFiles.length!==expectedCount) errors.push(`HTML: ${htmlFiles.length}; esperados ${expectedCount}`);
 
 for(const file of htmlFiles){
@@ -28,6 +29,17 @@ for(const file of htmlFiles){
   if(!h.includes("'click_llamada'")||!h.includes("'click_whatsapp'")) errors.push(`${rel}: eventos de contacto incompletos`);
   if(!tels.length||!tels.some(x=>x.includes(TEL))) errors.push(`${rel}: enlace de llamada ausente`);
   if(!was.length) errors.push(`${rel}: enlace WhatsApp ausente`);
+}
+
+// Las páginas provinciales deben conservar el hub SEO y el índice alfabético visible en el HTML final.
+for(const slug of provinceSlugs){
+  const file=path.join(ROOT,slug,'index.html');
+  if(!fs.existsSync(file)){errors.push(`${slug}: página provincial ausente`);continue}
+  const h=fs.readFileSync(file,'utf8');
+  if(!h.includes('class="province-seo"')) errors.push(`${slug}: bloque SEO provincial ausente`);
+  if(!h.includes('class="alpha-localities"')||!h.includes('class="alpha-nav"')) errors.push(`${slug}: índice alfabético provincial ausente`);
+  const towns=localidades.filter(x=>x.provinciaSlug===slug);
+  for(const d of towns){if(!h.includes(`href="/${slug}/${d.slug}/"`)) errors.push(`${slug}: falta enlace provincial a ${d.slug}`)}
 }
 
 const sitemapPath=path.join(ROOT,'sitemap.xml'),robotsPath=path.join(ROOT,'robots.txt');
@@ -49,4 +61,4 @@ else {
 }
 
 if(errors.length){console.error(`\nAUDITORÍA FINAL FALLIDA (${errors.length})`);for(const e of errors.slice(0,200))console.error('- '+e);process.exit(2)}
-console.log(`AUDITORÍA FINAL OK: ${htmlFiles.length} páginas; dominio, canonical, sitemap, robots, GA4, llamadas y WhatsApp validados sobre el HTML definitivo.`);
+console.log(`AUDITORÍA FINAL OK: ${htmlFiles.length} páginas; dominio, canonical, sitemap, robots, GA4, llamadas, WhatsApp e índices provinciales validados sobre el HTML definitivo.`);
