@@ -14,12 +14,15 @@ function setAttr(tag,name,value){const re=new RegExp(`\\s+${name}=["'][^"']*["']
 function cdn(src,w,q=80){return`/.netlify/images?url=${src}&amp;w=${w}&amp;q=${q}`}
 function optimize(tag){const original=tag.match(/\bsrc=["']([^"']+)["']/i)?.[1];if(!original)return tag;let out=tag,d=dimensions(original);if(d){out=setAttr(out,'width',d.width);out=setAttr(out,'height',d.height)}out=setAttr(out,'decoding','async');const hero=original==='/assets/hero-antennista.png'||original==='/assets/hero-antennista.jpg';if(hero){out=setAttr(out,'loading','eager');out=setAttr(out,'fetchpriority','high')}else if(!/\bloading=["']eager["']/i.test(out))out=setAttr(out,'loading','lazy');
   if(HEAVY.has(original)){
-    const widths=hero?[480,768,960,1280,1600]:[320,480,640,800,1000];
-    const fallback=hero?1280:800;
-    out=setAttr(out,'src',cdn(original,fallback,80));
-    out=setAttr(out,'srcset',widths.map(w=>`${cdn(original,w,80)} ${w}w`).join(', '));
+    // En móvil el hero ocupa el viewport; no necesitamos descargar una variante de 1280 px como fallback.
+    // Mantenemos calidad visual y damos al navegador candidatos más ajustados para DPR/viewport móvil.
+    const widths=hero?[360,480,640,768,960,1280]:[320,480,640,800,1000];
+    const fallback=hero?768:800;
+    const quality=hero?76:80;
+    out=setAttr(out,'src',cdn(original,fallback,quality));
+    out=setAttr(out,'srcset',widths.map(w=>`${cdn(original,w,quality)} ${w}w`).join(', '));
     out=setAttr(out,'sizes',hero?'(max-width: 900px) 100vw, 52vw':'(max-width: 640px) 50vw, (max-width: 900px) 50vw, 33vw');
   }
   return out;
 }
-if(!fs.existsSync(ROOT))throw new Error('image-metadata: falta public/');let changed=0,images=0,cdnImages=0;for(const file of walk(ROOT).filter(f=>f.endsWith('.html'))){const html=fs.readFileSync(file,'utf8');const next=html.replace(/<img\b[^>]*>/gi,tag=>{images++;const original=tag.match(/\bsrc=["']([^"']+)["']/i)?.[1];if(original&&HEAVY.has(original))cdnImages++;const n=optimize(tag);if(n!==tag)changed++;return n});if(next!==html)fs.writeFileSync(file,next)}console.log(`Imágenes revisadas: ${images}; etiquetas optimizadas: ${changed}; usos servidos por Image CDN: ${cdnImages}.`);
+if(!fs.existsSync(ROOT))throw new Error('image-metadata: falta public/');let changed=0,images=0,cdnImages=0;for(const file of walk(ROOT).filter(f=>f.endsWith('.html'))){const html=fs.readFileSync(file,'utf8');const next=html.replace(/<img\b[^>]*>/gi,tag=>{images++;const original=tag.match(/\bsrc=["']([^"']+)["']/i)?.[1];if(original&&HEAVY.has(original))cdnImages++;const n=optimize(tag);if(n!==tag)changed++;return n});if(next!==html)fs.writeFileSync(file,next)}console.log(`Imágenes revisadas: ${images}; etiquetas optimizadas: ${changed}; usos servidos por Image CDN: ${cdnImages}. Hero LCP optimizado para móvil.`);
