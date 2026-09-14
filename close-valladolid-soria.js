@@ -5,7 +5,7 @@ const EXPECTED={valladolid:225,soria:183};
 const PROV={47:['Valladolid','valladolid'],42:['Soria','soria']};
 const anchors={
  valladolid:['Valladolid','Tordesillas','Medina del Campo','Peñafiel','Medina de Rioseco','Olmedo','Íscar','Villalón de Campos'],
- soria:['Soria','Almazán','San Esteban de Gormaz','El Burgo de Osma','Ágreda','Ólvega','San Leonardo de Yagüe','Medinaceli']
+ soria:['Soria','Almazán','San Esteban de Gormaz','Burgo de Osma-Ciudad de Osma','Ágreda','Ólvega','San Leonardo de Yagüe','Medinaceli']
 };
 const deaccent=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 const slugify=s=>deaccent(s.toLowerCase()).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
@@ -15,7 +15,20 @@ function nearby(slug,name){const a=anchors[slug].filter(x=>x.toLowerCase()!==nam
 let text;try{const r=await fetch(SOURCE);if(!r.ok)throw new Error(`HTTP ${r.status}`);text=await r.text();}catch(e){throw new Error(`No se pudo cargar el padrón municipal de cierre: ${e.message}`)}
 const official={valladolid:[],soria:[]};for(const line of text.split(/\r?\n/).slice(1)){if(!line)continue;const cols=parseCsvLine(line);const p=Number(cols[1]);if(!PROV[p])continue;const [,slug]=PROV[p];official[slug].push(reorder(cols[4].trim()));}
 for(const [slug,n] of Object.entries(EXPECTED))if(official[slug].length!==n)throw new Error(`Fuente municipal inesperada para ${slug}: ${official[slug].length}/${n}`);
-const raw=JSON.parse(fs.readFileSync(BASE,'utf8'));const seen=new Set(raw.map(d=>`${d.provinciaSlug}/${d.slug}`));const added={valladolid:0,soria:0};
+
+let raw=JSON.parse(fs.readFileSync(BASE,'utf8'));
+const officialSlugs={};for(const [slug,names] of Object.entries(official))officialSlugs[slug]=new Set(names.map(slugify));
+const removed={valladolid:[],soria:[]};
+raw=raw.filter(d=>{
+  if(!EXPECTED[d.provinciaSlug])return true;
+  if(officialSlugs[d.provinciaSlug].has(d.slug))return true;
+  removed[d.provinciaSlug].push(`${d.localidad} [${d.slug}]`);
+  return false;
+});
+for(const slug of Object.keys(removed))if(removed[slug].length)console.log(`Cierre ${slug}: retiradas variantes/no municipales: ${removed[slug].join(', ')}`);
+
+const seen=new Set(raw.map(d=>`${d.provinciaSlug}/${d.slug}`));const added={valladolid:0,soria:0};
 for(const [slug,names] of Object.entries(official)){const provincia=slug==='valladolid'?'Valladolid':'Soria';for(const localidad of names){const s=slugify(localidad),key=`${slug}/${s}`;if(seen.has(key))continue;raw.push({provincia,provinciaSlug:slug,localidad,slug:s,comarca:`Provincia de ${provincia}`,cercanas:nearby(slug,localidad)});seen.add(key);added[slug]++;}}
-for(const [slug,n] of Object.entries(EXPECTED)){const count=raw.filter(d=>d.provinciaSlug===slug).length;if(count!==n)throw new Error(`${slug} incompleta tras cierre: ${count}/${n}`)}
-fs.writeFileSync(BASE,JSON.stringify(raw,null,2)+'\n');console.log(`Cierre Valladolid/Soria: Valladolid ${EXPECTED.valladolid}/${EXPECTED.valladolid} (+${added.valladolid}); Soria ${EXPECTED.soria}/${EXPECTED.soria} (+${added.soria}).`);
+for(const [slug,n] of Object.entries(EXPECTED)){const rows=raw.filter(d=>d.provinciaSlug===slug);const unique=new Set(rows.map(d=>d.slug));if(rows.length!==n||unique.size!==n)throw new Error(`${slug} incompleta tras cierre: ${rows.length}/${n} (${unique.size} slugs únicos)`)}
+fs.writeFileSync(BASE,JSON.stringify(raw,null,2)+'\n');
+console.log(`Cierre Valladolid/Soria OK: Valladolid ${EXPECTED.valladolid}/${EXPECTED.valladolid} (+${added.valladolid}, -${removed.valladolid.length}); Soria ${EXPECTED.soria}/${EXPECTED.soria} (+${added.soria}, -${removed.soria.length}).`);
