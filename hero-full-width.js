@@ -8,7 +8,7 @@ export const HERO = '/assets/hero-antenista-panorama.webp';
 export const HERO_SHA256 = '33afa9a51475a68e7a6b200903deee3f474728f1f1f03618c5cb5a6176496cc4';
 export const WIDTH = 1916;
 export const HEIGHT = 821;
-const CSS_PATH = '/assets/hero-panorama-v2.css';
+const CSS_PATH = '/assets/hero-panorama-v3.css';
 const WIDTHS = [480, 640, 768, 960, 1280, 1600, WIDTH];
 const imageUrl = w => `/.netlify/images?url=${HERO}&amp;w=${w}&amp;q=90`;
 
