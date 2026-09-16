@@ -35,7 +35,8 @@ export const CSS = `
 .hero.ac-hero-full .copy,.hero.ac-hero-full .hero-copy{padding:24px 16px 22px}
 .hero.ac-hero-full .copy h1,.hero.ac-hero-full .hero-copy h1,.hero.ac-hero-full.ac-hero-long .copy h1,.hero.ac-hero-full.ac-hero-long .hero-copy h1{font-size:clamp(30px,8.7vw,40px)}
 .hero.ac-hero-full .copy h2,.hero.ac-hero-full .hero-copy h2{font-size:19px}
-.hero.ac-hero-full .actions .btn{font-size:16px;flex-basis:130px}
+/* En móvil la barra fija inferior ya ofrece llamada y WhatsApp; evitamos duplicar los CTAs en el hero. */
+.hero.ac-hero-full .actions{display:none!important}
 }
 `;
 
