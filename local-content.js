@@ -47,11 +47,41 @@ l=>`Para pequeñas reparaciones eléctricas en ${l} localizamos primero el orige
 l=>`Además de antenas y porteros, en ${l} atendemos ciertas averías eléctricas de vivienda: cortes, mecanismos, iluminación y elementos de protección del cuadro doméstico.`]
 };
 
+
+const usefulVariants=[
+(d)=>`Si el aviso es en ${d.localidad}, cuéntanos si la incidencia afecta a una sola vivienda, a varias viviendas o a toda la comunidad. Ese dato ayuda a decidir si conviene empezar por una toma interior, la distribución o la cabecera de antena.`,
+(d)=>`Para preparar una revisión en ${d.localidad}, indica qué ha dejado de funcionar, desde cuándo ocurre y si el fallo es continuo o intermitente. En antenas y TDT también ayuda saber si faltan todos los canales o solo algunos.`,
+(d)=>`Cuando nos contactes desde ${d.localidad}, dinos si se trata de una instalación individual o comunitaria y qué síntoma observas. En porteros y videoporteros conviene distinguir entre fallo de llamada, audio, imagen o apertura.`,
+(d)=>`Si necesitas asistencia en ${d.localidad}, puedes adelantar qué equipo está afectado y si el problema aparece en un único punto o en varios. Así la revisión puede centrarse desde el principio en recepción, amplificación, cableado o distribución.`,
+(d)=>`En una avería de ${d.localidad} es útil saber si otros vecinos tienen el mismo problema. Si solo falla una vivienda, la comprobación puede empezar por su derivación y tomas; si afecta a varias, se revisa la parte común de la instalación.`,
+(d)=>`Para una instalación nueva en ${d.localidad}, indica cuántos puntos necesitas y qué instalación existe actualmente. Para una reparación, describe el síntoma y si ya se ha probado otro televisor, toma, telefonillo o monitor.`,
+(d)=>`Antes de desplazarnos a ${d.localidad}, una descripción breve de la avería permite orientar mejor la revisión. Puedes indicar si hay cortes, pixelaciones, ausencia total de señal, problemas de apertura o fallos de audio e imagen.`,
+(d)=>`Si el servicio es en ${d.localidad}, no hace falta saber qué componente está averiado. Basta con explicar qué ocurre y a cuántos puntos o viviendas afecta; el diagnóstico debe localizar el origen antes de sustituir equipos.`
+];
+const secondFaqVariants=[
+(d)=>[`¿Qué información ayuda a revisar una avería de antena en ${d.localidad}?`,`Indica si el problema afecta a una vivienda o a varias, qué canales o servicios fallan y desde cuándo ocurre. Con esos datos se puede orientar la comprobación de antena, amplificación, cableado y tomas.`],
+(d)=>[`¿Conviene cambiar la antena si falla la señal en ${d.localidad}?`,`No necesariamente. Una pérdida de señal también puede venir de amplificadores, fuentes, conexiones, repartidores, cableado o tomas. Lo razonable es comprobar la instalación antes de sustituir la antena.`],
+(d)=>[`¿Revisáis averías comunitarias en ${d.localidad}?`,`Sí, el servicio contempla instalaciones individuales y colectivas. Si el fallo afecta a varias viviendas, se revisan los elementos comunes de recepción, amplificación y distribución para localizar el origen.`],
+(d)=>[`¿Qué se comprueba si falla un portero o videoportero en ${d.localidad}?`,`Depende del síntoma. Se puede revisar llamada, audio, imagen, apertura, alimentación, placa, telefonillo o monitor y cableado antes de decidir si procede reparar o renovar el equipo.`],
+(d)=>[`¿Podéis revisar una TDT que se corta en ${d.localidad}?`,`Sí. Los cortes y pixelaciones requieren comprobar nivel y calidad de señal y seguir la instalación desde recepción y amplificación hasta la distribución y las tomas afectadas.`],
+(d)=>[`¿Atendéis antenas parabólicas en ${d.localidad}?`,`Sí. Se puede revisar orientación, fijaciones, LNB, conectores y cableado, además de la distribución interior cuando la señal de satélite no llega correctamente.`]
+];
+function usefulLocalBlock(d,key){
+  const comarca=String(d.comarca||'').trim();
+  const context=comarca?` en la zona de ${comarca}, ${d.provincia}`:` en ${d.provincia}`;
+  const text=pick(usefulVariants,key,'util')(d);
+  return `<section class="band local-value" id="preparar-aviso"><div class="wrap detail"><div><div class="kicker">Preparar la revisión</div><h2>Antes de pedir asistencia técnica en ${esc(d.localidad)}</h2><p>${esc(text)}</p><p>La página corresponde al servicio en ${esc(d.localidad)}${esc(context)}. El teléfono de contacto es <a href="tel:+34641589394">641 589 394</a>.</p></div><aside class="help"><strong>Información útil</strong><span>Localidad, tipo de instalación, síntoma y a cuántos puntos o viviendas afecta.</span><a href="tel:+34641589394">Llamar 641 589 394</a></aside></div></section>`;
+}
+function addSecondFaq(html,d,key){
+  const pair=pick(secondFaqVariants,key,'faq2')(d);
+  return html.replace(/(<section class="faq local-faq">[\s\S]*?<\/details>)([\s\S]*?<\/div><\/section>)/i,`$1<details><summary>${esc(pair[0])}</summary><p>${esc(pair[1])}</p></details>$2`);
+}
+
 function replaceFirstParagraph(sectionHtml,text){return sectionHtml.replace(/<p>([\s\S]*?)<\/p>/i,`<p>${esc(text)}</p>`);}
 function rewriteSection(html,id,text){const re=new RegExp(`(<section\\b[^>]*id=["']${id}["'][^>]*>[\\s\\S]*?<\\/section>)`,'i');return html.replace(re,m=>replaceFirstParagraph(m,text));}
 function setHeroSubtitle(html){return html.replace(/(<div class="(?:copy|hero-copy)">[\s\S]*?<h1>[\s\S]*?<\/h1>\s*<h2>)[\s\S]*?(<\/h2>)/i,`$1${HERO_SUBTITLE}$2`);}
 
 const homeFile=path.join(ROOT,'index.html');
 if(fs.existsSync(homeFile)){const home=setHeroSubtitle(fs.readFileSync(homeFile,'utf8'));fs.writeFileSync(homeFile,home);}
-for(const d of localidades){const file=path.join(ROOT,d.provinciaSlug,d.slug,'index.html');if(!fs.existsSync(file))throw new Error(`Contenido local: falta ${file}`);let html=setHeroSubtitle(fs.readFileSync(file,'utf8'));const key=`${d.provinciaSlug}/${d.slug}`;html=rewriteSection(html,'reparacion',pick(copy.reparacion,key,'reparacion')(d.localidad));html=rewriteSection(html,'tdt',pick(copy.tdt,key,'tdt')(d.localidad));html=rewriteSection(html,'parabolicas',pick(copy.parabolicas,key,'parabolicas')(d.localidad));html=rewriteSection(html,'porteros',pick(copy.porteros,key,'porteros')(d.localidad));html=rewriteSection(html,'telefonia-movil',pick(copy.movil,key,'movil')(d.localidad));html=rewriteSection(html,'reparaciones-electricas',pick(copy.electricidad,key,'electricidad')(d.localidad));fs.writeFileSync(file,html);}
+for(const d of localidades){const file=path.join(ROOT,d.provinciaSlug,d.slug,'index.html');if(!fs.existsSync(file))throw new Error(`Contenido local: falta ${file}`);let html=setHeroSubtitle(fs.readFileSync(file,'utf8'));const key=`${d.provinciaSlug}/${d.slug}`;html=rewriteSection(html,'reparacion',pick(copy.reparacion,key,'reparacion')(d.localidad));html=rewriteSection(html,'tdt',pick(copy.tdt,key,'tdt')(d.localidad));html=rewriteSection(html,'parabolicas',pick(copy.parabolicas,key,'parabolicas')(d.localidad));html=rewriteSection(html,'porteros',pick(copy.porteros,key,'porteros')(d.localidad));html=rewriteSection(html,'telefonia-movil',pick(copy.movil,key,'movil')(d.localidad));html=rewriteSection(html,'reparaciones-electricas',pick(copy.electricidad,key,'electricidad')(d.localidad));if(!html.includes('id="preparar-aviso"'))html=html.replace('<section class="faq local-faq">',usefulLocalBlock(d,key)+'<section class="faq local-faq">');html=addSecondFaq(html,d,key);fs.writeFileSync(file,html);}
 console.log(`Contenido SEO modular aplicado de forma determinista a ${localidades.length} localidades.`);
