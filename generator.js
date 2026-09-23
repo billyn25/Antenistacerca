@@ -50,8 +50,9 @@ html{scroll-behavior:smooth}body{font-family:Arial,Helvetica,sans-serif;color:va
 
 function businessSchema(){return {'@type':'Organization','@id':`${DOMAIN}/#negocio`,name:'Antenista Cerca',url:`${DOMAIN}/`,telephone:TEL}}
 function nearby(d){
-  const links=d.cercanas.map(n=>{const t=byName.get(n.toLowerCase());return t?`<a href="/${t.provinciaSlug}/${t.slug}/">${esc(n)}</a>`:`<span>${esc(n)}</span>`}).join('');
-  return `<div class="nearby-links">${links}</div><p><a class="more" href="/${d.provinciaSlug}/">Ver todos los municipios de ${esc(d.provincia)} →</a></p>`;
+  const sameProvince=d.cercanas.map(n=>byName.get(n.toLowerCase())).filter(t=>t&&t.provinciaSlug===d.provinciaSlug&&t.slug!==d.slug);
+  const links=sameProvince.map(t=>`<a href="/${t.provinciaSlug}/${t.slug}/">${esc(t.localidad)}</a>`).join('');
+  return `${links?`<div class="nearby-links">${links}</div>`:''}<p><a class="more" href="/${d.provinciaSlug}/">Ver todos los municipios de ${esc(d.provincia)} →</a></p>`;
 }
 function schema(d){
   const url=`${DOMAIN}/${d.provinciaSlug}/${d.slug}/`;
@@ -62,7 +63,7 @@ function schema(d){
     {'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'Inicio',item:`${DOMAIN}/`},{'@type':'ListItem',position:2,name:d.provincia,item:`${DOMAIN}/${d.provinciaSlug}/`},{'@type':'ListItem',position:3,name:d.localidad,item:url}]}
   ]});
 }
-function localSeoBlock(d){return `<section class="band local-seo"><div class="wrap detail"><div><div class="kicker">Servicio de proximidad</div><h2>Técnico de antenas en ${esc(d.localidad)} y zona cercana</h2><p>${esc(d.introLocal)}</p><p>${esc(d.zonaLocal)}</p><div class="direct-tech"><span class="direct-icon" aria-hidden="true">✓</span><div><strong>Trato directo con el técnico</strong><span>Te atiende una persona que conoce el trabajo y puede orientarte desde el primer contacto, sin centralitas ni intermediarios.</span></div></div></div><aside class="help"><strong>Urgencias 24 horas</strong><span>Cuéntanos qué ocurre y trataremos de atenderte lo antes posible.</span><a href="tel:${TEL}">Llamar ${PHONE}</a></aside></div></section>`}
+function localSeoBlock(d){return `<section class="band local-seo"><div class="wrap detail"><div><div class="kicker">Servicio en tu localidad</div><h2>Técnico de antenas en ${esc(d.localidad)}</h2><p>${esc(d.introLocal)}</p><p>${esc(d.zonaLocal)}</p><div class="direct-tech"><span class="direct-icon" aria-hidden="true">✓</span><div><strong>Trato directo con el técnico</strong><span>Te atiende una persona que conoce el trabajo y puede orientarte desde el primer contacto, sin centralitas ni intermediarios.</span></div></div></div><aside class="help"><strong>Urgencias 24 horas</strong><span>Cuéntanos qué ocurre y trataremos de atenderte lo antes posible.</span><a href="tel:${TEL}">Llamar ${PHONE}</a></aside></div></section>`}
 function localFaqBlock(d){return `<section class="faq local-faq"><div class="wrap"><h2>Información útil para ${esc(d.localidad)}</h2><details><summary>${esc(d.faqPregunta)}</summary><p>${esc(d.faqRespuesta)}</p></details></div></section>`}
 function removeServiceSection(h,phrase){return h.replace(/<section\b[\s\S]*?<\/section>/gi,s=>s.includes(phrase)?'':s)}
 function townCards(d){
