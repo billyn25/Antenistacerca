@@ -40,7 +40,7 @@ const antennaVariants=[
 ];
 const hash=s=>[...s].reduce((a,c)=>(a+c.charCodeAt(0))%997,0);
 
-const FAVICON='<link rel="icon" type="image/webp" href="/assets/logo-antenista-cerca-v1.webp"><link rel="apple-touch-icon" href="/assets/logo-antenista-cerca-v1.webp">';
+const FAVICON='<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="alternate icon" type="image/webp" href="/assets/logo-antenista-cerca-v1.webp"><link rel="apple-touch-icon" href="/assets/logo-antenista-cerca-v1.webp">';
 function withFavicon(html){return html.includes('rel="icon"')?html:html.replace('</head>',FAVICON+'</head>');}
 
 const SHARED_UI=`
