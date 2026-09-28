@@ -147,7 +147,7 @@ fs.mkdirSync(OUT,{recursive:true});
 for(const d of localidades){const dir=path.join(OUT,d.provinciaSlug,d.slug);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),town(d));}
 for(const [slug,g] of groups){const dir=path.join(OUT,slug);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),province(g.provincia,slug,g.items));}
 fs.writeFileSync(path.join(OUT,'index.html'),home());
-const urls=[`${DOMAIN}/`,...localidades.map(d=>`${DOMAIN}/${d.provinciaSlug}/${d.slug}/`)];
+const urls=[`${DOMAIN}/`,...[...groups.keys()].map(s=>`${DOMAIN}/${s}/`),...localidades.map(d=>`${DOMAIN}/${d.provinciaSlug}/${d.slug}/`)];
 fs.writeFileSync(path.join(OUT,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(u=>`<url><loc>${u}</loc></url>`).join('')}</urlset>`);
 fs.writeFileSync(path.join(OUT,'robots.txt'),`User-agent: *\nDisallow: /\n\nSitemap: ${DOMAIN}/sitemap.xml\n`);
 console.log(`Generadas ${localidades.length} localidades, ${groups.size} provincias y portada desde un único generador.`);
