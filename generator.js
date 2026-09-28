@@ -133,7 +133,7 @@ function home(){
     const sorted=[...g.items].sort((a,b)=>a.localidad.localeCompare(b.localidad,'es',{sensitivity:'base'}));
     const byNorm=new Map(sorted.map(d=>[norm(d.localidad),d]));
     const priority=(priorityByProvince[slug]||[]).map(n=>byNorm.get(norm(n))).filter(Boolean);
-    const visible=[...priority,...sorted.filter(d=>!priority.some(p=>p.slug===d.slug))].slice(0,12);
+    const visible=[...priority,...sorted.filter(d=>!priority.some(p=>p.slug===d.slug))].slice(0,24);
     const used=new Set(visible.map(d=>d.slug));
     const extra=sorted.filter(d=>!used.has(d.slug));
     return `<section class="area"><div class="areahead"><h3>${esc(g.provincia)}</h3><a href="/${slug}/">Ver todos →</a></div><div class="towns">${visible.map(d=>`<a href="/${slug}/${d.slug}/">Antenista en ${esc(d.localidad)}</a>`).join('')}</div>${extra.length?`<details class="town-more"><summary>Todos los demás pueblos con servicio</summary><div class="town-more-links">${extra.map(d=>`<a href="/${slug}/${d.slug}/">Antenista en ${esc(d.localidad)}</a>`).join('')}</div></details>`:''}</section>`;
