@@ -44,7 +44,7 @@ for(const slug of provinceSlugs){
   if(!h.includes('class="province-seo"')) errors.push(`${slug}: bloque SEO provincial ausente`);
   if(!h.includes('class="alpha-localities"')||!h.includes('class="alpha-nav"')) errors.push(`${slug}: índice alfabético provincial ausente`);
   const towns=localidades.filter(x=>x.provinciaSlug===slug);
-  for(const d of towns){if(!h.includes(`href="/${slug}/${d.slug}/"`)) errors.push(`${slug}: falta enlace provincial a ${d.slug}`)}
+  for(const d of towns){if(!h.includes(`href="/${slug}/${d.slug}/"`)) errors.push(`${slug}: falta enlace provincial a ${d.slug}`);if(!h.includes(`>Antenista en ${d.localidad}</a>`)) errors.push(`${slug}: anchor municipal débil para ${d.slug}`)}
 }
 
 const sitemapPath=path.join(ROOT,'sitemap.xml'),robotsPath=path.join(ROOT,'robots.txt');
