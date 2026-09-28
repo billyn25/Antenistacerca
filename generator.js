@@ -55,7 +55,7 @@ function businessSchema(){return {'@type':'Organization','@id':`${DOMAIN}/#negoc
 function nearby(d){
   const sameProvince=d.cercanas.map(n=>byName.get(n.toLowerCase())).filter(t=>t&&t.provinciaSlug===d.provinciaSlug&&t.slug!==d.slug);
   const links=sameProvince.map(t=>`<a href="/${t.provinciaSlug}/${t.slug}/">Antenista en ${esc(t.localidad)}</a>`).join('');
-  return `${links?`<div class="nearby-links">${links}</div>`:''}<p><a class="more" href="/${d.provinciaSlug}/">Ver todos los municipios de ${esc(d.provincia)} →</a></p>`;
+  return `${links?`<div class="nearby-links">${links}</div>`:''}<p><a class="more" href="/${d.provinciaSlug}/">Directorio de municipios de ${esc(d.provincia)} →</a></p>`;
 }
 function schema(d){
   const url=`${DOMAIN}/${d.provinciaSlug}/${d.slug}/`;
