@@ -23,7 +23,7 @@ function hub(slug,p){
   for(const d of items){const l=letter(d.localidad)||'#';if(!by.has(l))by.set(l,[]);by.get(l).push(d)}
   const letters=[...by.keys()].sort((a,b)=>a.localeCompare(b,'es'));
   const nav=letters.map(l=>`<a href="#letra-${slug}-${l}" aria-label="Localidades de ${esc(p.name)} con ${l}">${l}</a>`).join('');
-  const sections=letters.map(l=>`<section class="alpha-group" id="letra-${slug}-${l}"><h3>${l}</h3><div class="alpha-links">${by.get(l).map(d=>`<a href="/${d.provinciaSlug}/${d.slug}/">${esc(d.localidad)}</a>`).join('')}</div></section>`).join('');
+  const sections=letters.map(l=>`<section class="alpha-group" id="letra-${slug}-${l}"><h3>${l}</h3><div class="alpha-links">${by.get(l).map(d=>`<a href="/${d.provinciaSlug}/${d.slug}/">Antenista en ${esc(d.localidad)}</a>`).join('')}</div></section>`).join('');
   return `<!-- PROVINCE-HUB-START --><section class="province-seo"><div class="kicker">Servicio técnico en toda la provincia</div><h2>Antenistas en ${esc(p.name)}: instalación, reparación y mantenimiento</h2><p>Atendemos instalaciones y averías de antenas TDT y parabólicas, sistemas individuales y colectivos, amplificación y distribución de señal en localidades de ${esc(p.name)}. También trabajamos con porteros automáticos y videoporteros, revisando la instalación antes de sustituir equipos.</p><div class="province-seo-grid"><div class="province-seo-card"><strong>Antenas TDT y colectivas</strong><p>Orientación, falta de señal, cableado, tomas, repartidores y mantenimiento de instalaciones individuales y comunitarias.</p></div><div class="province-seo-card"><strong>Parabólicas y amplificación</strong><p>Instalación y ajuste de parabólicas, amplificadores, fuentes, cabeceras y módulos monocanal.</p></div><div class="province-seo-card"><strong>Porteros y videoporteros</strong><p>Reparación, renovación e instalación de telefonillos, placas de calle, porteros automáticos y videoporteros.</p></div></div></section><section class="alpha-localities" id="localidades"><div class="kicker">Encuentra tu localidad</div><h2>Localidades de ${esc(p.name)} por orden alfabético</h2><p class="alpha-intro">Selecciona la inicial de tu localidad para acceder directamente a la página del servicio técnico de antenista de tu zona.</p><nav class="alpha-nav" aria-label="Índice alfabético de localidades de ${esc(p.name)}">${nav}</nav>${sections}</section><!-- PROVINCE-HUB-END -->`;
 }
 
@@ -41,7 +41,7 @@ for(const [slug,p] of groups){
   h=h.replace('</head>',css+'</head>');
   // Verificación fuerte: todas las localidades deben aparecer como enlaces y el índice debe existir.
   if(!h.includes('class="alpha-nav"')||!h.includes('class="alpha-localities"')) throw new Error(`Province hubs: índice alfabético ausente en ${file}`);
-  for(const d of p.items){if(!h.includes(`href="/${d.provinciaSlug}/${d.slug}/"`)) throw new Error(`Province hubs: falta enlace ${d.localidad} en ${file}`)}
+  for(const d of p.items){if(!h.includes(`href="/${d.provinciaSlug}/${d.slug}/"`)) throw new Error(`Province hubs: falta enlace ${d.localidad} en ${file}`);if(!h.includes(`>Antenista en ${esc(d.localidad)}</a>`)) throw new Error(`Province hubs: anchor municipal débil ${d.localidad} en ${file}`)}
   fs.writeFileSync(file,h);done++;
 }
 console.log(`Hubs provinciales visibles: ${done}. Índice alfabético integrado en el listado original con ${localidades.length} enlaces locales.`);
