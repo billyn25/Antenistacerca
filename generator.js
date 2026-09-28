@@ -54,7 +54,7 @@ html{scroll-behavior:smooth}body{font-family:Arial,Helvetica,sans-serif;color:va
 function businessSchema(){return {'@type':'Organization','@id':`${DOMAIN}/#negocio`,name:'Antenista Cerca',url:`${DOMAIN}/`,telephone:TEL}}
 function nearby(d){
   const sameProvince=d.cercanas.map(n=>byName.get(n.toLowerCase())).filter(t=>t&&t.provinciaSlug===d.provinciaSlug&&t.slug!==d.slug);
-  const links=sameProvince.map(t=>`<a href="/${t.provinciaSlug}/${t.slug}/">${esc(t.localidad)}</a>`).join('');
+  const links=sameProvince.map(t=>`<a href="/${t.provinciaSlug}/${t.slug}/">Antenista en ${esc(t.localidad)}</a>`).join('');
   return `${links?`<div class="nearby-links">${links}</div>`:''}<p><a class="more" href="/${d.provinciaSlug}/">Ver todos los municipios de ${esc(d.provincia)} →</a></p>`;
 }
 function schema(d){
@@ -103,7 +103,7 @@ function town(d){
 }
 
 function province(p,slug,items){
-  const links=[...items].sort((a,b)=>a.localidad.localeCompare(b.localidad,'es')).map(x=>`<a href="/${slug}/${x.slug}/">${esc(x.localidad)}</a>`).join('');
+  const links=[...items].sort((a,b)=>a.localidad.localeCompare(b.localidad,'es')).map(x=>`<a href="/${slug}/${x.slug}/">Antenista en ${esc(x.localidad)}</a>`).join('');
   const graph=JSON.stringify({'@context':'https://schema.org','@graph':[businessSchema(),{'@type':'CollectionPage',url:`${DOMAIN}/${slug}/`,name:`Antenistas en ${p}`,about:{'@id':`${DOMAIN}/#negocio`}}]});
   return withFavicon(`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><title>Antenistas y reparación de antenas en ${esc(p)} | ${PHONE}</title><meta name="description" content="Técnicos de antenas en municipios de ${esc(p)} para instalación y reparación de antenas TDT, parabólicas, amplificación, porteros y videoporteros. Teléfono ${PHONE}."><link rel="canonical" href="${DOMAIN}/${slug}/"><script type="application/ld+json">${graph}</script>${SHARED_UI}<style>*{box-sizing:border-box}body{margin:0}.w{padding:34px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-top:22px}.grid a{padding:13px 14px;border:1px solid var(--ui-line);border-radius:9px;font-weight:700;background:#fff;color:var(--ui-blue)}h1{color:var(--ui-blue);font-size:40px}.lead{color:#536373;max-width:920px;line-height:1.65}.direct-province{display:flex;gap:10px;align-items:center;margin:18px 0;padding:13px 14px;background:#eef5fa;border-left:4px solid var(--ui-blue);border-radius:9px;color:var(--ui-blue);font-weight:700}.direct-province i{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ui-green);color:#fff;font-style:normal}@media(max-width:640px){h1{font-size:34px}}</style></head><body><main class="w"><p><a href="/" style="color:var(--ui-blue)">← Inicio</a></p><h1>Técnicos de antenas en ${esc(p)}</h1><p class="lead">Técnico de antenas y antenista para reparación e instalación de antenas de TV y TDT, amplificadores y cabeceras, porteros automáticos y videoporteros, soluciones de cobertura móvil y reparaciones eléctricas del hogar.</p><div class="direct-province"><i>✓</i><span>Trato directo con el técnico desde el primer contacto, sin centralitas ni intermediarios.</span></div><div class="grid">${links}</div></main><div class="mobilebar"><a href="tel:${TEL}">☎ ${PHONE}</a><a href="https://wa.me/${WA}">WhatsApp</a></div></body></html>`);
 }
