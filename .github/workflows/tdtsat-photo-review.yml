@@ -12,33 +12,33 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Obtener fotografía de referencia del fabricante
+      - name: Obtener imágenes de la ficha del fabricante
         run: |
           mkdir -p .quality
           python - <<'PY'
           from urllib.request import Request, urlopen
           from urllib.parse import urljoin
           from pathlib import Path
-          import re, json, html
-          base='https://apagonsd.televes.com/'
-          raw=urlopen(Request(base,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode('utf8')
-          Path('.quality/manufacturer.html').write_text(raw)
+          import re,json
+          url='https://apagonsd.televes.com/assets/css/style.css'
+          raw=urlopen(Request(url,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode('utf8')
+          Path('.quality/manufacturer.css').write_text(raw)
           links=[]
-          for match in re.finditer(r'(?:src|data-src|href)=[\"\']([^\"\']+)[\"\']|url\([\"\']?([^\)\"\']+)',raw,re.I):
-              u=urljoin(base,html.unescape(match.group(1) or match.group(2)))
-              if re.search(r'\.(?:jpg|jpeg|png|webp)(?:\?|$)',u,re.I) and u not in links: links.append(u)
-          print(json.dumps(links,ensure_ascii=False,indent=2))
+          for m in re.finditer(r'url\([\"\']?([^\)\"\']+)',raw):
+              u=urljoin(url,m.group(1))
+              if re.search(r'\.(jpg|jpeg|png|webp)(\?|$)',u,re.I) and u not in links: links.append(u)
+          print(json.dumps(links,indent=2))
           Path('.quality/images.json').write_text(json.dumps(links,indent=2))
           for n,u in enumerate(links):
-              if re.search(r'5128|combo|zas',u,re.I):
-                  data=urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
+              if n>16: break
+              try:
+                  data=urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=20).read()
                   Path(f'.quality/candidate-{n}.img').write_bytes(data)
                   print('CANDIDATE',n,u,len(data))
+              except Exception as e: print('FAILED',u,str(e))
           PY
-      - name: Guardar fuentes para revisión sin modificar producción
-        run: git archive --format=tar.gz HEAD > .quality/repo-source.tar.gz
       - uses: actions/upload-artifact@v4
         with:
-          name: tdtsat-photo-source
+          name: tdtsat-receiver-images
           path: .quality/
           include-hidden-files: true
