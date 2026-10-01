@@ -58,7 +58,7 @@ function schema(d){
   return JSON.stringify({'@context':'https://schema.org','@graph':[
     businessSchema(),
     {'@type':'WebPage','@id':`${url}#pagina`,url,name:`Antenista en ${d.localidad} | Reparación e instalación`,description:d.descripcion,about:{'@id':`${DOMAIN}/#negocio`}},
-    {'@type':'Service','@id':`${url}#servicio`,name:`Antenista, reparación e instalación de antenas en ${d.localidad}`,provider:{'@id':`${DOMAIN}/#negocio`},telephone:TEL,serviceType:['Instalación y reparación de antenas individuales y colectivas','Antenas TDT','Antenas parabólicas','Reparación de antenas y amplificadores de antena','Cabeceras y módulos monocanal','Instalación, reparación y renovación de porteros automáticos y videoporteros','Antenas de telefonía móvil','Reparaciones eléctricas en el hogar','Urgencias 24 horas'],areaServed:{'@type':'AdministrativeArea',name:d.localidad}},
+    {'@type':'Service','@id':`${url}#servicio`,name:`Antenista, reparación e instalación de antenas en ${d.localidad}`,provider:{'@id':`${DOMAIN}/#negocio`},telephone:TEL,serviceType:['Instalación y reparación de antenas individuales y colectivas','Antenas TDT','Antenas parabólicas','TDT por satélite HD','Reparación de antenas y amplificadores de antena','Cabeceras y módulos monocanal','Instalación, reparación y renovación de porteros automáticos y videoporteros','Antenas de telefonía móvil','Reparaciones eléctricas en el hogar','Urgencias 24 horas'],areaServed:{'@type':'AdministrativeArea',name:d.localidad}},
     {'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'Inicio',item:`${DOMAIN}/`},{'@type':'ListItem',position:2,name:d.provincia,item:`${DOMAIN}/${d.provinciaSlug}/`},{'@type':'ListItem',position:3,name:d.localidad,item:url}]}
   ]});
 }
@@ -95,7 +95,7 @@ function town(d){
   h=h.replace('</head>',SHARED_UI+townExtras+'</head>');
   h=h.replaceAll('Porteros y videoporteros','Porteros automáticos y videoporteros').replaceAll('Reparación de porteros y videoporteros','Reparación de porteros automáticos y videoporteros').replaceAll('porteros y videoporteros','porteros automáticos y videoporteros');
   const cards=(h.match(/class="card"/g)||[]).length,mobileCount=(h.match(/id="telefonia-movil"/g)||[]).length;
-  if(!h.includes('<header')||cards!==6||mobileCount!==1) throw new Error(`Página ${d.localidad} inválida: header=${h.includes('<header')} cards=${cards} mobile=${mobileCount}`);
+  if(!h.includes('<header')||cards!==7||mobileCount!==1) throw new Error(`Página ${d.localidad} inválida: header=${h.includes('<header')} cards=${cards} mobile=${mobileCount}`);
   return h;
 }
 
