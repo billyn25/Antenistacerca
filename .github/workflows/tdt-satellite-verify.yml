@@ -1,129 +1,97 @@
 name: Verificar TDT por satélite
 on:
   push:
-    branches: [fix/tdt-satellite-build]
+    branches: [main, fix/tdt-satellite-build]
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  repair-and-verify:
-    if: github.ref == 'refs/heads/fix/tdt-satellite-build'
+  verify:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Corregir únicamente el contador y Schema del servicio
-        shell: bash
+      - name: Build completo y auditoría existente
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          file = Path('generator.js')
-          source = file.read_text(encoding='utf8')
-          edits = {
-              'cards!==6': 'cards!==7',
-              "'Antenas TDT','Antenas parabólicas','Reparación de antenas": "'Antenas TDT','Antenas parabólicas','TDT por satélite HD','Reparación de antenas",
-          }
-          for old, new in edits.items():
-              assert source.count(old) == 1, f'Punto de cambio inesperado: {old}'
-              source = source.replace(old, new, 1)
-          file.write_text(source, encoding='utf8')
-          Path('tests').mkdir(exist_ok=True)
-          Path('tests/tdt-satellite.test.mjs').write_text('''import fs from 'node:fs';
-          import path from 'node:path';
-          import assert from 'node:assert/strict';
-          import test from 'node:test';
-
-          const root = 'public';
-          const towns = JSON.parse(fs.readFileSync('src/localidades.json', 'utf8'));
-          const read = route => fs.readFileSync(path.join(root, route), 'utf8');
-          const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-          const previousLinks = ['tdt', 'parabolicas', 'porteros', 'reparacion', 'telefonia-movil', 'reparaciones-electricas'];
-
-          test('portada conserva los siete servicios, incluida TDT por satélite HD', () => {
-            const html = read('index.html');
-            const section = html.match(/<section id="servicios"[\\s\\S]*?<\\/section>/)?.[0] || '';
-            assert.equal((section.match(/<article>/g) || []).length, 7);
-            assert.equal((section.match(/<h3>TDT por satélite HD<\\/h3>/g) || []).length, 1);
-            assert.match(section, /antena parabólica y receptor compatible/);
-            assert.match(html, /href="tel:\\+34641589394"/);
-          });
-
-          test('cada municipio conserva los seis servicios anteriores y añade TDT-SAT con destino y Schema', () => {
-            assert.ok(towns.length > 0);
-            for (const town of towns) {
-              const file = `${town.provinciaSlug}/${town.slug}/index.html`;
-              const html = read(file);
-              const section = html.match(/<section class="services wrap" id="servicios">[\\s\\S]*?<\\/section>/)?.[0] || '';
-              assert.equal((section.match(/class="card"/g) || []).length, 7, file);
-              for (const id of [...previousLinks, 'tdt-satelite']) {
-                assert.ok(section.includes(`href="#${id}"`), `${file}: enlace ${id}`);
-                assert.equal([...html.matchAll(/\\bid="([^"]+)"/g)].filter(m => m[1] === id).length, 1, `${file}: destino ${id}`);
-              }
-              assert.ok(html.includes(`<h2>Instalación de TDT por satélite en HD en ${escape(town.localidad)}</h2>`), file);
-              const json = html.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/)?.[1];
-              const graph = JSON.parse(json)['@graph'];
-              assert.ok(graph.some(item => item['@type'] === 'Service' && item.serviceType.includes('TDT por satélite HD')), file);
-              assert.ok(html.includes(`href="https://www.antenistacerca.es/${town.provinciaSlug}/${town.slug}/"`), file);
-            }
-          });
-
-          test('se conservan las rutas del sitemap y el modo de publicación existente', () => {
-            const expected = new Set(['https://www.antenistacerca.es/']);
-            for (const town of towns) {
-              expected.add(`https://www.antenistacerca.es/${town.provinciaSlug}/`);
-              expected.add(`https://www.antenistacerca.es/${town.provinciaSlug}/${town.slug}/`);
-            }
-            const urls = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\\/loc>/g)].map(m => m[1]);
-            assert.equal(urls.length, expected.size);
-            assert.deepEqual(new Set(urls), expected);
-            assert.match(read('index.html'), /content="noindex,nofollow"/);
-            assert.match(read('robots.txt'), /Disallow: \\//);
-          });
-          ''', encoding='utf8')
-          PY
           mkdir -p .quality
-          git diff -- generator.js > .quality/generator.diff
-          git diff --check
-      - name: Build completo con auditoría existente
-        id: build
-        continue-on-error: true
-        run: |
           set -o pipefail
           npm run build 2>&1 | tee .quality/build.log
-      - name: Regresión específica del servicio
-        id: regression
-        if: always()
-        continue-on-error: true
+      - name: Servicio, Schema, rutas y servicios anteriores
         run: |
           set -o pipefail
           node --test tests/tdt-satellite.test.mjs 2>&1 | tee .quality/tdt-tests.log
-      - name: Guardar cambios comprobados solo en la rama aislada
-        if: steps.build.outcome == 'success' && steps.regression.outcome == 'success'
+      - name: Preparar comprobación visual
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add generator.js tests/tdt-satellite.test.mjs
-          git commit -m 'Fix TDT-SAT card validation and include service in local Schema'
-          git push origin HEAD:fix/tdt-satellite-build
-      - name: Conservar diagnóstico y páginas generadas
-        if: always()
+          python -m pip install playwright==1.57.0
+          python -m playwright install --with-deps chromium webkit
+      - name: Verificar el servicio en móvil y escritorio sin JavaScript
+        shell: bash
         run: |
-          cp generator.js .quality/generator.js
-          cp tests/tdt-satellite.test.mjs .quality/tdt-satellite.test.mjs
-          tar -czf .quality/generated-site.tar.gz public src/localidades.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from functools import partial
+          from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+          from threading import Thread
+          from playwright.sync_api import sync_playwright
+
+          class QuietHandler(SimpleHTTPRequestHandler):
+              def log_message(self, *_args):
+                  pass
+
+          root = Path('public').resolve()
+          out = Path('.quality')
+          towns = json.loads(Path('src/localidades.json').read_text(encoding='utf8'))
+          town = next((t for t in towns if t['slug'] == 'galdakao'), towns[0])
+          town_path = '/' + town['provinciaSlug'] + '/' + town['slug'] + '/'
+          server = ThreadingHTTPServer(('127.0.0.1', 0), partial(QuietHandler, directory=str(root)))
+          Thread(target=server.serve_forever, daemon=True).start()
+          origin = f'http://127.0.0.1:{server.server_port}'
+          results = []
+          try:
+              with sync_playwright() as pw:
+                  for engine in ['chromium', 'webkit']:
+                      browser = getattr(pw, engine).launch()
+                      for width in [390, 1280]:
+                          context = browser.new_context(viewport={'width': width, 'height': 900}, java_script_enabled=False)
+                          context.route('**/*', lambda route: route.continue_() if route.request.url.startswith(origin) else route.abort())
+                          page = context.new_page()
+                          page.goto(origin, wait_until='load')
+                          home_card = page.locator('#servicios article').filter(has=page.get_by_role('heading', name='TDT por satélite HD', exact=True))
+                          assert home_card.count() == 1
+                          assert home_card.is_visible()
+                          page.locator('#servicios').scroll_into_view_if_needed()
+                          page.locator('#servicios').screenshot(path=str(out / f'{engine}-{width}-portada-servicios.png'))
+                          page.goto(origin + town_path, wait_until='load')
+                          card = page.locator('a.card[href="#tdt-satelite"]')
+                          assert card.count() == 1 and card.is_visible()
+                          assert page.locator('#servicios a.card').count() == 7
+                          card.click()
+                          assert page.url.endswith('#tdt-satelite')
+                          section = page.locator('#tdt-satelite')
+                          assert section.is_visible()
+                          heading = section.locator('h2')
+                          assert heading.inner_text() == 'Instalación de TDT por satélite en HD en ' + town['localidad']
+                          box = section.bounding_box()
+                          assert box and box['x'] >= -1 and box['x'] + box['width'] <= width + 1
+                          section.screenshot(path=str(out / f'{engine}-{width}-servicio-local.png'))
+                          results.append({'engine':engine,'width':width,'route':town_path,'cardVisible':True,'anchorWorks':True,'sectionVisible':True,'javascript':False})
+                          context.close()
+                      browser.close()
+              (out / 'visual-report.json').write_text(json.dumps({'passed':True,'cases':results},ensure_ascii=False,indent=2),encoding='utf8')
+              print('TDT-SAT VISIBLE: portada y municipio, móvil y escritorio, Chromium y WebKit; enlaces operativos sin JavaScript.')
+          finally:
+              server.shutdown()
+              server.server_close()
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: tdt-satellite-quality
           path: .quality/
           include-hidden-files: true
-      - name: Resultado final
-        if: always()
-        run: |
-          test '${{ steps.build.outcome }}' = 'success'
-          test '${{ steps.regression.outcome }}' = 'success'
