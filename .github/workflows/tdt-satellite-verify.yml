@@ -32,7 +32,7 @@ jobs:
       - name: Verificar el servicio en móvil y escritorio sin JavaScript
         shell: bash
         run: |
-          python - <<'PY'
+          python -u - <<'PY'
           import json
           from pathlib import Path
           from functools import partial
@@ -53,34 +53,46 @@ jobs:
           Thread(target=server.serve_forever, daemon=True).start()
           origin = f'http://127.0.0.1:{server.server_port}'
           results = []
+
+          def capture(page, selector, filename):
+              # Full-page capture avoids stale element handles during anchor scrolling.
+              page.wait_for_timeout(600)
+              locator = page.locator(selector)
+              assert locator.is_visible(), selector
+              rect = locator.evaluate('(el) => { const r = el.getBoundingClientRect(); return {x:r.x+scrollX,y:r.y+scrollY,width:r.width,height:r.height}; }')
+              page.screenshot(path=str(out / filename), full_page=True, animations='disabled')
+              return {'file':filename,'rect':rect}
+
           try:
               with sync_playwright() as pw:
                   for engine in ['chromium', 'webkit']:
                       browser = getattr(pw, engine).launch()
                       for width in [390, 1280]:
+                          print(f'Comprobando {engine}, ancho {width}')
                           context = browser.new_context(viewport={'width': width, 'height': 900}, java_script_enabled=False)
                           context.route('**/*', lambda route: route.continue_() if route.request.url.startswith(origin) else route.abort())
                           page = context.new_page()
-                          page.goto(origin, wait_until='load')
+                          response = page.goto(origin, wait_until='load')
+                          assert response and response.status == 200
                           home_card = page.locator('#servicios article').filter(has=page.get_by_role('heading', name='TDT por satélite HD', exact=True))
-                          assert home_card.count() == 1
-                          assert home_card.is_visible()
-                          page.locator('#servicios').scroll_into_view_if_needed()
-                          page.locator('#servicios').screenshot(path=str(out / f'{engine}-{width}-portada-servicios.png'))
-                          page.goto(origin + town_path, wait_until='load')
+                          assert home_card.count() == 1 and home_card.is_visible()
+                          home_capture = capture(page, '#servicios', f'{engine}-{width}-portada-servicios.png')
+                          response = page.goto(origin + town_path, wait_until='load')
+                          assert response and response.status == 200
                           card = page.locator('a.card[href="#tdt-satelite"]')
                           assert card.count() == 1 and card.is_visible()
                           assert page.locator('#servicios a.card').count() == 7
                           card.click()
-                          assert page.url.endswith('#tdt-satelite')
+                          page.wait_for_url(origin + town_path + '#tdt-satelite')
+                          page.wait_for_timeout(600)
                           section = page.locator('#tdt-satelite')
                           assert section.is_visible()
                           heading = section.locator('h2')
                           assert heading.inner_text() == 'Instalación de TDT por satélite en HD en ' + town['localidad']
                           box = section.bounding_box()
                           assert box and box['x'] >= -1 and box['x'] + box['width'] <= width + 1
-                          section.screenshot(path=str(out / f'{engine}-{width}-servicio-local.png'))
-                          results.append({'engine':engine,'width':width,'route':town_path,'cardVisible':True,'anchorWorks':True,'sectionVisible':True,'javascript':False})
+                          local_capture = capture(page, '#tdt-satelite', f'{engine}-{width}-servicio-local.png')
+                          results.append({'engine':engine,'width':width,'route':town_path,'cardVisible':True,'anchorWorks':True,'sectionVisible':True,'javascript':False,'homeCapture':home_capture,'localCapture':local_capture})
                           context.close()
                       browser.close()
               (out / 'visual-report.json').write_text(json.dumps({'passed':True,'cases':results},ensure_ascii=False,indent=2),encoding='utf8')
