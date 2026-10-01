@@ -16,90 +16,32 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Recuperar comparacion de la base ya comprobada
+      - name: Recuperar el cambio revisado y la base original
         uses: actions/download-artifact@v4
         with:
           name: cerca-tdtsat-refactor-quality
-          path: .baseline
-          run-id: 36898236543
+          path: .candidate
+          run-id: 36898685713
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Incorporar solo TDT SAT y su prueba de regresion
+      - name: Aplicar el servicio y actualizar el contador estricto de auditoria
         run: |
-          mkdir -p .quality
-          cp .baseline/baseline.json .quality/baseline.json
-          cp .baseline/baseline.log .quality/baseline.log
+          mkdir -p .quality tests
+          cp .candidate/baseline.json .quality/baseline.json
+          cp .candidate/baseline.log .quality/baseline.log
+          cp .candidate/generator.js generator.js
+          cp .candidate/package.json package.json
+          cp .candidate/tdt-satellite-service.test.mjs tests/tdt-satellite-service.test.mjs
           python3 - <<'PY'
           from pathlib import Path
-          import json
-          f=Path('generator.js')
-          s=f.read_text()
-          assert 'id="tdt-satelite"' not in s, 'El servicio ya existe; revisar antes de duplicar'
-          def once(old,new):
-              global s
-              assert s.count(old)==1, f'Punto de cambio inesperado: {old[:100]}'
-              s=s.replace(old,new,1)
-          once("'Antenas TDT','Antenas parabólicas','Reparación de antenas", "'Antenas TDT','Antenas parabólicas','TDT por satélite HD','Reparación de antenas")
-          card='<a class="card" href="#parabolicas"><img src="${PARABOLICA}" alt="Antena parabólica para instalación y reparación en ${loc}"><h3>Parabólicas</h3><p>Montaje, ajuste, mantenimiento y resolución de averías.</p></a>'
-          extra='<a class="card" href="#tdt-satelite"><img src="${PARABOLICA}" alt="Antena parabólica para recepción de TDT por satélite en ${loc}"><h3>TDT por satélite HD</h3><p>Instalación de parabólica y receptor compatible. Configuración y comprobación de recepción en HD.</p></a>'
-          once(card,card+extra)
-          marker='  h=h.replace(/<section class="band" id="porteros">'
-          block='''  h=h.replace('<section class="band" id="porteros">',`<section class="twocol wrap" id="tdt-satelite"><div><div class="kicker">TDT por satélite</div><h2>Instalación de TDT por satélite en HD en ${esc(d.localidad)}</h2><p>Instalamos antena parabólica y receptor para recibir la TDT por satélite. Configuramos y comprobamos el equipo compatible con alta definición cuando la emisión y el receptor lo permiten.</p></div><aside class="sidebox"><strong>Parabólica y receptor</strong><p>Revisamos orientación, LNB, cableado y sintonización para comprobar la instalación.</p></aside></section><section class="band" id="porteros">`);
-          '''
-          once(marker,block+marker)
-          once('cards!==6','cards!==7')
-          home='<article><img src="${PARABOLICA}" alt="Antena parabólica para instalación, orientación y reparación"><div><h3>Antenas parabólicas</h3><p>Montaje, orientación y reparación de parabólicas. Ajustamos señal y revisamos LNB, conectores, cableado y distribución de satélite.</p></div></article>'
-          addition='<article><img src="${PARABOLICA}" alt="Antena parabólica para recepción de TDT por satélite"><div><h3>TDT por satélite HD</h3><p>Instalación de antena parabólica y receptor compatible para recibir la TDT por satélite en alta definición cuando la emisión y el equipo lo permiten.</p></div></article>'
-          once(home,home+addition)
-          f.write_text(s)
-          Path('tests').mkdir(exist_ok=True)
-          Path('tests/tdt-satellite-service.test.mjs').write_text(r'''import fs from 'node:fs';
-          import path from 'node:path';
-          import assert from 'node:assert/strict';
-          import test from 'node:test';
-          const root='public';
-          const towns=JSON.parse(fs.readFileSync('src/localidades.json','utf8'));
-          const read=p=>fs.readFileSync(path.join(root,p),'utf8');
-          const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-          const oldServices=['tdt','parabolicas','porteros','reparacion','telefonia-movil','reparaciones-electricas'];
-          test('portada conserva servicios y muestra TDT por satélite HD',()=>{
-            const h=read('index.html');
-            const section=h.match(/<section\b[^>]*id="servicios"[\s\S]*?<\/section>/)?.[0]||'';
-            assert.equal((section.match(/<article\b/g)||[]).length,7);
-            assert.equal((section.match(/<h3>TDT por satélite HD<\/h3>/g)||[]).length,1);
-            assert.match(section,/antena parabólica y receptor compatible/);
-            assert.match(h,/tel:\+34641589394/);
-          });
-          test('todas las localidades conservan los seis servicios y añaden TDT-SAT con destino y Schema',()=>{
-            assert.ok(towns.length>0);
-            for(const d of towns){
-              const file=`${d.provinciaSlug}/${d.slug}/index.html`,h=read(file);
-              const section=h.match(/<section\b[^>]*id="servicios"[\s\S]*?<\/section>/)?.[0]||'';
-              const ids=[...h.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
-              for(const id of [...oldServices,'tdt-satelite']){
-                assert.ok(section.includes(`href="#${id}"`),`${file}: enlace ${id}`);
-                assert.equal(ids.filter(x=>x===id).length,1,`${file}: destino ${id}`);
-              }
-              assert.ok(h.includes(`<h2>Instalación de TDT por satélite en HD en ${escape(d.localidad)}</h2>`),file);
-              const graphs=[...h.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap(m=>{const j=JSON.parse(m[1]);return j['@graph']||[j]});
-              assert.ok(graphs.some(n=>n['@type']==='Service'&&n.serviceType?.includes('TDT por satélite HD')),`${file}: Schema`);
-            }
-          });
-          test('respeta la configuracion SEO de la salida, sin forzar noindex',()=>{
-            const home=read('index.html'),robots=read('robots.txt');
-            const production=/<meta name="robots" content="index,follow/.test(home);
-            assert.ok(production||home.includes('content="noindex,nofollow"'));
-            if(production){assert.match(robots,/Allow: \//);assert.doesNotMatch(robots,/Disallow: \//)}
-            else assert.match(robots,/Disallow: \//);
-          });
-          ''')
-          p=Path('package.json'); data=json.loads(p.read_text())
-          for key in ['build','build:prod']:
-              data['scripts'][key]+=' && node --test tests/tdt-satellite-service.test.mjs'
-          p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+          f=Path('audit.js'); s=f.read_text()
+          old='if((h.match(/class="card"/g)||[]).length!==6)errors.push(`${rel}: tarjetas != 6`);'
+          new='if((h.match(/class="card"/g)||[]).length!==7)errors.push(`${rel}: tarjetas != 7`);'
+          assert s.count(old)==1, 'Punto de cambio inesperado en auditoria'
+          f.write_text(s.replace(old,new,1))
           PY
           git diff --check
-          git diff -- generator.js package.json > .quality/change.patch
-          cp generator.js package.json .quality/
+          git diff -- generator.js package.json audit.js > .quality/change.patch
+          cp generator.js package.json audit.js .quality/
           cp tests/tdt-satellite-service.test.mjs .quality/
       - name: Build completo de produccion con servicio nuevo
         shell: bash
@@ -130,7 +72,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add generator.js package.json tests/tdt-satellite-service.test.mjs
+          git add generator.js package.json audit.js tests/tdt-satellite-service.test.mjs
           git commit -m 'Add TDT satellite HD to production homepage and municipality services'
           git push origin HEAD:fix/tdt-sat-refactor-verificado
       - name: Guardar salida para revision visual
