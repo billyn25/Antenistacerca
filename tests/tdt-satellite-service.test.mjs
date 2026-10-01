@@ -37,3 +37,26 @@ test('respeta la configuracion SEO de la salida, sin forzar noindex',()=>{
   if(production){assert.match(robots,/Allow: \//);assert.doesNotMatch(robots,/Disallow: \//)}
   else assert.match(robots,/Disallow: \//);
 });
+
+const satellitePhoto='/assets/receptor-tdt-satelite-hd.webp';
+test('TDT-SAT tiene fotografía local propia, distinta de parabólicas, en portada y pueblos',()=>{
+  const image=fs.readFileSync(path.join(root,satellitePhoto.slice(1)));
+  assert.equal(image.toString('ascii',0,4),'RIFF');
+  assert.equal(image.toString('ascii',8,12),'WEBP');
+  assert.ok(image.length>1000&&image.length<100000);
+  assert.notDeepEqual(image,fs.readFileSync(path.join(root,'assets/parabolica.jpeg')));
+  const files=['index.html',...towns.map(d=>`${d.provinciaSlug}/${d.slug}/index.html`)];
+  for(const file of files){
+    const html=read(file);
+    const card=file==='index.html'
+      ? [...html.matchAll(/<article\b[\s\S]*?<\/article>/g)].map(m=>m[0]).find(s=>s.includes('<h3>TDT por satélite HD</h3>'))
+      : html.match(/<a class="card" href="#tdt-satelite">[\s\S]*?<\/a>/)?.[0];
+    assert.ok(card,`${file}: tarjeta TDT-SAT`);
+    assert.ok(card.includes(`src="${satellitePhoto}"`),`${file}: foto del receptor`);
+    assert.match(card,/width="640"/);
+    assert.match(card,/height="360"/);
+    assert.match(card,/alt="Receptor Televés ZAS HD COMBO/);
+    assert.ok(!card.includes('parabolica.jpeg'),`${file}: imagen repetida`);
+    assert.equal(html.split(`src="${satellitePhoto}"`).length-1,1,`${file}: una sola foto TDT-SAT`);
+  }
+});
