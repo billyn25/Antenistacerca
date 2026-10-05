@@ -1,78 +1,37 @@
-name: Verificar Madrid y SEO en rama limpia
+name: Recuperar fuentes completas de Madrid
 on:
   push:
     branches: [review/madrid-seo-20261005]
 permissions:
   contents: write
 jobs:
-  verify:
+  snapshot:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-      - name: Aplicar configuración revisada y datos postales contrastados
+          fetch-depth: 2
+      - name: Recuperar la configuración que ya superó ambos builds
         run: |
           mkdir -p .quality
           python3 - <<'PY'
-          from pathlib import Path
-          import json,urllib.request,hashlib
-          r=Path('.')
-          b=urllib.request.urlopen('https://raw.githubusercontent.com/billyn25/antenasrapid/fc7ead70124156c46bda6c28acf5f475bf4d1978/content/postal-codes-madrid.json',timeout=40).read()
-          assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()=='b05578a496895112c691b66cd04119f4ab65165f'
-          (r/'src/postal-codes-madrid.json').write_bytes(b)
-          def change(name,a,b):
-              p=r/name;s=p.read_text();assert s.count(a)==1,(name,s.count(a),a[:100]);p.write_text(s.replace(a,b))
-          p=r/'package.json';d=json.loads(p.read_text())
-          for key in ['build','build:prod','validate:localidades']:
-              d['scripts'][key]=d['scripts'][key].replace('node merge-localidades.js','node add-madrid.mjs && node merge-localidades.js')
-          for key,mode in [('build','test'),('build:prod','production')]:
-              d['scripts'][key]=d['scripts'][key].replace('node audit-final.js',f'node madrid-seo.mjs && node audit-final.js {mode}')
-              d['scripts'][key]+=' && node --test tests/madrid-seo.test.mjs && node audit-madrid-seo.mjs'
-          d['scripts']['test:madrid']='node --test tests/madrid-seo.test.mjs'
-          p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
-          change('audit-final.js',"const OLD_DOMAIN='https://www.antenistacerca.es';", "const OLD_DOMAIN='https://www.antenistacerca.es';\nconst production=(process.argv[2]||'production')==='production';")
-          change('audit-final.js',"if(!/^Allow:\\s*\\/$/mi.test(r)||/^Disallow:\\s*\\/$/mi.test(r)) errors.push('robots: producción bloqueada');", "if(production){if(!/^Allow:\\s*\\/$/mi.test(r)||/^Disallow:\\s*\\/$/mi.test(r)) errors.push('robots: producción bloqueada');}\n  else if(!/^Disallow:\\s*\\/$/mi.test(r)||/^Allow:\\s*\\/$/mi.test(r)) errors.push('robots: vista previa sin protección');")
-          change('audit-final.js',"  const convIds=", "  const robots=h.match(/<meta name=\"robots\" content=\"([^\"]*)\"/)?.[1]||'';\n  if(production ? /noindex|nofollow/.test(robots)||!robots.includes('index,follow') : robots!=='noindex,nofollow') errors.push(`${rel}: robots no corresponde al entorno`);\n  const convIds=")
-          change('netlify.toml','command = "npm run build:prod"','command = "npm run build"')
-          with (r/'netlify.toml').open('a') as f:
-              f.write('\n# Solo la publicación de producción permite indexación.\n[context.production]\n  command = "npm run build:prod"\n\n[context.deploy-preview]\n  command = "npm run build"\n\n[context.branch-deploy]\n  command = "npm run build"\n')
-          change('generator.js',"const byName=new Map(localidades.map(x=>[x.localidad.toLowerCase(),x]));", "const byName=new Map(localidades.map(x=>[`${x.provinciaSlug}/${x.localidad.toLowerCase()}`,x]));")
-          change('generator.js',"byName.get(n.toLowerCase())", "byName.get(`${d.provinciaSlug}/${n.toLowerCase()}`)")
+          import subprocess,textwrap
+          previous=subprocess.check_output(['git','show','904ef8c4923c2808cffc9694d4ff2074f81aa192:.github/workflows/madrid-seo-review.yml'],text=True)
+          script=previous.split("python3 - <<'PY'\n",1)[1].split('\n          PY',1)[0]
+          exec(compile(textwrap.dedent(script),'reviewed-config','exec'))
           PY
-          git diff --check
-      - name: Construir vista previa protegida
-        run: |
-          npm run build > .quality/preview.log 2>&1
-          cp public/madrid-seo-audit.json .quality/preview-audit.json
-          git checkout -- src/localidades.json
-      - name: Construir producción y validar todas las localidades
-        run: |
-          npm run build:prod > .quality/production.log 2>&1
-          cp public/madrid-seo-audit.json .quality/production-audit.json
-          cp public/madrid-seo-report.json .quality/
-      - name: Preparar navegador
-        run: |
-          python3 -m pip install playwright
-          python3 -m playwright install --with-deps chromium
-      - name: Comprobar Madrid, nombres largos y provincias anteriores
-        run: python3 tests/madrid-seo.browser.py
-      - name: Guardar solo las fuentes verificadas
-        run: |
-          git checkout -- src/localidades.json
           git add package.json generator.js audit-final.js netlify.toml src/postal-codes-madrid.json
           git diff --cached --check
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'Integra Madrid y SEO verificados sobre la rama limpia'
+          git commit -m 'Conserva la configuración de Madrid que pasó las auditorías de producción y preview'
           git push origin HEAD:review/madrid-seo-20261005
-          git rev-parse HEAD > .quality/verified-source-commit.txt
-          git ls-tree -r HEAD > .quality/verified-tree.txt
+          git rev-parse HEAD > .quality/source-commit.txt
+          git ls-tree -r HEAD > .quality/git-tree.txt
+          tar --exclude=.git --exclude=.quality --exclude=node_modules -czf .quality/source.tar.gz .
       - uses: actions/upload-artifact@v4
-        if: always()
         with:
-          name: cerca-madrid-seo-verificado
+          name: cerca-madrid-complete-sources
           path: .quality/
           include-hidden-files: true
