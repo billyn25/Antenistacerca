@@ -6,6 +6,7 @@ import { auditConsent, JS_PATH, CSS_PATH, RUNTIME, CSS } from './cookie-consent.
 const ROOT='public';
 const DOMAIN='https://antenistacerca.es';
 const OLD_DOMAIN='https://www.antenistacerca.es';
+const production=(process.argv[2]||'production')==='production';
 const TEL='+34641589394';
 const errors=[];
 const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);
@@ -18,6 +19,8 @@ for(const file of htmlFiles){
   const rel=path.relative(ROOT,file).split(path.sep).join('/');
   const h=fs.readFileSync(file,'utf8');
   const canon=[...h.matchAll(/<link\s+rel=["']canonical["']\s+href=["']([^"']+)["'][^>]*>/gi)].map(m=>m[1]);
+  const robots=h.match(/<meta name="robots" content="([^"]*)"/)?.[1]||'';
+  if(production ? /noindex|nofollow/.test(robots)||!robots.includes('index,follow') : robots!=='noindex,nofollow') errors.push(`${rel}: robots no corresponde al entorno`);
   const convIds=(h.match(/id=["']antenistacerca-conversions["']/gi)||[]).length;
   const tels=[...h.matchAll(/<a\b[^>]*href=["'](tel:[^"']+)["']/gi)].map(m=>m[1]);
   const was=[...h.matchAll(/<a\b[^>]*href=["']([^"']+)["']/gi)].map(m=>m[1]).filter(x=>/(?:^whatsapp:|wa\.me|(?:api\.|web\.)?whatsapp\.com)/i.test(x));
@@ -60,7 +63,8 @@ else {
 if(!fs.existsSync(robotsPath)) errors.push('robots.txt ausente');
 else {
   const r=fs.readFileSync(robotsPath,'utf8');
-  if(!/^Allow:\s*\/$/mi.test(r)||/^Disallow:\s*\/$/mi.test(r)) errors.push('robots: producción bloqueada');
+  if(production){if(!/^Allow:\s*\/$/mi.test(r)||/^Disallow:\s*\/$/mi.test(r)) errors.push('robots: producción bloqueada');}
+  else if(!/^Disallow:\s*\/$/mi.test(r)||/^Allow:\s*\/$/mi.test(r)) errors.push('robots: vista previa sin protección');
   if(!r.includes(`Sitemap: ${DOMAIN}/sitemap.xml`)) errors.push('robots: sitemap incorrecto');
   if(r.includes(OLD_DOMAIN)) errors.push('robots: queda www antiguo');
 }
