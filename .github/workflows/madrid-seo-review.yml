@@ -1,11 +1,11 @@
-name: Revision Madrid y SEO Cerca
+name: Verificar Madrid y SEO en rama limpia
 on:
   push:
     branches: [review/madrid-seo-20261005]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  review:
+  verify:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -13,44 +13,66 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Guardar fuentes exactas y datos para pruebas
+      - name: Aplicar configuración revisada y datos postales contrastados
         run: |
-          mkdir -p .quality/sources
-          git ls-tree -r HEAD > .quality/git-tree.txt
-          tar --exclude=.git --exclude=.quality --exclude=node_modules -czf .quality/source.tar.gz .
+          mkdir -p .quality
           python3 - <<'PY'
-          import urllib.request,concurrent.futures,json,re
           from pathlib import Path
-          urls={
-            'municipios.csv':'https://raw.githubusercontent.com/codeforspain/ds-organizacion-administrativa/master/data/municipios.csv',
-            'municipios.json':'https://raw.githubusercontent.com/codeforspain/ds-organizacion-administrativa/1e9c99280ef4d7a12def33cafc3df59d9fc1f688/data/municipios.json',
-            'postal-madrid.json':'https://raw.githubusercontent.com/billyn25/antenasrapid/fc7ead70124156c46bda6c28acf5f475bf4d1978/content/postal-codes-madrid.json',
-            'home.html':'https://antenistacerca.es/',
-            'www-home.html':'https://www.antenistacerca.es/',
-            'robots.txt':'https://antenistacerca.es/robots.txt',
-            'sitemap.xml':'https://antenistacerca.es/sitemap.xml',
-            'lerma.html':'https://antenistacerca.es/burgos/lerma/',
-            'galdakao.html':'https://antenistacerca.es/bizkaia/galdakao/'
-          }
-          def read(item):
-            name,url=item
-            try:
-              with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 (compatible; site-owner-audit)'}),timeout=30) as r:
-                body=r.read();Path('.quality/sources',name).write_bytes(body)
-                txt=body.decode('utf-8','replace')
-                return {'file':name,'url':url,'finalUrl':r.url,'status':r.status,'xRobotsTag':r.headers.get('X-Robots-Tag'),'contentType':r.headers.get('Content-Type'),'bytes':len(body),'title':re.findall(r'<title>(.*?)</title>',txt),'robots':re.findall(r'<meta[^>]+name=[\"\']robots[\"\'][^>]*>',txt),'canonical':re.findall(r'<link[^>]+rel=[\"\']canonical[\"\'][^>]*>',txt)}
-            except Exception as e:return {'file':name,'url':url,'error':str(e)}
-          with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool: report=list(pool.map(read,urls.items()))
-          Path('.quality/live-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
-          print(json.dumps(report,ensure_ascii=False))
+          import json,urllib.request,hashlib
+          r=Path('.')
+          b=urllib.request.urlopen('https://raw.githubusercontent.com/billyn25/antenasrapid/fc7ead70124156c46bda6c28acf5f475bf4d1978/content/postal-codes-madrid.json',timeout=40).read()
+          assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()=='b05578a496895112c691b66cd04119f4ab65165f'
+          (r/'src/postal-codes-madrid.json').write_bytes(b)
+          def change(name,a,b):
+              p=r/name;s=p.read_text();assert s.count(a)==1,(name,s.count(a),a[:100]);p.write_text(s.replace(a,b))
+          p=r/'package.json';d=json.loads(p.read_text())
+          for key in ['build','build:prod','validate:localidades']:
+              d['scripts'][key]=d['scripts'][key].replace('node merge-localidades.js','node add-madrid.mjs && node merge-localidades.js')
+          for key,mode in [('build','test'),('build:prod','production')]:
+              d['scripts'][key]=d['scripts'][key].replace('node audit-final.js',f'node madrid-seo.mjs && node audit-final.js {mode}')
+              d['scripts'][key]+=' && node --test tests/madrid-seo.test.mjs && node audit-madrid-seo.mjs'
+          d['scripts']['test:madrid']='node --test tests/madrid-seo.test.mjs'
+          p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+          change('audit-final.js',"const OLD_DOMAIN='https://www.antenistacerca.es';", "const OLD_DOMAIN='https://www.antenistacerca.es';\nconst production=(process.argv[2]||'production')==='production';")
+          change('audit-final.js',"if(!/^Allow:\\s*\\/$/mi.test(r)||/^Disallow:\\s*\\/$/mi.test(r)) errors.push('robots: producción bloqueada');", "if(production){if(!/^Allow:\\s*\\/$/mi.test(r)||/^Disallow:\\s*\\/$/mi.test(r)) errors.push('robots: producción bloqueada');}\n  else if(!/^Disallow:\\s*\\/$/mi.test(r)||/^Allow:\\s*\\/$/mi.test(r)) errors.push('robots: vista previa sin protección');")
+          change('audit-final.js',"  const convIds=", "  const robots=h.match(/<meta name=\"robots\" content=\"([^\"]*)\"/)?.[1]||'';\n  if(production ? /noindex|nofollow/.test(robots)||!robots.includes('index,follow') : robots!=='noindex,nofollow') errors.push(`${rel}: robots no corresponde al entorno`);\n  const convIds=")
+          change('netlify.toml','command = "npm run build:prod"','command = "npm run build"')
+          with (r/'netlify.toml').open('a') as f:
+              f.write('\n# Solo la publicación de producción permite indexación.\n[context.production]\n  command = "npm run build:prod"\n\n[context.deploy-preview]\n  command = "npm run build"\n\n[context.branch-deploy]\n  command = "npm run build"\n')
+          change('generator.js',"const byName=new Map(localidades.map(x=>[x.localidad.toLowerCase(),x]));", "const byName=new Map(localidades.map(x=>[`${x.provinciaSlug}/${x.localidad.toLowerCase()}`,x]));")
+          change('generator.js',"byName.get(n.toLowerCase())", "byName.get(`${d.provinciaSlug}/${n.toLowerCase()}`)")
           PY
-      - name: Build de referencia de la rama limpia
+          git diff --check
+      - name: Construir vista previa protegida
         run: |
-          npm run build:prod > .quality/build-production.log 2>&1
-          tar -czf .quality/public.tar.gz public
+          npm run build > .quality/preview.log 2>&1
+          cp public/madrid-seo-audit.json .quality/preview-audit.json
+          git checkout -- src/localidades.json
+      - name: Construir producción y validar todas las localidades
+        run: |
+          npm run build:prod > .quality/production.log 2>&1
+          cp public/madrid-seo-audit.json .quality/production-audit.json
+          cp public/madrid-seo-report.json .quality/
+      - name: Preparar navegador
+        run: |
+          python3 -m pip install playwright
+          python3 -m playwright install --with-deps chromium
+      - name: Comprobar Madrid, nombres largos y provincias anteriores
+        run: python3 tests/madrid-seo.browser.py
+      - name: Guardar solo las fuentes verificadas
+        run: |
+          git checkout -- src/localidades.json
+          git add package.json generator.js audit-final.js netlify.toml src/postal-codes-madrid.json
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Integra Madrid y SEO verificados sobre la rama limpia'
+          git push origin HEAD:review/madrid-seo-20261005
+          git rev-parse HEAD > .quality/verified-source-commit.txt
+          git ls-tree -r HEAD > .quality/verified-tree.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: cerca-madrid-baseline
+          name: cerca-madrid-seo-verificado
           path: .quality/
           include-hidden-files: true
