@@ -20,7 +20,7 @@ const ELECTRIC='https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg
 const TOWN='https://images.unsplash.com/photo-1541698265912-0a5606dcf0f8?auto=format&fit=crop&fm=jpg&q=82&w=1600';
 
 const esc=(s='')=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
-const byName=new Map(localidades.map(x=>[x.localidad.toLowerCase(),x]));
+const byName=new Map(localidades.map(x=>[`${x.provinciaSlug}/${x.localidad.toLowerCase()}`,x]));
 const groups=new Map();
 for(const d of localidades){
   if(!groups.has(d.provinciaSlug)) groups.set(d.provinciaSlug,{provincia:d.provincia,items:[]});
@@ -54,7 +54,7 @@ html{scroll-behavior:smooth}body{font-family:Arial,Helvetica,sans-serif;color:va
 
 function businessSchema(){return {'@type':'Organization','@id':`${DOMAIN}/#negocio`,name:'Antenista Cerca',url:`${DOMAIN}/`,telephone:TEL}}
 function nearby(d){
-  const sameProvince=d.cercanas.map(n=>byName.get(n.toLowerCase())).filter(t=>t&&t.provinciaSlug===d.provinciaSlug&&t.slug!==d.slug);
+  const sameProvince=d.cercanas.map(n=>byName.get(`${d.provinciaSlug}/${n.toLowerCase()}`)).filter(t=>t&&t.provinciaSlug===d.provinciaSlug&&t.slug!==d.slug);
   const links=sameProvince.map(t=>`<a href="/${t.provinciaSlug}/${t.slug}/">Antenista en ${esc(t.localidad)}</a>`).join('');
   return `${links?`<div class="nearby-links">${links}</div>`:''}<p><a class="more" href="/${d.provinciaSlug}/">Directorio de municipios de ${esc(d.provincia)} →</a></p>`;
 }
