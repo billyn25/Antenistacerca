@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {validateMadrid,madridRows,addMadrid} from '../add-madrid.mjs';
-import {enrichTown,postalBlock,improveServiceContent,syncMetadata} from '../madrid-seo.mjs';
+import {enrichTown,postalBlock,improveServiceContent,syncMetadata,directory} from '../madrid-seo.mjs';
 const data=JSON.parse(fs.readFileSync(new URL('../src/postal-codes-madrid.json',import.meta.url),'utf8'));
 const rows=madridRows(data);
 test('179 municipios e identificadores únicos y 296 códigos contrastados',()=>{
@@ -40,4 +40,15 @@ test('producción y previews separados en Netlify',()=>{
  const toml=fs.readFileSync(new URL('../netlify.toml',import.meta.url),'utf8');
  assert.match(toml,/\[context.production\][\s\S]*?command = "npm run build:prod"/);
  for(const c of ['deploy-preview','branch-deploy'])assert.ok(toml.includes(`[context.${c}]\n  command = "npm run build"`));
+});
+
+test('Madrid conserva accesos rápidos y convierte solo los enlaces alfabéticos',()=>{
+ const t={slug:'madrid',localidad:'Madrid',postalCodes:['28001']};
+ const link='<a href="/madrid/madrid/">Antenista en Madrid</a>';
+ const h='<html><head></head><body><nav class="province-quick">'+link+'</nav><nav class="alpha-nav">A</nav><section class="alpha-localities">'+link+'</section><!-- PROVINCE-HUB-END --></body></html>';
+ const result=directory(h,[t],{checkedOn:'2026-10-02'});
+ assert.equal((result.match(/class="ac-madrid-result"/g)||[]).length,1);
+ assert.ok(result.includes('<nav class="province-quick">'+link+'</nav>'));
+ assert.ok(result.includes('data-madrid-search="Madrid 28001"'));
+ assert.ok(result.includes('Códigos postales: 28001'));
 });
