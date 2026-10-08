@@ -53,9 +53,13 @@ function directory(h,towns,data){
  const search=`<div class="ac-madrid-search"><label for="ac-madrid-query">${label}</label><input type="search" id="ac-madrid-query" placeholder="Ej.: Coslada o 28801" autocomplete="off" aria-describedby="ac-madrid-status"><p id="ac-madrid-status" role="status" aria-live="polite">179 municipios disponibles. Un código compartido muestra todas las localidades asociadas.</p></div>`;
  for(const t of towns){
   const link=`<a href="/madrid/${t.slug}/">Antenista en ${esc(t.localidad)}</a>`;
-  assert.equal(h.split(link).length,2,`Madrid: falta enlace ${t.slug}`);
+  // Los accesos rápidos pueden repetir el enlace; transformar solo el del listado alfabético.
+  const alphaStart=h.indexOf('<nav class="alpha-nav"');
+  assert.ok(alphaStart>=0,'Madrid: falta índice alfabético');
+  const alphaLink=h.indexOf(link,alphaStart);
+  assert.ok(alphaLink>=0,`Madrid: falta enlace alfabético ${t.slug}`);
   const codes=t.postalCodes;
-  h=h.replace(link,`<div class="ac-madrid-result" data-madrid-search="${esc(t.localidad)} ${codes.join(' ')}">${link}<a class="ac-madrid-codes-link" href="/madrid/${t.slug}/#codigos-postales">Códigos postales: ${codes.slice(0,4).join(' · ')}${codes.length>4?` · y ${codes.length-4} más`:''}</a></div>`);
+  h=h.slice(0,alphaLink)+`<div class="ac-madrid-result" data-madrid-search="${esc(t.localidad)} ${codes.join(' ')}">${link}<a class="ac-madrid-codes-link" href="/madrid/${t.slug}/#codigos-postales">Códigos postales: ${codes.slice(0,4).join(' · ')}${codes.length>4?` · y ${codes.length-4} más`:''}</a></div>`+h.slice(alphaLink+link.length);
  }
  h=h.replace(marker,search+marker).replace('<!-- PROVINCE-HUB-END -->',note(data)+'<!-- PROVINCE-HUB-END -->');
  return h.replace('</body>','<script src="/assets/madrid-search.js" defer></script></body>');
