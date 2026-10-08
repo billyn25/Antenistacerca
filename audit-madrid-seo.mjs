@@ -9,7 +9,7 @@ const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?
 const files=walk('public').filter(f=>f.endsWith('.html'));
 const home=fs.readFileSync('public/index.html','utf8'),directory=fs.readFileSync('public/madrid/index.html','utf8');
 const isProd=home.includes('content="index,follow');
-assert.equal(rows.length,3057,'Conservar las 2878 localidades previas más Madrid');assert.equal(files.length,3074);assert.ok(directory.includes('id="ac-madrid-query"'));
+assert.equal(rows.length,3077,'Conservar las 3057 localidades anteriores y las 20 nuevas de Toledo y Guadalajara');assert.equal(new Set(rows.map(r=>r.provinciaSlug)).size,18,'Deben conservarse las 18 provincias');assert.equal(rows.filter(r=>r.provinciaSlug==='toledo').length,10);assert.equal(rows.filter(r=>r.provinciaSlug==='guadalajara').length,10);assert.equal(files.length,3096);assert.ok(directory.includes('id="ac-madrid-query"'));
 for(const file of files){
  const h=fs.readFileSync(file,'utf8'),rel=path.relative('public',file).split(path.sep).join('/');
  assert.equal((h.match(/<h1\b/g)||[]).length,1,rel+': H1');
