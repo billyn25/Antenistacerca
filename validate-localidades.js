@@ -13,7 +13,7 @@ for(let i=0;i<localidades.length;i++){
   const label=d.localidad||`fila ${i+1}`;
   for(const key of required){
     const v=d[key];
-    if(v==null||(typeof v==='string'&&!v.trim())||(Array.isArray(v)&&!v.length)) errors.push(`${label}: falta ${key}`);
+    if(v==null||(typeof v==='string'&&!v.trim())||(Array.isArray(v)&&!v.length&&key!=='cercanas')) errors.push(`${label}: falta ${key}`);
   }
   if(d.slug&&!slugRe.test(d.slug)) errors.push(`${label}: slug inválido (${d.slug})`);
   if(d.provinciaSlug&&!slugRe.test(d.provinciaSlug)) errors.push(`${label}: provinciaSlug inválido (${d.provinciaSlug})`);
