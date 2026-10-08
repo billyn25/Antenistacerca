@@ -46,7 +46,7 @@ export function syncMetadata(h){
  return h.replace(/(<div class="mobilebar")>/g,'$1 data-nosnippet>')
    .replace(/<\/a><a([^>]+href="(?:tel:|https:\/\/wa\.me\/))/g,'</a> <a$1');
 }
-function directory(h,towns,data){
+export function directory(h,towns,data){
  const label='Buscar municipio o código postal';
  const marker='<nav class="alpha-nav"';
  assert.equal(h.split(marker).length,2,'Madrid: falta índice alfabético');
