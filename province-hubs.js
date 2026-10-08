@@ -30,14 +30,42 @@ function practicalSection(slug,p){
  const selected=[0,1,2].map(i=>practicalGuides[(offset+i)%practicalGuides.length]);
  return `<section class="province-practical" aria-label="Orientación técnica para averías en ${esc(p.name)}"><h2>Problemas habituales de antenas y porteros en ${esc(p.name)}</h2><p>Estas orientaciones ayudan a describir una avería antes de solicitar una revisión. No sustituyen una comprobación técnica ni implican que exista una sede en cada municipio.</p><div class="province-seo-grid">${selected.map(g=>`<div class="province-seo-card"><strong>${esc(g.title)}</strong><p>${esc(g.body)}</p></div>`).join('')}</div></section>`;
 }
+const priorityTowns={
+ alava:['Vitoria-Gasteiz','Laudio/Llodio','Amurrio','Agurain/Salvatierra'],
+ bizkaia:['Bilbao','Barakaldo','Getxo','Portugalete','Durango','Gernika-Lumo'],
+ gipuzkoa:['Donostia/San Sebastián','Irun','Errenteria','Eibar','Zarautz'],
+ cantabria:['Santander','Torrelavega','Castro-Urdiales','Laredo'],
+ madrid:['Madrid','Alcalá de Henares','Móstoles','Getafe','Leganés'],
+ toledo:['Toledo','Talavera de la Reina','Illescas','Seseña','Torrijos'],
+ guadalajara:['Guadalajara','Azuqueca de Henares','Alovera','Cabanillas del Campo'],
+ burgos:['Burgos','Aranda de Duero','Miranda de Ebro','Lerma'],
+ asturias:['Oviedo','Gijón','Avilés','Langreo'],
+ navarra:['Pamplona/Iruña','Tudela','Estella-Lizarra','Tafalla'],
+ 'la-rioja':['Logroño','Calahorra','Haro','Arnedo'],
+ leon:['León','Ponferrada','Astorga','La Bañeza'],
+ valladolid:['Valladolid','Medina del Campo','Tordesillas','Peñafiel'],
+ zamora:['Zamora','Benavente','Toro'],
+ palencia:['Palencia','Aguilar de Campoo','Guardo'],
+ salamanca:['Salamanca','Béjar','Ciudad Rodrigo'],
+ segovia:['Segovia','Cuéllar','El Espinar'],
+ soria:['Soria','Almazán','El Burgo de Osma']
+};
+const normalizeTown=s=>String(s).normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'');
+function quickTownLinks(slug,items){
+ const wanted=new Set((priorityTowns[slug]||[]).map(normalizeTown));
+ const selected=items.filter(d=>wanted.has(normalizeTown(d.localidad))).slice(0,6);
+ if(selected.length<3) return '';
+ return `<nav class="province-quick" aria-label="Accesos directos a municipios"><strong>Accesos rápidos a municipios</strong><div class="alpha-links">${selected.map(d=>`<a href="/${d.provinciaSlug}/${d.slug}/">Antenista en ${esc(d.localidad)}</a>`).join('')}</div></nav>`;
+}
 function hub(slug,p){
   const items=[...p.items].sort((a,b)=>a.localidad.localeCompare(b.localidad,'es',{sensitivity:'base'}));
   const by=new Map();
   for(const d of items){const l=letter(d.localidad)||'#';if(!by.has(l))by.set(l,[]);by.get(l).push(d)}
   const letters=[...by.keys()].sort((a,b)=>a.localeCompare(b,'es'));
+  const quick=quickTownLinks(slug,items);
   const nav=letters.map(l=>`<a href="#letra-${slug}-${l}" aria-label="Localidades de ${esc(p.name)} con ${l}">${l}</a>`).join('');
   const sections=letters.map(l=>`<section class="alpha-group" id="letra-${slug}-${l}"><h3>${l}</h3><div class="alpha-links">${by.get(l).map(d=>`<a href="/${d.provinciaSlug}/${d.slug}/">Antenista en ${esc(d.localidad)}</a>`).join('')}</div></section>`).join('');
-  return `<!-- PROVINCE-HUB-START --><section class="province-seo"><div class="kicker">Servicio técnico en toda la provincia</div><h2>Antenistas en ${esc(p.name)}: instalación, reparación y mantenimiento</h2><p>Atendemos instalaciones y averías de antenas TDT y parabólicas, sistemas individuales y colectivos, amplificación y distribución de señal en localidades de ${esc(p.name)}. También trabajamos con porteros automáticos y videoporteros, revisando la instalación antes de sustituir equipos.</p><div class="province-seo-grid"><div class="province-seo-card"><strong>Antenas TDT y colectivas</strong><p>Orientación, falta de señal, cableado, tomas, repartidores y mantenimiento de instalaciones individuales y comunitarias.</p></div><div class="province-seo-card"><strong>Parabólicas y amplificación</strong><p>Instalación y ajuste de parabólicas, amplificadores, fuentes, cabeceras y módulos monocanal.</p></div><div class="province-seo-card"><strong>Porteros y videoporteros</strong><p>Reparación, renovación e instalación de telefonillos, placas de calle, porteros automáticos y videoporteros.</p></div></div></section>${practicalSection(slug,p)}<section class="alpha-localities" id="localidades"><div class="kicker">Encuentra tu localidad</div><h2>Localidades de ${esc(p.name)} por orden alfabético</h2><p class="alpha-intro">Selecciona la inicial de tu localidad para acceder directamente a la página del servicio técnico de antenista de tu zona.</p><nav class="alpha-nav" aria-label="Índice alfabético de localidades de ${esc(p.name)}">${nav}</nav>${sections}</section><!-- PROVINCE-HUB-END -->`;
+  return `<!-- PROVINCE-HUB-START --><section class="province-seo"><div class="kicker">Servicio técnico en toda la provincia</div><h2>Antenistas en ${esc(p.name)}: instalación, reparación y mantenimiento</h2><p>Atendemos instalaciones y averías de antenas TDT y parabólicas, sistemas individuales y colectivos, amplificación y distribución de señal en localidades de ${esc(p.name)}. También trabajamos con porteros automáticos y videoporteros, revisando la instalación antes de sustituir equipos.</p><div class="province-seo-grid"><div class="province-seo-card"><strong>Antenas TDT y colectivas</strong><p>Orientación, falta de señal, cableado, tomas, repartidores y mantenimiento de instalaciones individuales y comunitarias.</p></div><div class="province-seo-card"><strong>Parabólicas y amplificación</strong><p>Instalación y ajuste de parabólicas, amplificadores, fuentes, cabeceras y módulos monocanal.</p></div><div class="province-seo-card"><strong>Porteros y videoporteros</strong><p>Reparación, renovación e instalación de telefonillos, placas de calle, porteros automáticos y videoporteros.</p></div></div></section>${practicalSection(slug,p)}<section class="alpha-localities" id="localidades"><div class="kicker">Encuentra tu localidad</div><h2>Localidades de ${esc(p.name)} por orden alfabético</h2><p class="alpha-intro">Selecciona la inicial de tu localidad para acceder directamente a la página del servicio técnico de antenista de tu zona.</p>${quick}<nav class="alpha-nav" aria-label="Índice alfabético de localidades de ${esc(p.name)}">${nav}</nav>${sections}</section><!-- PROVINCE-HUB-END -->`;
 }
 
 let done=0;
