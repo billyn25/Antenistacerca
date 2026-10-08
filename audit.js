@@ -15,8 +15,15 @@ for(let i=0;i<locals.length;i++)for(let j=i+1;j<locals.length;j++){
 if(similarPairs.length){
  const byProvince=new Map();
  for(const pair of similarPairs){const prov=pair.a.split('/')[0];byProvince.set(prov,(byProvince.get(prov)||0)+1)}
- const top=similarPairs.sort((a,b)=>b.similarity-a.similarity).slice(0,30);
- fs.writeFileSync(path.join(ROOT,'seo-similarity-report.json'),JSON.stringify({pairs:similarPairs.length,threshold:.89,byFirstProvince:Object.fromEntries([...byProvince].sort((a,b)=>b[1]-a[1])),top},null,2));
+ const ranked=[...similarPairs].sort((a,b)=>b.similarity-a.similarity);
+ const affected=new Map();
+ for(const pair of ranked){for(const rel of [pair.a,pair.b]){
+  const v=affected.get(rel)||{page:rel,similarPages:0,maxSimilarity:0};
+  v.similarPages++;v.maxSimilarity=Math.max(v.maxSimilarity,pair.similarity);affected.set(rel,v);
+ }}
+ const priorityPages=[...affected.values()].sort((a,b)=>b.similarPages-a.similarPages||b.maxSimilarity-a.maxSimilarity).slice(0,50);
+ const top=ranked.slice(0,30);
+ fs.writeFileSync(path.join(ROOT,'seo-similarity-report.json'),JSON.stringify({pairs:similarPairs.length,threshold:.89,byFirstProvince:Object.fromEntries([...byProvince].sort((a,b)=>b[1]-a[1])),priorityPages,top},null,2));
  warnings.push(`Similitud SEO: ${similarPairs.length} pares >=89%; informe en seo-similarity-report.json. Es un indicador de revisión, no una penalización de Google.`);
  for(const pair of top.slice(0,10))warnings.push(`${pair.a} ~ ${pair.b}: ${(pair.similarity*100).toFixed(1)}%`);
 }const home=fs.readFileSync(path.join(ROOT,'index.html'),'utf8');for(const x of ['Antenista cerca de tu vivienda','Técnico en instalación, reparación y mantenimiento de antenas, porteros automáticos y videoporteros','Hoy estamos cerca de tu casa','★★★★★','FTE Maximal'])if(!home.includes(x))errors.push(`index: falta ${x}`);if((home.match(/id="servicios"/g)||[]).length!==1)errors.push('index: servicios duplicados');if((home.match(/class="extra-services"/g)||[]).length!==1)errors.push('index: extra-services incorrecto');const sp=path.join(ROOT,'sitemap.xml');if(!fs.existsSync(sp))errors.push('sitemap ausente');else{const sm=fs.readFileSync(sp,'utf8'),urls=[...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]),expectedUrls=new Set([...expectedFiles].map(r=>r==='index.html'?`${DOMAIN}/`:`${DOMAIN}/${r.replace(/index\.html$/,'')}`));if(new Set(urls).size!==urls.length)errors.push('sitemap duplicados');for(const u of expectedUrls)if(!urls.includes(u))errors.push(`sitemap falta ${u}`);for(const c of canonList)if(!urls.includes(c))errors.push(`sitemap falta canonical ${c}`)}const rp=path.join(ROOT,'robots.txt');if(!fs.existsSync(rp))errors.push('robots ausente');else{const r=fs.readFileSync(rp,'utf8');if(PRODUCTION&&(!/^Allow:\s*\/$/mi.test(r)||/^Disallow:\s*\/$/mi.test(r)))errors.push('robots producción bloqueada');if(!PRODUCTION&&!/^Disallow:\s*\/$/mi.test(r))errors.push('robots pruebas abierto');if(!r.includes(`${DOMAIN}/sitemap.xml`))errors.push('robots sin sitemap')}
