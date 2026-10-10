@@ -102,6 +102,10 @@ else {
 }
 
 const home=fs.readFileSync(path.join(ROOT,'index.html'),'utf8');
+const homeTownLinks=[...home.matchAll(/href=["']\/(?:[^"'\/]+)\/(?:[^"'\/]+)\/["']/g)].length;
+const maxHomeTownLinks=provinceSlugs.length*16;
+if(homeTownLinks>maxHomeTownLinks) errors.push(`portada: demasiados enlaces municipales directos (${homeTownLinks}); máximo previsto=${maxHomeTownLinks}`);
+if(/class=["']town-more(?:-links)?["']/.test(home)) errors.push('portada: vuelve a incluir el censo completo de municipios; debe vivir en los hubs provinciales');
 for(const slug of provinceSlugs){
   if(!home.includes(`href="/${slug}/"`)) errors.push(`portada: falta enlace a /${slug}/`);
   const provinceFile=path.join(ROOT,slug,'index.html');
