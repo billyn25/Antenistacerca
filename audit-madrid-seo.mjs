@@ -29,8 +29,11 @@ for(const t of rows){
  const codes=[...h.matchAll(/class="ac-postal-code">(\d{5})<\/span>/g)].map(x=>x[1]);
  assert.deepEqual(codes,postal.municipalities.find(r=>r.id===t.municipioId).postalCodes,t.slug+': códigos');
  assert.equal((h.match(/class="faq local-faq"/g)||[]).length,1,t.slug+': FAQ');
- assert.ok(directory.includes(`href="/madrid/${t.slug}/"`));assert.ok(home.includes(`href="/madrid/${t.slug}/"`));
+ assert.ok(directory.includes(`href="/madrid/${t.slug}/"`),t.slug+': enlace ausente en el hub de Madrid');
 }
+assert.ok(home.includes('href="/madrid/"'),'Portada: falta enlace al hub de Madrid');
+const homeMadridTownLinks=[...home.matchAll(/href="\/madrid\/[^"\/]+\//g)].length;
+assert.ok(homeMadridTownLinks<=16,`Portada: demasiados enlaces directos de Madrid (${homeMadridTownLinks}); el censo completo debe vivir en /madrid/`);
 if(isProd){const xml=fs.readFileSync('public/sitemaps/sitemap-madrid.xml','utf8');assert.equal((xml.match(/<loc>/g)||[]).length,180);assert.ok(fs.readFileSync('public/sitemap.xml','utf8').includes('/sitemaps/sitemap-madrid.xml'));}
 const report={passed:true,production:isProd,madrid:madrid.length,postalCodes:296,municipalities:rows.length,provinces:new Set(rows.map(r=>r.provinciaSlug)).size,html:files.length};
 fs.writeFileSync('public/madrid-seo-audit.json',JSON.stringify(report,null,2));console.log('AUDITORÍA MADRID/SEO OK:',JSON.stringify(report));
