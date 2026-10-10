@@ -31,3 +31,24 @@
 
 [context.branch-deploy]
   command = "npm run build"
+
+
+# Los archivos de rastreo deben revalidarse en cada deploy para que buscadores
+# vean rápidamente cambios de indexación y sitemaps.
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/sitemaps/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
