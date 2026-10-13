@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {validateMadrid,madridRows,addMadrid} from '../add-madrid.mjs';
+import {madridDistricts} from '../src/madrid-districts.mjs';
 import {enrichTown,postalBlock,improveServiceContent,syncMetadata,directory} from '../madrid-seo.mjs';
 const data=JSON.parse(fs.readFileSync(new URL('../src/postal-codes-madrid.json',import.meta.url),'utf8'));
 const rows=madridRows(data);
@@ -51,4 +52,12 @@ test('Madrid conserva accesos rápidos y convierte solo los enlaces alfabéticos
  assert.ok(result.includes('<nav class="province-quick">'+link+'</nav>'));
  assert.ok(result.includes('data-madrid-search="Madrid 28001"'));
  assert.ok(result.includes('Códigos postales: 28001'));
+});
+
+
+test('21 distritos de Madrid capital con rutas únicas',()=>{
+ assert.equal(madridDistricts.length,21);
+ assert.equal(new Set(madridDistricts.map(d=>d.route)).size,21);
+ assert.ok(madridDistricts.some(d=>d.slug==='san-blas-canillejas'));
+ assert.ok(madridDistricts.some(d=>d.slug==='vicalvaro'));
 });
