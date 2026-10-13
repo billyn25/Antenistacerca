@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import localidades from './src/localidades.json' with { type: 'json' };
+import {madridDistricts} from './src/madrid-districts.mjs';
 
 const ROOT='public';
 const DOMAIN='https://antenistacerca.es';
@@ -29,7 +30,7 @@ let totalUrls=1;
 
 for(const slug of [...groups.keys()].sort((a,b)=>a.localeCompare(b,'es'))){
   const group=groups.get(slug);
-  const urls=[`${DOMAIN}/${slug}/`,...group.towns.map(t=>`${DOMAIN}/${slug}/${t.slug}/`)];
+  const urls=[`${DOMAIN}/${slug}/`,...group.towns.map(t=>`${DOMAIN}/${slug}/${t.slug}/`),...(slug==='madrid'?madridDistricts.map(d=>`${DOMAIN}${d.route}`):[])];
   const filename=`sitemap-${slug}.xml`;
   fs.writeFileSync(path.join(SITEMAP_DIR,filename),urlset(urls));
   children.push(`${DOMAIN}/sitemaps/${filename}`);
@@ -40,10 +41,10 @@ fs.writeFileSync(path.join(ROOT,'sitemap.xml'),sitemapIndex(children));
 fs.writeFileSync(path.join(ROOT,'robots.txt'),`User-agent: *\nAllow: /\n\nSitemap: ${DOMAIN}/sitemap.xml\n`);
 
 // Verificación inmediata del resultado final.
-const expected=localidades.length+groups.size+1;
+const expected=localidades.length+madridDistricts.length+groups.size+1;
 if(totalUrls!==expected) throw new Error(`SITEMAPS: ${totalUrls} URLs generadas; esperadas ${expected}`);
 const rootXml=fs.readFileSync(path.join(ROOT,'sitemap.xml'),'utf8');
 if(rootXml.includes(OLD_DOMAIN)||!rootXml.includes('<sitemapindex')) throw new Error('SITEMAPS: índice principal incorrecto');
 if(children.length!==groups.size+1) throw new Error(`SITEMAPS: ${children.length} sitemaps hijos; esperados ${groups.size+1}`);
 
-console.log(`SITEMAPS OK: índice principal + ${groups.size} provincias + portada; ${totalUrls} URLs indexables repartidas por provincia.`);
+console.log(`SITEMAPS OK: índice principal + ${groups.size} provincias + portada; ${totalUrls} URLs indexables, incluidos ${madridDistricts.length} distritos de Madrid.`);
