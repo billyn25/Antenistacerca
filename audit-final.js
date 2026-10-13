@@ -12,7 +12,7 @@ const errors=[];
 const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);
 const htmlFiles=walk(ROOT).filter(f=>f.endsWith('.html'));
 const provinceSlugs=[...new Set(localidades.map(x=>x.provinciaSlug))];
-const expectedCount=localidades.length+provinceSlugs.length+1;
+const expectedCount=localidades.length+madridDistricts.length+provinceSlugs.length+1;
 if(htmlFiles.length!==expectedCount) errors.push(`HTML: ${htmlFiles.length}; esperados ${expectedCount}`);
 
 for(const file of htmlFiles){
