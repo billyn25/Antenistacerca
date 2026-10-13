@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import localidades from './src/localidades.json' with {type:'json'};
+import {madridDistricts} from './src/madrid-districts.mjs';
 import { auditConsent, JS_PATH, CSS_PATH, RUNTIME, CSS } from './cookie-consent.mjs';
 
 const ROOT='public';
