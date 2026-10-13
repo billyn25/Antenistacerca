@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import localidades from './src/localidades.json' with { type: 'json' };
+import {madridDistricts} from './src/madrid-districts.mjs';
 
 const OUT='public';
 const TEMPLATE=fs.readFileSync('src/template.html','utf8');
@@ -21,6 +22,14 @@ const TOWN='https://images.unsplash.com/photo-1541698265912-0a5606dcf0f8?auto=fo
 
 const esc=(s='')=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
 const byName=new Map(localidades.map(x=>[`${x.provinciaSlug}/${x.localidad.toLowerCase()}`,x]));
+const madridDistrictRecords=madridDistricts.map(d=>({
+  localidad:d.name,provincia:'Madrid',provinciaSlug:'madrid',slug:d.slug,cercanas:[],
+  descripcion:`Antenista en ${d.name}, Madrid. Llama al ${PHONE}. Instalación y reparación de antenas TDT, parabólicas, amplificadores, porteros automáticos y videoporteros.`,
+  introLocal:`Servicio técnico de antenas en el distrito de ${d.name}, Madrid capital, para viviendas, comunidades y negocios.`,
+  zonaLocal:`Indica el distrito de ${d.name}, la calle y el tipo de instalación. La disponibilidad y el desplazamiento se confirman al contactar; esta página no representa una sede física.`,
+  faqPregunta:`¿Atendéis antenas y porteros en ${d.name}, Madrid?`,
+  faqRespuesta:`Sí, puedes consultar instalación y reparación de antenas TDT, parabólicas, amplificación, porteros automáticos y videoporteros en ${d.name}. Describe el problema y la dirección real para preparar el aviso.`
+}));
 const groups=new Map();
 for(const d of localidades){
   if(!groups.has(d.provinciaSlug)) groups.set(d.provinciaSlug,{provincia:d.provincia,items:[]});
@@ -148,9 +157,10 @@ function home(){
 fs.rmSync(OUT,{recursive:true,force:true});
 fs.mkdirSync(OUT,{recursive:true});
 for(const d of localidades){const dir=path.join(OUT,d.provinciaSlug,d.slug);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),town(d));}
+for(const d of madridDistrictRecords){const dir=path.join(OUT,d.provinciaSlug,d.slug);if(fs.existsSync(dir))throw new Error(`Distrito Madrid colisiona con una localidad: ${d.slug}`);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),town(d));}
 for(const [slug,g] of groups){const dir=path.join(OUT,slug);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),province(g.provincia,slug,g.items));}
 fs.writeFileSync(path.join(OUT,'index.html'),home());
-const urls=[`${DOMAIN}/`,...[...groups.keys()].map(s=>`${DOMAIN}/${s}/`),...localidades.map(d=>`${DOMAIN}/${d.provinciaSlug}/${d.slug}/`)];
+const urls=[`${DOMAIN}/`,...[...groups.keys()].map(s=>`${DOMAIN}/${s}/`),...localidades.map(d=>`${DOMAIN}/${d.provinciaSlug}/${d.slug}/`),...madridDistrictRecords.map(d=>`${DOMAIN}/${d.provinciaSlug}/${d.slug}/`)];
 fs.writeFileSync(path.join(OUT,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(u=>`<url><loc>${u}</loc></url>`).join('')}</urlset>`);
 fs.writeFileSync(path.join(OUT,'robots.txt'),`User-agent: *\nDisallow: /\n\nSitemap: ${DOMAIN}/sitemap.xml\n`);
-console.log(`Generadas ${localidades.length} localidades, ${groups.size} provincias y portada desde un único generador.`);
+console.log(`Generadas ${localidades.length} localidades, ${madridDistrictRecords.length} distritos de Madrid, ${groups.size} provincias y portada desde un único generador.`);
