@@ -3,7 +3,7 @@ import path from 'node:path';
 import localidades from './src/localidades.json' with {type:'json'};
 const ROOT='public',errors=[],warnings=[];
 const provinces=[...new Set(localidades.map(x=>x.provinciaSlug))];
-const expected=new Set(['/',...provinces.map(x=>`/${x}/`),...localidades.map(x=>`/${x.provinciaSlug}/${x.slug}/`)]);
+const expected=new Set(['/',...provinces.map(x=>`/${x}/`),...localidades.map(x=>`/${x.provinciaSlug}/${x.slug}/`),...madridDistricts.map(d=>d.route)]);
 const fileFor=url=>url==='/'?path.join(ROOT,'index.html'):path.join(ROOT,url.slice(1),'index.html');
 const normHref=(href,from)=>{if(!href||href.startsWith('#')||/^(?:https?:|tel:|mailto:|whatsapp:|javascript:)/i.test(href))return null;let p=href.split(/[?#]/)[0];if(!p)return null;if(!p.startsWith('/')){const base=from==='/'?'/':from;p=path.posix.resolve(base,p)}p=p.replace(/\/index\.html$/,'/');if(!p.endsWith('/'))p+='/';return p};
 const links=new Map(),incoming=new Map([...expected].map(x=>[x,0]));
