@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import localidades from './src/localidades.json' with { type: 'json' };
+import {madridDistricts} from './src/madrid-districts.mjs';
 
 const ROOT='public',DOMAIN='https://www.antenistacerca.es',PHONE='641 589 394';
 const MODE=(process.argv[2]||process.env.SEO_MODE||'test').toLowerCase();
@@ -8,6 +9,7 @@ const PRODUCTION=MODE==='production'||MODE==='prod';
 const ROBOTS=PRODUCTION?'index,follow,max-image-preview:large':'noindex,nofollow';
 const OG_IMAGE=`${DOMAIN}/assets/hero-antennista.png`;
 const townByFile=new Map(localidades.map(d=>[`${d.provinciaSlug}/${d.slug}/index.html`,d]));
+const districtByFile=new Map(madridDistricts.map(d=>[`madrid/${d.slug}/index.html`,{localidad:d.name,provincia:'Madrid',provinciaSlug:'madrid',slug:d.slug}]));
 const provinceByFile=new Map();for(const d of localidades)provinceByFile.set(`${d.provinciaSlug}/index.html`,d.provincia);
 const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 const nameCounts=new Map();for(const d of localidades){const k=norm(d.localidad);nameCounts.set(k,(nameCounts.get(k)||0)+1)}
@@ -17,7 +19,7 @@ const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'
 const townTitle=name=>{const variants=[`Antenista en ${name} | Reparación e instalación de antenas`,`Antenista en ${name} | Reparación de antenas`,`Antenista en ${name} | Servicio técnico de antenas`,`Antenista en ${name}`];return variants.find(x=>x.length<=65)||variants.at(-1).slice(0,65)};
 const townDescription=name=>{const prefix=`Antenista en ${name}. Llama al ${PHONE}. `;const variants=['Instalación y reparación de antenas TDT y parabólicas, amplificadores, porteros automáticos y videoporteros.','Instalación y reparación de TDT, parabólicas, amplificadores, porteros y videoporteros.','Reparación e instalación de TDT, parabólicas, porteros y videoporteros.','Instalación y reparación de antenas TDT y parabólicas.'].map(text=>prefix+text);return variants.find(x=>x.length<=165)||variants.at(-1)};
 const provinceDescription=name=>`Antenistas en ${name}. Directorio de municipios con servicio de TDT, parabólicas, amplificación, porteros y videoporteros. Tel. ${PHONE}.`;
-function metadataFor(rel){const town=townByFile.get(rel);if(town){const name=seoName(town);return{title:townTitle(name),description:townDescription(name),canonical:`${DOMAIN}/${town.provinciaSlug}/${town.slug}/`}}const province=provinceByFile.get(rel);if(province){const slug=rel.split('/')[0];return{title:`Antenistas en ${province} | Directorio por municipios`,description:provinceDescription(province),canonical:`${DOMAIN}/${slug}/`}}if(rel==='index.html')return{title:'Antenista Cerca | Instalación y reparación de antenas',description:`Antenista Cerca. Llama al ${PHONE}. Instalación, reparación y mantenimiento de antenas TDT, parabólicas, amplificación, porteros y videoporteros.`,canonical:`${DOMAIN}/`};throw new Error(`SEO: HTML no reconocido: ${rel}`)}
+function metadataFor(rel){const town=townByFile.get(rel);if(town){const name=seoName(town);return{title:townTitle(name),description:townDescription(name),canonical:`${DOMAIN}/${town.provinciaSlug}/${town.slug}/`}}const district=districtByFile.get(rel);if(district){const name=`${district.localidad}, Madrid`;return{title:townTitle(name),description:townDescription(name),canonical:`${DOMAIN}/madrid/${district.slug}/`}}const province=provinceByFile.get(rel);if(province){const slug=rel.split('/')[0];return{title:`Antenistas en ${province} | Directorio por municipios`,description:provinceDescription(province),canonical:`${DOMAIN}/${slug}/`}}if(rel==='index.html')return{title:'Antenista Cerca | Instalación y reparación de antenas',description:`Antenista Cerca. Llama al ${PHONE}. Instalación, reparación y mantenimiento de antenas TDT, parabólicas, amplificación, porteros y videoporteros.`,canonical:`${DOMAIN}/`};throw new Error(`SEO: HTML no reconocido: ${rel}`)}
 function setTitle(h,v){const tag=`<title>${esc(v)}</title>`;return/<title>[\s\S]*?<\/title>/i.test(h)?h.replace(/<title>[\s\S]*?<\/title>/i,tag):h.replace('</head>',tag+'</head>')}
 function setMeta(h,key,value,attr='name'){const k=key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),re=new RegExp(`<meta\\s+${attr}=["']${k}["'][^>]*>`,'i'),tag=`<meta ${attr}="${esc(key)}" content="${esc(value)}">`;return re.test(h)?h.replace(re,tag):h.replace('</head>',tag+'</head>')}
 function setCanonical(h,v){const tag=`<link rel="canonical" href="${esc(v)}">`;return/<link\s+rel=["']canonical["'][^>]*>/i.test(h)?h.replace(/<link\s+rel=["']canonical["'][^>]*>/i,tag):h.replace('</head>',tag+'</head>')}
