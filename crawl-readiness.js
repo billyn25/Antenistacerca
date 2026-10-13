@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import localidades from './src/localidades.json' with { type: 'json' };
+import {madridDistricts} from './src/madrid-districts.mjs';
 
 const ROOT='public';
 const DOMAIN='https://antenistacerca.es';
@@ -11,7 +12,7 @@ const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirector
 if(!fs.existsSync(ROOT)) throw new Error('CRAWL: falta public/');
 const htmlFiles=walk(ROOT).filter(f=>f.endsWith('.html'));
 const provinceSlugs=[...new Set(localidades.map(x=>x.provinciaSlug))].sort((a,b)=>a.localeCompare(b,'es'));
-const expectedCount=localidades.length+provinceSlugs.length+1;
+const expectedCount=localidades.length+madridDistricts.length+provinceSlugs.length+1;
 
 if(localidades.length<1000) errors.push(`dataset demasiado pequeño para producción: ${localidades.length} localidades`);
 if(htmlFiles.length!==expectedCount) errors.push(`HTML=${htmlFiles.length}; esperados=${expectedCount}`);
@@ -77,7 +78,7 @@ else {
     const xmlProvince=fs.readFileSync(file,'utf8');
     const urls=[...xmlProvince.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
     const towns=localidades.filter(x=>x.provinciaSlug===slug);
-    const expected=new Set([`${DOMAIN}/${slug}/`,...towns.map(t=>`${DOMAIN}/${slug}/${t.slug}/`)]);
+    const expected=new Set([`${DOMAIN}/${slug}/`,...towns.map(t=>`${DOMAIN}/${slug}/${t.slug}/`),...(slug==='madrid'?madridDistricts.map(d=>`${DOMAIN}${d.route}`):[])]);
     if(urls.length!==expected.size) errors.push(`sitemap-${slug}: ${urls.length} URLs; esperadas ${expected.size}`);
     for(const url of expected) if(!urls.includes(url)) errors.push(`sitemap-${slug}: falta ${url}`);
     for(const url of urls) if(!expected.has(url)) errors.push(`sitemap-${slug}: URL inesperada ${url}`);
@@ -114,6 +115,7 @@ for(const slug of provinceSlugs){
   for(const town of localidades.filter(x=>x.provinciaSlug===slug)){
     if(!h.includes(`href="/${slug}/${town.slug}/"`)) errors.push(`${slug}: falta enlace a ${town.slug}`);
   }
+  if(slug==='madrid') for(const d of madridDistricts) if(!h.includes(`href="${d.route}"`)) errors.push(`madrid: falta enlace al distrito ${d.slug}`);
 }
 
 if(errors.length){
@@ -123,4 +125,4 @@ if(errors.length){
   process.exit(1);
 }
 
-console.log(`CRAWL READINESS OK: ${localidades.length} localidades, ${provinceSlugs.length} provincias, ${htmlFiles.length} HTML indexables, sitemap index + sitemaps provinciales completos, robots abierto, canonicals únicos y enlazado provincial completo.`);
+console.log(`CRAWL READINESS OK: ${localidades.length} localidades, ${madridDistricts.length} distritos Madrid, ${provinceSlugs.length} provincias, ${htmlFiles.length} HTML indexables, sitemap index + sitemaps provinciales completos, robots abierto, canonicals únicos y enlazado provincial completo.`);
