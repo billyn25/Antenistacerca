@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import localidades from './src/localidades.json' with {type:'json'};
+import {madridDistricts} from './src/madrid-districts.mjs';
 
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const letter=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').charAt(0).toUpperCase();
@@ -57,6 +58,10 @@ function quickTownLinks(slug,items){
  if(selected.length<3) return '';
  return `<nav class="province-quick" aria-label="Accesos directos a municipios"><strong>Accesos rápidos a municipios</strong><div class="alpha-links">${selected.map(d=>`<a href="/${d.provinciaSlug}/${d.slug}/">Antenista en ${esc(d.localidad)}</a>`).join('')}</div></nav>`;
 }
+function madridDistrictSection(slug){
+  if(slug!=='madrid') return '';
+  return `<section class="madrid-districts" id="distritos-madrid"><div class="kicker">Madrid capital</div><h2>Distritos de Madrid capital</h2><p>Elige tu distrito para consultar instalación y reparación de antenas, TDT, parabólicas, porteros automáticos y videoporteros. Los 21 distritos aparecen separados de los 179 municipios de la Comunidad de Madrid.</p><div class="alpha-links district-links">${madridDistricts.map(d=>`<a href="${d.route}">Antenista en ${esc(d.name)}</a>`).join('')}</div></section>`;
+}
 function hub(slug,p){
   const items=[...p.items].sort((a,b)=>a.localidad.localeCompare(b.localidad,'es',{sensitivity:'base'}));
   const by=new Map();
@@ -65,7 +70,7 @@ function hub(slug,p){
   const quick=quickTownLinks(slug,items);
   const nav=letters.map(l=>`<a href="#letra-${slug}-${l}" aria-label="Localidades de ${esc(p.name)} con ${l}">${l}</a>`).join('');
   const sections=letters.map(l=>`<section class="alpha-group" id="letra-${slug}-${l}"><h3>${l}</h3><div class="alpha-links">${by.get(l).map(d=>`<a href="/${d.provinciaSlug}/${d.slug}/">Antenista en ${esc(d.localidad)}</a>`).join('')}</div></section>`).join('');
-  return `<!-- PROVINCE-HUB-START --><section class="province-seo"><div class="kicker">Servicio técnico en toda la provincia</div><h2>Antenistas en ${esc(p.name)}: instalación, reparación y mantenimiento</h2><p>Atendemos instalaciones y averías de antenas TDT y parabólicas, sistemas individuales y colectivos, amplificación y distribución de señal en localidades de ${esc(p.name)}. También trabajamos con porteros automáticos y videoporteros, revisando la instalación antes de sustituir equipos.</p><div class="province-seo-grid"><div class="province-seo-card"><strong>Antenas TDT y colectivas</strong><p>Orientación, falta de señal, cableado, tomas, repartidores y mantenimiento de instalaciones individuales y comunitarias.</p></div><div class="province-seo-card"><strong>Parabólicas y amplificación</strong><p>Instalación y ajuste de parabólicas, amplificadores, fuentes, cabeceras y módulos monocanal.</p></div><div class="province-seo-card"><strong>Porteros y videoporteros</strong><p>Reparación, renovación e instalación de telefonillos, placas de calle, porteros automáticos y videoporteros.</p></div></div></section>${practicalSection(slug,p)}<section class="alpha-localities" id="localidades"><div class="kicker">Encuentra tu localidad</div><h2>Localidades de ${esc(p.name)} por orden alfabético</h2><p class="alpha-intro">Selecciona la inicial de tu localidad para acceder directamente a la página del servicio técnico de antenista de tu zona.</p>${quick}<nav class="alpha-nav" aria-label="Índice alfabético de localidades de ${esc(p.name)}">${nav}</nav>${sections}</section><!-- PROVINCE-HUB-END -->`;
+  return `<!-- PROVINCE-HUB-START --><section class="province-seo"><div class="kicker">Servicio técnico en toda la provincia</div><h2>Antenistas en ${esc(p.name)}: instalación, reparación y mantenimiento</h2><p>Atendemos instalaciones y averías de antenas TDT y parabólicas, sistemas individuales y colectivos, amplificación y distribución de señal en localidades de ${esc(p.name)}. También trabajamos con porteros automáticos y videoporteros, revisando la instalación antes de sustituir equipos.</p><div class="province-seo-grid"><div class="province-seo-card"><strong>Antenas TDT y colectivas</strong><p>Orientación, falta de señal, cableado, tomas, repartidores y mantenimiento de instalaciones individuales y comunitarias.</p></div><div class="province-seo-card"><strong>Parabólicas y amplificación</strong><p>Instalación y ajuste de parabólicas, amplificadores, fuentes, cabeceras y módulos monocanal.</p></div><div class="province-seo-card"><strong>Porteros y videoporteros</strong><p>Reparación, renovación e instalación de telefonillos, placas de calle, porteros automáticos y videoporteros.</p></div></div></section>${practicalSection(slug,p)}${madridDistrictSection(slug)}<section class="alpha-localities" id="localidades"><div class="kicker">Encuentra tu localidad</div><h2>Localidades de ${esc(p.name)} por orden alfabético</h2><p class="alpha-intro">Selecciona la inicial de tu localidad para acceder directamente a la página del servicio técnico de antenista de tu zona.</p>${quick}<nav class="alpha-nav" aria-label="Índice alfabético de localidades de ${esc(p.name)}">${nav}</nav>${sections}</section><!-- PROVINCE-HUB-END -->`;
 }
 
 let done=0;
