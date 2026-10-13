@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import localidades from './src/localidades.json' with {type:'json'};
+import {madridDistricts} from './src/madrid-districts.mjs';
 const ROOT='public',errors=[],warnings=[];
 const provinces=[...new Set(localidades.map(x=>x.provinciaSlug))];
 const expected=new Set(['/',...provinces.map(x=>`/${x}/`),...localidades.map(x=>`/${x.provinciaSlug}/${x.slug}/`),...madridDistricts.map(d=>d.route)]);
