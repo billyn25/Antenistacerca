@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {validateMadrid} from './add-madrid.mjs';
+import {madridDistricts} from './src/madrid-districts.mjs';
 const rows=JSON.parse(fs.readFileSync('src/localidades.json','utf8'));
 const postal=validateMadrid(JSON.parse(fs.readFileSync('src/postal-codes-madrid.json','utf8')));
 const madrid=rows.filter(t=>t.provinciaSlug==='madrid');assert.equal(madrid.length,179);
@@ -9,7 +10,7 @@ const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?
 const files=walk('public').filter(f=>f.endsWith('.html'));
 const home=fs.readFileSync('public/index.html','utf8'),directory=fs.readFileSync('public/madrid/index.html','utf8');
 const isProd=home.includes('content="index,follow');
-assert.equal(rows.length,3549,'Conservar 3057 localidades anteriores y 492 municipios de Toledo y Guadalajara');assert.equal(new Set(rows.map(r=>r.provinciaSlug)).size,18,'Deben conservarse las 18 provincias');assert.equal(rows.filter(r=>r.provinciaSlug==='toledo').length,204);assert.equal(rows.filter(r=>r.provinciaSlug==='guadalajara').length,288);assert.equal(files.length,3568);assert.ok(directory.includes('id="ac-madrid-query"'));
+assert.equal(rows.length,3549,'Conservar 3057 localidades anteriores y 492 municipios de Toledo y Guadalajara');assert.equal(new Set(rows.map(r=>r.provinciaSlug)).size,18,'Deben conservarse las 18 provincias');assert.equal(rows.filter(r=>r.provinciaSlug==='toledo').length,204);assert.equal(rows.filter(r=>r.provinciaSlug==='guadalajara').length,288);assert.equal(files.length,3589);assert.ok(directory.includes('id="ac-madrid-query"'));assert.ok(directory.includes('id="distritos-madrid"'));assert.ok(directory.indexOf('id="distritos-madrid"')<directory.indexOf('id="localidades"'));for(const d of madridDistricts)assert.ok(directory.includes(`href="${d.route}"`),d.slug+': distrito ausente en el hub de Madrid');
 for(const file of files){
  const h=fs.readFileSync(file,'utf8'),rel=path.relative('public',file).split(path.sep).join('/');
  assert.equal((h.match(/<h1\b/g)||[]).length,1,rel+': H1');
@@ -34,6 +35,6 @@ for(const t of rows){
 assert.ok(home.includes('href="/madrid/"'),'Portada: falta enlace al hub de Madrid');
 const homeMadridTownLinks=[...home.matchAll(/href="\/madrid\/[^"\/]+\//g)].length;
 assert.ok(homeMadridTownLinks<=16,`Portada: demasiados enlaces directos de Madrid (${homeMadridTownLinks}); el censo completo debe vivir en /madrid/`);
-if(isProd){const xml=fs.readFileSync('public/sitemaps/sitemap-madrid.xml','utf8');assert.equal((xml.match(/<loc>/g)||[]).length,180);assert.ok(fs.readFileSync('public/sitemap.xml','utf8').includes('/sitemaps/sitemap-madrid.xml'));}
-const report={passed:true,production:isProd,madrid:madrid.length,postalCodes:296,municipalities:rows.length,provinces:new Set(rows.map(r=>r.provinciaSlug)).size,html:files.length};
+if(isProd){const xml=fs.readFileSync('public/sitemaps/sitemap-madrid.xml','utf8');assert.equal((xml.match(/<loc>/g)||[]).length,201);assert.ok(fs.readFileSync('public/sitemap.xml','utf8').includes('/sitemaps/sitemap-madrid.xml'));}
+const report={passed:true,production:isProd,madrid:madrid.length,districts:madridDistricts.length,postalCodes:296,municipalities:rows.length,provinces:new Set(rows.map(r=>r.provinciaSlug)).size,html:files.length};
 fs.writeFileSync('public/madrid-seo-audit.json',JSON.stringify(report,null,2));console.log('AUDITORÍA MADRID/SEO OK:',JSON.stringify(report));
