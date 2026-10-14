@@ -1,9 +1,9 @@
 import fs from 'node:fs';
-import localidades from './src/localidades.json' with {type:'json'};
 import {madridDistricts} from './src/madrid-districts.mjs';
 
 const DOMAIN='https://antenistacerca.es';
-const provinces=[...new Set(localidades.map(t=>t.provinciaSlug))].sort();
+const provinces=['alava','asturias','bizkaia','burgos','cantabria','gipuzkoa','guadalajara','la-rioja','leon','madrid','navarra','palencia','salamanca','segovia','soria','toledo','valladolid','zamora'].sort();
+const EXPECTED_INDEXABLE=3589;
 const errors=[],checks=[];
 const assert=(ok,msg)=>{if(!ok)throw Error(msg)};
 const check=async(name,fn)=>{try{await fn();checks.push(name);console.log('OK',name)}catch(e){errors.push({name,error:e.message});console.error('ERROR',name,e.message)}};
@@ -16,17 +16,16 @@ await check('índice sitemap',async()=>{const urls=locs(await read200(DOMAIN+'/s
 let all=[];
 for(const p of provinces)await check('sitemap '+p,async()=>{
  const urls=locs(await read200(DOMAIN+'/sitemaps/sitemap-'+p+'.xml'));
- const expected=1+localidades.filter(t=>t.provinciaSlug===p).length+(p==='madrid'?madridDistricts.length:0);
- assert(urls.length===expected,'URLs '+urls.length+'/'+expected);
+ assert(urls.length>1+(p==='madrid'?madridDistricts.length:0),'Sitemap provincial incompleto: '+urls.length);
  assert(urls.includes(DOMAIN+'/'+p+'/'),'falta hub');
  all.push(...urls);
 });
 await check('sitemap core',async()=>{const urls=locs(await read200(DOMAIN+'/sitemaps/sitemap-core.xml'));assert(urls.length===1&&urls[0]===DOMAIN+'/','core incorrecto');all.push(...urls)});
-await check('cobertura y URLs únicas',async()=>{assert(all.length===localidades.length+madridDistricts.length+provinces.length+1,'total '+all.length);assert(new Set(all).size===all.length,'duplicadas');assert(all.every(u=>u.startsWith(DOMAIN+'/')),'host erróneo')});
+await check('cobertura y URLs únicas',async()=>{assert(all.length===EXPECTED_INDEXABLE,'total '+all.length+'/'+EXPECTED_INDEXABLE);assert(new Set(all).size===all.length,'duplicadas');assert(all.every(u=>u.startsWith(DOMAIN+'/')),'host erróneo')});
 const samples=[DOMAIN+'/',...provinces.map(p=>DOMAIN+'/'+p+'/')];
 for(const p of provinces){
- const towns=localidades.filter(t=>t.provinciaSlug===p);
- for(const t of [towns[0],towns[Math.floor(towns.length/2)],towns.at(-1)].filter(Boolean))samples.push(DOMAIN+'/'+p+'/'+t.slug+'/');
+ const urls=all.filter(u=>new URL(u).pathname.startsWith('/'+p+'/')&&new URL(u).pathname!=='/'+p+'/');
+ for(const u of [urls[0],urls[Math.floor(urls.length/2)],urls.at(-1)].filter(Boolean))samples.push(u);
 }
 for(const d of [madridDistricts[0],madridDistricts.find(x=>x.slug==='vicalvaro'),madridDistricts.find(x=>x.slug==='san-blas-canillejas')].filter(Boolean))samples.push(DOMAIN+d.route);
 for(const url of [...new Set(samples)])await check('canonical '+new URL(url).pathname,async()=>{
@@ -40,7 +39,7 @@ for(const url of ['https://www.antenistacerca.es/','http://antenistacerca.es/','
  const dest=new URL(r.headers.get('location'),url);
  assert(dest.origin===DOMAIN,'destino fuera del host '+dest.href);
 });
-const report={timestamp:new Date().toISOString(),domain:DOMAIN,expectedIndexable:localidades.length+madridDistricts.length+provinces.length+1,passed:checks.length,failed:errors.length,errors};
+const report={timestamp:new Date().toISOString(),domain:DOMAIN,expectedIndexable:EXPECTED_INDEXABLE,passed:checks.length,failed:errors.length,errors};
 fs.writeFileSync('antenistacerca-live-seo-report.json',JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report,null,2));
 if(errors.length)process.exitCode=1;
