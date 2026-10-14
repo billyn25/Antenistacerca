@@ -53,10 +53,16 @@ const priorityTowns={
 };
 const normalizeTown=s=>String(s).normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'');
 function quickTownLinks(slug,items){
- const wanted=new Set((priorityTowns[slug]||[]).map(normalizeTown));
- const selected=items.filter(d=>wanted.has(normalizeTown(d.localidad))).slice(0,6);
- if(selected.length<3) return '';
- return `<nav class="province-quick" aria-label="Accesos directos a municipios"><strong>Accesos rápidos a municipios</strong><div class="alpha-links">${selected.map(d=>`<a href="/${d.provinciaSlug}/${d.slug}/">Antenista en ${esc(d.localidad)}</a>`).join('')}</div></nav>`;
+ // Primero municipios relevantes que existan de verdad; después cobertura alfabética.
+ // Evita secciones vacías por variantes de nombres y no altera las URLs existentes.
+ const byName=new Map(items.map(d=>[normalizeTown(d.localidad),d]));
+ const selected=[],seen=new Set();
+ const add=d=>{if(d&&!seen.has(d.slug)){selected.push(d);seen.add(d.slug)}};
+ for(const name of priorityTowns[slug]||[]) add(byName.get(normalizeTown(name)));
+ const target=Math.min(12,items.length);
+ if(items.length>1)for(let i=0;i<target&&selected.length<target;i++)add(items[Math.round(i*(items.length-1)/(target-1))]);
+ for(const d of items){if(selected.length>=target)break;add(d)}
+ return `<nav class="province-quick" aria-label="Accesos directos a municipios"><strong>Accesos rápidos a municipios de ${esc(groups.get(slug).name)}</strong><p class="alpha-intro">Localidades destacadas y accesos distribuidos por la provincia. El directorio alfabético conserva todos los municipios.</p><div class="alpha-links">${selected.map(d=>`<a href="/${d.provinciaSlug}/${d.slug}/">Antenista en ${esc(d.localidad)}</a>`).join('')}</div></nav>`;
 }
 function madridDistrictSection(slug){
   if(slug!=='madrid') return '';
