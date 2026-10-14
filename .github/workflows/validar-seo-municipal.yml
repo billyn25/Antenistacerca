@@ -1,0 +1,27 @@
+name: Validar refuerzo SEO municipal
+on:
+  workflow_dispatch:
+  push:
+    branches: [refactor-limpieza-segura]
+    paths:
+      - '.github/workflows/validar-seo-municipal.yml'
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Construir producción y auditar SEO municipal
+        run: npm run build:prod
+      - name: Guardar informes SEO
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-seo-municipal
+          path: |
+            public/seo-similarity-report.json
+            public/crawl-readiness-report.json
+          if-no-files-found: ignore
