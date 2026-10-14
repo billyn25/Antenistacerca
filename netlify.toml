@@ -52,3 +52,10 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
     X-Content-Type-Options = "nosniff"
+
+# Consolidar la portada duplicada sin cambiar las URLs municipales.
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
