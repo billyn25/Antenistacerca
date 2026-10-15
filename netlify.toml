@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build && node scripts/regional-contact.mjs"
+  command = "npm run build && node scripts/regional-contact-entry.mjs"
   publish = "public"
 
 [[headers]]
@@ -24,13 +24,13 @@
 
 # Solo la publicación de producción permite indexación.
 [context.production]
-  command = "npm run build:prod && node scripts/regional-contact.mjs"
+  command = "npm run build:prod && node scripts/regional-contact-entry.mjs"
 
 [context.deploy-preview]
-  command = "npm run build && node scripts/regional-contact.mjs"
+  command = "npm run build && node scripts/regional-contact-entry.mjs"
 
 [context.branch-deploy]
-  command = "npm run build && node scripts/regional-contact.mjs"
+  command = "npm run build && node scripts/regional-contact-entry.mjs"
 
 
 # Los archivos de rastreo deben revalidarse en cada deploy para que buscadores

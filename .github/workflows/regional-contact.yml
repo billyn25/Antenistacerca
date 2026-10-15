@@ -2,7 +2,7 @@ name: Verificar contactos regionales publicados
 on:
   push:
     branches: [refactor-limpieza-segura]
-    paths: ['scripts/regional-contact.*', 'netlify.toml', '.github/workflows/regional-contact.yml']
+    paths: ['scripts/regional-contact*', 'tests/madrid-seo.test.mjs', 'netlify.toml', '.github/workflows/regional-contact.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,9 +23,9 @@ jobs:
         with:
           node-version: '22'
       - name: Generar y auditar sin cambiar rutas
-        run: npm run build:prod && node scripts/regional-contact.mjs
+        run: npm run build:prod && node scripts/regional-contact-entry.mjs
       - name: Preparar muestra visual
-        run: zip -q .cache/regional-sample.zip public/index.html public/assets/*.css public/assets/*.js
+        run: zip -q .cache/regional-sample.zip public/index.html public/madrid/index.html public/assets/*.css public/assets/*.js
       - name: Verificar todas las paginas centrales publicadas y controles norte
         run: node scripts/regional-contact.mjs --live
       - uses: actions/upload-artifact@v4

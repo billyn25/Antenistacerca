@@ -37,10 +37,19 @@ test('sincronización de metadatos e identidad; botones sin texto pegado',()=>{
  assert.equal(graph[0].name,'Título & prueba');assert.equal(graph[0].description,'Descripción');assert.equal(graph[1].name,'Antenista Cerca');
  assert.ok(after.includes('data-nosnippet'));assert.ok(after.includes('</a> <a'));assert.ok(!after.includes('streetAddress'));assert.equal(syncMetadata(after),after);
 });
-test('producción y previews separados en Netlify',()=>{
+test('producción y previews separados en Netlify, con contacto regional auditado al final',()=>{
  const toml=fs.readFileSync(new URL('../netlify.toml',import.meta.url),'utf8');
- assert.match(toml,/\[context.production\][\s\S]*?command = "npm run build:prod"/);
- for(const c of ['deploy-preview','branch-deploy'])assert.ok(toml.includes(`[context.${c}]\n  command = "npm run build"`));
+ const commands=new Map();let section='';
+ for(const line of toml.split('\n')){
+  const heading=line.match(/^\[([^\[\]]+)\]\s*$/);if(heading)section=heading[1];
+  const command=line.match(/^\s*command\s*=\s*"([^"]+)"\s*$/);if(command)commands.set(section,command[1]);
+ }
+ const suffix=' && node scripts/regional-contact-entry.mjs';
+ assert.equal(commands.get('context.production'),'npm run build:prod'+suffix);
+ for(const context of ['build','context.deploy-preview','context.branch-deploy'])assert.equal(commands.get(context),'npm run build'+suffix);
+});
+test('el pie provincial no modifica contenido y no duplica pies existentes',async()=>{
+ const {testFooter}=await import('../scripts/regional-contact-entry.mjs');testFooter();
 });
 
 test('Madrid conserva accesos rápidos y convierte solo los enlaces alfabéticos',()=>{
