@@ -1,8 +1,8 @@
-name: Verificar contactos regionales publicados
+name: Verificar contactos y diseño de distritos
 on:
   push:
     branches: [refactor-limpieza-segura]
-    paths: ['scripts/regional-contact*', 'tests/madrid-seo.test.mjs', 'netlify.toml', '.github/workflows/regional-contact.yml']
+    paths: ['scripts/regional-contact*', 'scripts/madrid-district-design.mjs', 'tests/madrid-district-design*', 'header-brand.mjs', 'hero-full-width.js', 'tests/madrid-seo.test.mjs', 'netlify.toml', '.github/workflows/regional-contact.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,17 +22,28 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Pruebas de diseño antes de compilar
+        run: node --test tests/madrid-district-design.test.mjs
       - name: Generar y auditar sin cambiar rutas
         run: npm run build:prod && node scripts/regional-contact-entry.mjs
       - name: Preparar muestra visual
-        run: zip -q .cache/regional-sample.zip public/index.html public/madrid/index.html public/assets/*.css public/assets/*.js
+        run: zip -q .cache/regional-sample.zip public/index.html public/madrid/index.html public/madrid/chamberi/index.html public/madrid/madrid/index.html public/assets/*.css public/assets/*.js
       - name: Verificar todas las paginas centrales publicadas y controles norte
         run: node scripts/regional-contact.mjs --live
+      - name: Instalar navegador de comprobacion
+        run: |
+          npm install --no-save --package-lock=false --ignore-scripts playwright@1.56.1
+          npx playwright install chromium
+      - name: Verificar 21 distritos, logo, CSS municipal y movil
+        run: node tests/madrid-district-design-live.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: contactos-regionales-verificados
-          path: .cache/regional-*
+          path: |
+            .cache/regional-*
+            .cache/district-design-build.json
+            .cache/district-design/
           include-hidden-files: true
           retention-days: 7
           if-no-files-found: warn
