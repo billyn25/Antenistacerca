@@ -1,0 +1,9 @@
+{
+  "root": "public",
+  "domain": "https://antenistacerca.es",
+  "central": ["madrid", "guadalajara", "toledo"],
+  "centralLabel": "Madrid, Guadalajara y Toledo",
+  "northLabel": "Zona norte y Castilla y León",
+  "northPhone": "641 589 394",
+  "expected": {"madrid": 201, "guadalajara": 289, "toledo": 205}
+}
