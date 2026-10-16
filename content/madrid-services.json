@@ -1,0 +1,128 @@
+[
+  {
+    "slug": "reparacion-antenas",
+    "label": "Reparación de antenas",
+    "title": "Reparación de antenas en Madrid",
+    "description": "Reparación de antenas en Madrid: falta de señal, canales que se cortan y averías de distribución. Viviendas y comunidades. Consulta al 614 78 99 45.",
+    "intro": "Cuando faltan canales o la imagen se corta, cambiar la antena no siempre es la solución. La revisión debe distinguir si el problema está en la recepción, la amplificación o el recorrido de la señal hasta el televisor. Atendemos consultas de viviendas y comunidades de Madrid para valorar la reparación que necesita cada instalación.",
+    "sections": [
+      ["Qué ocurre y a quién afecta", "Si falla una sola televisión, interesa conocer si otras tomas de la vivienda funcionan. Si varios vecinos pierden los mismos canales, conviene revisar los elementos comunes. Cuando la avería aparece de forma intermitente, indica cuándo se produce y qué canales afecta: esa información ayuda a preparar la comprobación, aunque por sí sola no identifica la pieza averiada."],
+      ["Qué puede incluir el diagnóstico", "Según los síntomas y el acceso disponible, la revisión puede abarcar antena, conexiones, alimentación, amplificadores, repartidores, derivadores y tomas. Comparar la señal en distintos puntos permite acotar el tramo que necesita atención. El objetivo es diferenciar un fallo de recepción de una pérdida en la distribución antes de proponer sustituir equipos."],
+      ["Reparar, ajustar o sustituir", "Una conexión deteriorada, una fuente que no alimenta correctamente y una antena dañada requieren intervenciones diferentes. La propuesta debe explicar qué se ha encontrado y qué elementos se pretenden reparar, ajustar o cambiar. Si parte de la instalación puede conservarse, se valora su estado y compatibilidad con la solución planteada."],
+      ["Vivienda individual o comunidad", "En una vivienda puedes comunicar cuántos televisores fallan y qué tomas has probado sin desmontar nada. En una comunidad resulta útil que el administrador o una persona de contacto reúna los avisos y confirme quién facilita el acceso a la cabecera. No es necesario que un vecino acceda al tejado para preparar la consulta."],
+      ["Qué condiciona el presupuesto", "La localización de la avería, el acceso, la longitud y estado del cableado y los componentes que deban cambiarse influyen en el alcance. Solicita que se concreten desplazamiento, diagnóstico, materiales e impuestos aplicables antes de autorizar el trabajo. Esta página no publica un precio cerrado porque no todas las averías requieren la misma intervención."]
+    ],
+    "questions": [
+      ["¿Debo resintonizar antes de llamar?", "Indica primero si faltan algunos canales o todos y si ocurre en otras tomas. Resintonizar no corrige una avería física de recepción o distribución y puede cambiar la lista de canales. No hace falta modificar ajustes ni desmontar equipos para solicitar una revisión."],
+      ["¿Podéis revisar una avería que afecta a varios vecinos?", "Puedes consultar la revisión de la instalación colectiva. Ayuda saber qué viviendas están afectadas, si pierden los mismos canales y quién coordina el acceso a los elementos comunes."],
+      ["¿Hay que cambiar la antena completa?", "No se decide solo por el síntoma. Primero se valora si el problema procede de antena, alimentación, amplificación, conexiones o cableado; después se plantea la actuación necesaria."]
+    ],
+    "intake": "Distrito o municipio, calle, número de televisores afectados, canales que fallan y si otros vecinos tienen el mismo problema.",
+    "related": ["antenas-tdt-colectivas", "amplificadores-antena"]
+  },
+  {
+    "slug": "antenas-tdt-colectivas",
+    "label": "Antenas TDT y colectivas",
+    "title": "Antenas TDT y colectivas en Madrid",
+    "description": "Instalación y revisión de antenas TDT individuales y colectivas en Madrid. Recepción, cabeceras y distribución para viviendas y comunidades. 614 78 99 45.",
+    "intro": "Una instalación TDT comprende más que la antena del tejado: también importa cómo se amplifica y reparte la señal hasta cada toma. En Madrid puedes consultar instalaciones individuales, revisiones de antenas colectivas y modificaciones de la distribución, diferenciando las necesidades de una vivienda de las de todo un edificio.",
+    "sections": [
+      ["Instalación individual", "Antes de plantear una antena o una nueva toma interesa conocer el inmueble, los puntos de televisión necesarios y el recorrido de cable disponible. La ubicación, fijación y acceso se valoran junto con las condiciones de recepción. El montaje se prepara para la instalación concreta, no a partir de una orientación genérica indicada por internet."],
+      ["Antena colectiva para comunidades", "En un edificio, recepción, cabecera y red de distribución deben funcionar de forma conjunta. Una revisión puede centrarse en los elementos comunes o en una rama concreta cuando solo fallan ciertas viviendas. Identificar el alcance evita confundir una avería de una toma particular con un problema de toda la comunidad."],
+      ["Renovar una instalación existente", "La antigüedad por sí sola no permite decidir qué debe sustituirse. Conviene valorar el estado de fijaciones, conexiones, cableado, fuentes y equipos de cabecera. La propuesta puede consistir en una reparación localizada o en renovar determinados componentes manteniendo los que resulten adecuados."],
+      ["Preparación del acceso comunitario", "Para organizar la revisión, indica si existe cuarto de telecomunicaciones o armario de cabecera, quién dispone de las llaves y si hay restricciones de acceso. No manipules equipos comunes para identificar modelos. Las fotografías que puedan tomarse desde una zona segura ayudan a describir la instalación sin sustituir una comprobación técnica."],
+      ["Comprobación de la distribución", "Tras una intervención es importante revisar la recepción en los puntos incluidos en el trabajo, no solo junto a la antena. Concreta de antemano qué tomas o viviendas se comprobarán y si la actuación comprende cableado interior. Si se detecta un problema fuera del alcance previsto, debe diferenciarse antes de ampliar el trabajo."]
+    ],
+    "questions": [
+      ["¿Puede fallar mi vivienda aunque la antena colectiva funcione?", "Sí. La incidencia puede encontrarse en una derivación, cable, conexión o toma de esa vivienda. Comunicar si otros vecinos tienen señal ayuda a orientar el diagnóstico."],
+      ["¿Se puede añadir una toma de televisión?", "Se puede consultar su viabilidad. Deben valorarse el recorrido del cable y la distribución existente antes de concretar materiales y presupuesto."],
+      ["¿Quién debe solicitar la revisión de una comunidad?", "Conviene coordinar la consulta con el administrador o la persona responsable de autorizar el trabajo y facilitar el acceso, especialmente si afecta a equipos comunes."]
+    ],
+    "intake": "Tipo de inmueble, número de viviendas o tomas afectadas, acceso a cabecera y persona responsable de coordinar la visita.",
+    "related": ["reparacion-antenas", "amplificadores-antena"]
+  },
+  {
+    "slug": "amplificadores-antena",
+    "label": "Amplificadores y cabeceras",
+    "title": "Amplificadores de antena en Madrid",
+    "description": "Revisión de amplificadores, fuentes de alimentación y cabeceras de antena en Madrid. Diagnóstico para viviendas y comunidades antes de sustituir. 614 78 99 45.",
+    "intro": "Una pérdida de televisión puede estar relacionada con amplificación o alimentación, pero el mismo síntoma también puede proceder del cableado o de la recepción. Antes de cambiar un amplificador interesa comprobar qué señal recibe, cómo se alimenta y qué ocurre a su salida y en la distribución.",
+    "sections": [
+      ["Amplificador de mástil, interior o cabecera", "No todos los equipos cumplen la misma función ni se instalan en el mismo punto. El amplificador de una vivienda y los módulos o centrales de una comunidad requieren una valoración acorde con la instalación. Para preparar el aviso puede ayudar la marca o referencia visible desde un lugar seguro, sin abrir cajas ni acceder a la cubierta."],
+      ["La fuente de alimentación también cuenta", "Una fuente y un amplificador son componentes diferentes. El diagnóstico puede requerir comprobar alimentación, conexiones y estado del equipo para distinguir qué elemento falla. Sustituir ambos sin revisar la instalación no es una conclusión que pueda obtenerse únicamente porque la pantalla indique ausencia de señal."],
+      ["Nivel de señal y calidad de recepción", "Más amplificación no equivale automáticamente a mejor recepción. Debe valorarse la señal disponible y el comportamiento del conjunto para ajustar o seleccionar el equipo adecuado. La revisión de conexiones y distribución sigue siendo necesaria cuando se propone renovar la amplificación."],
+      ["Módulos monocanal y centrales comunitarias", "En una cabecera pueden existir equipos de distintas generaciones y funciones. Conviene identificar los módulos afectados, su alimentación y la distribución a la que dan servicio. Una actuación localizada debe distinguirse de una renovación completa, explicando qué componentes se conservan y cuáles se propone sustituir."],
+      ["Preparar una revisión sin manipular equipos", "Comunica si han desaparecido todos los canales o solo algunos, si afecta a varios vecinos y si la avería comenzó tras una incidencia conocida. No ajustes mandos, desconectes fuentes ni abras armarios para hacer pruebas por tu cuenta. Coordina el acceso con quien tenga autorización sobre la instalación."]
+    ],
+    "questions": [
+      ["¿Poner un amplificador más potente arregla los cortes?", "No necesariamente. Antes deben valorarse recepción, alimentación y distribución. El equipo se selecciona según la instalación, no únicamente por una cifra de ganancia."],
+      ["¿Revisáis equipos antiguos de comunidad?", "Puedes consultar la revisión de fuentes, módulos y centrales existentes. La reparación o sustitución depende de su estado y de la compatibilidad de la solución propuesta."],
+      ["¿Es útil enviar una fotografía del equipo?", "Puede ayudar si la referencia es visible y la fotografía se obtiene sin riesgo. No hace falta abrir cajas, tocar cableado ni acceder a una zona de uso restringido."]
+    ],
+    "intake": "Tipo de instalación, canales afectados, alcance entre vecinos y referencia del equipo únicamente si puede verse con seguridad.",
+    "related": ["reparacion-antenas", "antenas-tdt-colectivas"]
+  },
+  {
+    "slug": "antenas-parabolicas",
+    "label": "Antenas parabólicas",
+    "title": "Instalación de parabólicas en Madrid",
+    "description": "Instalación, orientación y reparación de antenas parabólicas en Madrid. Revisión de fijación, LNB, cableado y receptor. Consulta tu instalación: 614 78 99 45.",
+    "intro": "Para instalar o recuperar la señal de una parabólica hay que conocer qué recepción se necesita y qué equipos existen. La consulta permite distinguir una instalación nueva de un problema de orientación, fijación, cableado, LNB o receptor, antes de concretar el acceso y la intervención.",
+    "sections": [
+      ["Antes de instalar una parabólica", "Indica si se trata de vivienda individual o comunidad, dónde podría situarse la antena y dónde estará el receptor. Deben valorarse ubicación, fijación, acceso y recorrido del cable. Confirma también que cuentas con la autorización necesaria para intervenir en los elementos del inmueble que se vayan a utilizar."],
+      ["Orientación y pérdida de señal", "Cuando una antena deja de recibir, no puede darse por hecho que se haya movido. También interesa revisar conexiones, cable, LNB y receptor. Explica si el fallo afecta a toda la recepción o a parte de ella y si hubo alguna incidencia antes de que comenzara, sin tratar de reorientar una antena situada en altura."],
+      ["LNB, conectores y cableado", "El LNB es el elemento receptor situado en el brazo de la parabólica. Su estado y conexiones forman parte de la comprobación, junto con el recorrido del coaxial. Una reparación puede localizarse en estos componentes sin requerir necesariamente sustituir todo el conjunto."],
+      ["Compatibilidad y contenido recibido", "Concreta qué equipo y tipo de recepción quieres utilizar. La instalación de una parabólica no incluye por sí misma suscripciones, permisos de acceso ni la disponibilidad de contenidos de terceros. No se garantiza la recepción de un servicio sin revisar sus condiciones y la compatibilidad del equipo."],
+      ["No confundir parabólica y TDT por satélite", "Son consultas que deben distinguirse. La recepción de TDT por satélite está vinculada a condiciones y equipos específicos y no debe presentarse como una alternativa libre y universal. Para esa necesidad, describe el problema de cobertura de la vivienda antes de elegir un receptor o contratar una instalación."]
+    ],
+    "questions": [
+      ["¿Se puede aprovechar la parabólica que ya tengo?", "Puede valorarse su estado, fijación, ubicación, LNB y cableado. La respuesta depende de la instalación y de la recepción que se quiera utilizar."],
+      ["¿Reorientáis una antena que ha perdido señal?", "Puedes consultar la revisión y orientación. Primero se distingue un desajuste de otros fallos de equipo o distribución."],
+      ["¿Necesito comprar un receptor antes de contactar?", "Es preferible concretar primero qué recepción necesitas y qué instalación existe. Así se evita dar por compatible un equipo que todavía no se ha valorado."]
+    ],
+    "intake": "Municipio o distrito, tipo de inmueble, recepción solicitada, equipo existente y acceso disponible a la instalación.",
+    "related": ["reparacion-antenas", "antenas-tdt-colectivas"]
+  },
+  {
+    "slug": "porteros-automaticos",
+    "label": "Porteros automáticos",
+    "title": "Reparación de porteros automáticos en Madrid",
+    "description": "Reparación e instalación de porteros automáticos en Madrid. Fallos de llamada, audio y apertura en viviendas y comunidades. Contacto: 614 78 99 45.",
+    "intro": "Un portero que no llama, no permite oír o no abre la puerta no tiene necesariamente averiado el telefonillo. Es importante separar esas funciones y conocer si la incidencia ocurre en una vivienda o en toda la comunidad. Con esa información se prepara una revisión del sistema existente.",
+    "sections": [
+      ["Distinguir llamada, audio y apertura", "Describe cada función por separado: si llega la llamada, si se escucha en ambos sentidos y si responde la apertura. Indica también qué ocurre en otras viviendas cuando lo sepas. La información permite diferenciar una incidencia particular de otra situada en la placa, alimentación o instalación común."],
+      ["Telefonillo de vivienda o elementos comunes", "La revisión puede comprender terminal interior, placa de calle, fuente, conexiones y cableado según el síntoma y el acceso. No conviene sustituir el telefonillo sin valorar el sistema al que pertenece. Equipos de aspecto parecido pueden utilizar tecnologías o conexiones distintas."],
+      ["Reparación de instalaciones antiguas", "En una instalación antigua se valora qué componentes pueden mantenerse y si existe una solución compatible. Puedes comunicar marca y referencia visibles, sin desmontar la placa ni el terminal. Reparar un elemento y renovar el conjunto de la comunidad son decisiones de alcance diferente."],
+      ["Renovación coordinada de una comunidad", "Si se plantea una sustitución general, interesa conocer número de viviendas, accesos, terminales y cableado existente. La propuesta debe explicar qué incluye la placa, qué equipos interiores se cambian y cómo se organiza el acceso a las viviendas. La coordinación se acuerda con la persona responsable de la comunidad."],
+      ["Cuándo estudiar el paso a videoportero", "Añadir imagen no consiste siempre en sustituir únicamente el terminal interior. Deben comprobarse tecnología, placa, alimentación, cableado y compatibilidad. La guía de videoporteros explica qué información permite valorar ese cambio sin comprar equipos antes de revisar la instalación."]
+    ],
+    "questions": [
+      ["¿Puedo cambiar solo el telefonillo?", "Puede ser posible, pero antes hay que confirmar el sistema y la compatibilidad del terminal. El aspecto o la marca no bastan por sí solos para decidirlo."],
+      ["¿Qué indico si el portero no abre?", "Comunica si la llamada y el audio funcionan y si otras viviendas pueden abrir. No pruebes a puentear conexiones ni manipules el mecanismo de la puerta."],
+      ["¿Atendéis comunidades además de viviendas?", "Puedes consultar reparación, instalación o renovación de sistemas comunitarios. Conviene contar con una persona que coordine autorización y acceso."]
+    ],
+    "intake": "Distrito o municipio, marca visible, función que falla, número de viviendas afectadas y contacto de la comunidad cuando proceda.",
+    "related": ["videoporteros", "reparacion-antenas"]
+  },
+  {
+    "slug": "videoporteros",
+    "label": "Videoporteros",
+    "title": "Instalación de videoporteros en Madrid",
+    "description": "Instalación y reparación de videoporteros en Madrid. Revisión de imagen, llamada, audio y apertura; compatibilidad antes de renovar. 614 78 99 45.",
+    "intro": "Al instalar o reparar un videoportero se valora el sistema completo: placa exterior, monitor, alimentación y cableado. Puedes consultar una avería de imagen o audio, la sustitución de un equipo compatible o la renovación de un portero sin cámara, tanto en vivienda como en comunidad.",
+    "sections": [
+      ["Instalación nueva o cambio de portero", "Para valorar el paso de audio a vídeo interesa conocer el número de viviendas y accesos, los equipos existentes y el cableado disponible. No se presupone que una pantalla nueva funcione con la placa antigua. La propuesta debe diferenciar una sustitución compatible de una renovación de varios elementos."],
+      ["Avería de imagen, sonido o llamada", "Indica si no llega la llamada, falta la imagen, no se escucha o no responde la apertura. También conviene saber si el fallo afecta a un monitor o a varios. Son datos para orientar la revisión; no permiten atribuir el problema automáticamente a la pantalla o a la cámara."],
+      ["Elegir un monitor compatible", "Antes de comprar un terminal hay que identificar la tecnología y la compatibilidad con placa y alimentación. Tamaño de pantalla, acabado o conectividad no sustituyen esa comprobación. Si deseas funciones adicionales, conviene detallarlas durante la consulta para valorar si requieren cambios en el conjunto."],
+      ["Vivienda unifamiliar y comunidad", "En una vivienda se revisan accesos y puntos interiores necesarios. En una comunidad la coordinación debe incluir viviendas, placa y responsables del acceso. Debe quedar claro qué equipos y cableado forman parte del trabajo y qué elementos existentes se conservan."],
+      ["Qué revisar al finalizar", "El alcance acordado debe permitir comprobar llamada, imagen, audio y apertura en los puntos incluidos. También resulta útil recibir una explicación del uso del monitor y de las funciones instaladas. Una función opcional no debe darse por incluida si no se ha acordado y verificado su compatibilidad."]
+    ],
+    "questions": [
+      ["¿Se pueden aprovechar los cables del portero antiguo?", "Hay que comprobar su estado y si la solución propuesta admite esa instalación. No se garantiza sin revisar el sistema y el recorrido existentes."],
+      ["¿Se puede cambiar una sola pantalla de la comunidad?", "Depende de que exista un monitor compatible con el sistema común. Conviene identificar la referencia y consultar antes de comprar."],
+      ["¿Qué envío para consultar una avería?", "Distrito o municipio, función que falla y referencia visible del monitor o placa, junto con el alcance entre viviendas cuando se conozca. No desmontes equipos para obtener esos datos."]
+    ],
+    "intake": "Localidad, instalación individual o comunitaria, funciones que necesitas, síntoma de avería y referencias visibles de placa o monitor.",
+    "related": ["porteros-automaticos", "antenas-tdt-colectivas"]
+  }
+]

@@ -8,6 +8,7 @@ import {VERSION,assertDistrictDesign} from '../scripts/madrid-district-design.mj
 import {auditHtml} from '../scripts/regional-contact.mjs';
 import {LOGO} from '../header-brand.mjs';
 import {HERO} from '../hero-full-width.js';
+import services from '../content/madrid-services.json' with {type:'json'};
 const origin='https://antenistacerca.es',out='.cache/district-design';
 const result={origin,branch:'refactor-limpieza-segura',commit:process.env.GITHUB_SHA||null,version:VERSION,districts:[],controls:[],assets:[],browser:[],ok:false};
 fs.mkdirSync(out,{recursive:true});
@@ -39,7 +40,7 @@ try{
  const madridMap=[...localIndex.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]).find(url=>/\/sitemaps\/[^/]*madrid[^/]*\.xml$/.test(url));
  assert.ok(madridMap,'Sitemap Madrid no encontrado');
  const {text:map}=await read(madridMap);const urls=[...map.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
- assert.equal(urls.length,201);for(const d of madridDistricts)assert.ok(urls.includes(origin+d.route));
+ assert.equal(urls.length,201+services.length);for(const d of madridDistricts)assert.ok(urls.includes(origin+d.route));
  result.sitemap={url:madridMap,urls:urls.length,districts:21,ok:true};
  for(const asset of [LOGO,HERO,'/assets/shared-ui.css','/assets/town-enhancements.css','/assets/header-brand-v1.css','/assets/hero-panorama-v3.css']){
   const r=await fetch(origin+asset,{signal:AbortSignal.timeout(20000)});assert.equal(r.status,200,asset);
@@ -63,6 +64,6 @@ try{
   }
   await context.close();
  }
- result.ok=true;console.log('CERCA PUBLICADO OK: 21 distritos, 8 controles, 6 recursos, sitemap de 201 URLs y 15 pruebas de navegador.');
+ result.ok=true;console.log('CERCA PUBLICADO OK: 21 distritos, 8 controles, 6 recursos, sitemap completo y 15 pruebas de navegador.');
 }catch(error){result.error=error.message;process.exitCode=1;console.error(error);}
 finally{if(browser)await browser.close();result.checkedAt=new Date().toISOString();fs.writeFileSync(out+'/published.json',JSON.stringify(result,null,2));}
