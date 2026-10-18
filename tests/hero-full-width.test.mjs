@@ -40,6 +40,8 @@ test('portada y pueblos actualizados; provincia intacta', {skip:!hasAsset},()=>{
  fs.writeFileSync(path.join(dir,'alava/index.html'),'PROVINCIA CON ABECEDARIO');
  for(const d of data){fs.mkdirSync(path.join(dir,'alava',d.slug));fs.writeFileSync(path.join(dir,'alava',d.slug,'index.html'),fixture(true))}
  assert.equal(main(dir,path.join(dir,'data.json')).pages,3);assert.equal(fs.readFileSync(path.join(dir,'alava/index.html'),'utf8'),'PROVINCIA CON ABECEDARIO');
- assert.equal(fs.readFileSync(path.join(dir,'assets/hero-panorama-v2.css'),'utf8'),CSS);
+ const stylesheet=fs.readdirSync(path.join(dir,'assets')).find(name=>/^hero-panorama-v\d+\.css$/.test(name));
+ assert.ok(stylesheet,'Se genera la hoja de estilo del hero vigente');
+ assert.equal(fs.readFileSync(path.join(dir,'assets',stylesheet),'utf8'),CSS);
  }finally{fs.rmSync(dir,{recursive:true,force:true})}
 });

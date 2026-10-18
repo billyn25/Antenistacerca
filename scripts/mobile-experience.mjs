@@ -1,0 +1,82 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {pathToFileURL} from 'node:url';
+import {CENTRAL,NORTH,region,auditHtml} from './regional-contact.mjs';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export const MOBILE_RELEASE='cerca-mobile-20261018';
+export const CSS=`
+body[data-ac-mobile-release] .towns a,body[data-ac-mobile-release] .alpha-links a,body[data-ac-mobile-release] .ac-cookie-policy-text{overflow-wrap:anywhere;min-width:0}body[data-ac-mobile-release] .home-stat{min-width:0}body[data-ac-mobile-release] .home-stat strong{font-size:clamp(28px,4vw,42px)!important;line-height:1.2;overflow-wrap:anywhere}body[data-ac-mobile-release] .area{min-width:0;box-sizing:border-box}body[data-ac-mobile-release] .areahead{flex-wrap:wrap;gap:8px}.ac-header{background:#fff;border-bottom:3px solid #ff8700;color:#103e68}.ac-header .head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:20px;max-width:1280px;width:calc(100% - 40px);margin:auto;padding:14px 0}.ac-header .brand{min-width:0}.ac-header nav{display:flex;justify-content:center;gap:20px;flex-wrap:wrap}.ac-header nav a{display:flex;align-items:center;min-height:44px;font-size:14px;font-weight:750;color:#143f67}.ac-menu-toggle{display:none}.ac-header .hcontact .tel{white-space:nowrap}.ac-quick-section{padding:42px 0;background:#f1f6fa;border-top:1px solid #d6e4ee}.ac-quick-section>.ac-quick-wrap{width:min(1100px,calc(100% - 32px));margin:auto}.ac-quick-section h2{font-size:clamp(24px,3vw,33px);line-height:1.2;color:#103e68;margin:8px 0 12px}.ac-quick-intro{color:#506678;line-height:1.65;max-width:760px}.ac-quick-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:24px;background:#fff;border:1px solid #d5e3ed;border-radius:16px;margin-top:22px;box-shadow:0 8px 24px rgba(13,51,81,.05)}.ac-quick-form[hidden]{display:none!important}.ac-field{min-width:0;display:grid;gap:7px;align-content:start}.ac-field label{font-size:14px;font-weight:750;color:#193e5b}.ac-field input,.ac-field select,.ac-field textarea{box-sizing:border-box;min-height:48px;width:100%;min-width:0;max-width:100%;border:1px solid #b8cddd;border-radius:8px;padding:12px;background:#fff;color:#193e5b;font:inherit;font-size:16px;line-height:1.45}.ac-field textarea{resize:vertical}.ac-field select:focus-visible,.ac-field input:focus-visible,.ac-field textarea:focus-visible{outline:3px solid #ed890f;outline-offset:2px}.ac-quick-bottom{grid-column:1/-1;border-top:1px solid #e0e9ef;padding-top:16px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}.ac-quick-recipient{font-size:14px;color:#36566e;line-height:1.5;margin:0}.ac-quick-submit{border:0;border-radius:9px;background:#087e40;color:#fff;padding:14px 20px;min-height:48px;font:750 16px/1.3 Arial,sans-serif;cursor:pointer}.ac-quick-note{grid-column:1/-1;font-size:12px;color:#5c7181;line-height:1.6;margin:0}.ac-quick-kicker{text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:800;color:#8e4a00}.ac-quick-fallback a{color:#103e68;font-weight:750}
+@media(max-width:900px){.ac-header{position:relative!important;top:auto!important}.ac-header .head{grid-template-columns:minmax(0,1fr) auto 48px!important;gap:10px!important;padding:10px 0!important;width:calc(100% - 24px)!important}.ac-header .brand{grid-column:1;grid-row:1;width:auto!important}.ac-header .brand>img{width:150px!important;max-width:100%!important;height:auto!important}.ac-header .brand small{font-size:10px!important;line-height:1.3!important}.ac-header .hcontact{grid-column:2;grid-row:1;display:block!important}.ac-header .hcontact .tel{font-size:16px!important;color:#123f68!important;font-weight:800!important}.ac-header .hcontact .green{display:none!important}.ac-menu-toggle{grid-column:3;grid-row:1;width:48px;min-height:46px;display:none;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:5px;border:1px solid #cddfeb;border-radius:9px;background:#f2f7fb;color:#123f68;font:750 10px/1.2 Arial,sans-serif;cursor:pointer}.ac-menu-toggle span:first-child{font-size:22px}.ac-header[data-ac-nav-ready] .ac-menu-toggle{display:flex}.ac-header nav{grid-column:1/-1;display:flex!important;flex-wrap:wrap;gap:7px!important;justify-content:flex-start;border-top:1px solid #e0e9ef;padding-top:6px}.ac-header[data-ac-nav-ready] nav{display:none!important}.ac-header[data-ac-menu-open="true"] nav{display:grid!important;grid-template-columns:1fr!important;gap:0!important}.ac-header nav a{font-size:14px;min-height:44px;padding:9px 12px;border-radius:7px}.ac-header nav a:hover{background:#f2f6fa}.ac-header button:focus-visible{outline:3px solid #ee8700;outline-offset:3px}}
+@media(max-width:640px){.ac-header .head{gap:7px!important}.ac-header .brand>img{width:140px!important}.ac-header .hcontact .tel{font-size:14px!important}.hero h1{font-size:clamp(30px,8.5vw,40px)!important;line-height:1.1!important;letter-spacing:-.7px!important}.hero .hero-copy,.hero .copy{padding-top:22px!important;padding-bottom:22px!important}.hero .copy>h2,.hero .hero-copy>h2,.hero .hero-copy>.subtitle,.hero .hero-copy .service-statement{font-size:17px!important;line-height:1.45!important}.hero .checks{font-size:15px!important;line-height:1.55!important}.hero .checks li{margin-bottom:8px!important;font-size:15px!important}.hero .urgent{font-size:13px!important;padding:7px 11px!important;border-radius:20px!important}.hero .kicker{font-size:11px!important;letter-spacing:.08em!important}.ac-quick-section{padding:30px 0}.ac-quick-form{grid-template-columns:minmax(0,1fr);padding:20px;gap:17px}.ac-quick-bottom{display:block}.ac-quick-submit{width:100%;margin-top:14px}}
+@media(max-width:359px){.ac-header .brand>img{width:118px!important}.ac-header .brand small{font-size:9px!important}.ac-header .hcontact .tel{font-size:12px!important}.ac-header .head{width:calc(100% - 18px)!important;gap:5px!important}}
+`;
+export function runtime(){
+ const header=document.querySelector('[data-ac-header]');
+ if(header){const button=header.querySelector('[data-ac-menu]'),nav=header.querySelector('#ac-navigation');if(button&&nav){
+  const set=open=>{button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'Cerrar menú':'Abrir menú');header.dataset.acMenuOpen=String(open);};
+  header.dataset.acNavReady='true';set(false);
+  button.addEventListener('click',()=>set(button.getAttribute('aria-expanded')!=='true'));
+  nav.addEventListener('click',e=>{if(e.target.closest('a'))set(false);});
+  header.addEventListener('keydown',e=>{if(e.key==='Escape'&&button.getAttribute('aria-expanded')==='true'){set(false);button.focus({preventScroll:true});}});
+ }}
+ const form=document.querySelector('[data-ac-quick-form]');if(!form)return;
+ const province=form.querySelector('[name="province"]'),place=form.querySelector('[name="locality"]'),service=form.querySelector('[name="service"]'),detail=form.querySelector('[name="detail"]'),label=form.querySelector('[data-ac-recipient]');
+ const contact=()=>['madrid','guadalajara','toledo'].includes(province.value)?{wa:'34614789945',phone:'614 78 99 45'}:{wa:'34641589394',phone:'641 589 394'};
+ const sync=()=>{const c=contact();form.dataset.phone=c.wa;label.textContent=province.value?'Contacto para '+province.options[province.selectedIndex].text+': '+c.phone:'Elige provincia para asignar el contacto de tu zona.';
+  if(province.value){for(const link of document.querySelectorAll('header .hcontact a.tel,.mobilebar a[href^="tel:"]')){link.href='tel:+'+c.wa;link.textContent=(link.closest('.mobilebar')?'☎ ':'')+c.phone;}for(const link of document.querySelectorAll('header .hcontact a[href^="https://wa.me/"],.mobilebar a[href^="https://wa.me/"]'))link.href='https://wa.me/'+c.wa;}
+ };
+ form.addEventListener('change',sync);form.addEventListener('input',sync);
+ form.addEventListener('submit',event=>{event.preventDefault();if(!form.reportValidity())return;sync();const c=contact(),extra=detail.value.trim().slice(0,600);const message='Hola, necesito consultar '+service.value+' en '+place.value.trim()+', '+province.options[province.selectedIndex].text+'.'+(extra?'\nDetalles: '+extra:'')+'\n¿Podéis confirmarme disponibilidad y condiciones de atención?';window.open('https://wa.me/'+c.wa+'?text='+encodeURIComponent(message),'_blank','noopener');});
+ sync();form.hidden=false;const fallback=document.querySelector('[data-ac-quick-fallback]');if(fallback)fallback.hidden=true;
+}
+export const JS='('+runtime.toString()+')();';
+const hash=createHash('sha256').update(CSS+JS).digest('hex').slice(0,12);
+export const cssPath=`/assets/mobile-experience.${hash}.css`,jsPath=`/assets/mobile-experience.${hash}.js`;
+export function quickForm(provinces,province,locality,contact){
+ return `<section class="ac-quick-section" id="ac-consulta"><div class="ac-quick-wrap"><span class="ac-quick-kicker">Tu aviso, preparado</span><h2>Consulta rápida por WhatsApp</h2><p class="ac-quick-intro">Indica la provincia, el pueblo y lo que necesitas. Te dirigimos al contacto de esa zona con el mensaje preparado.</p><p class="ac-quick-fallback" data-ac-quick-fallback>Puedes consultar directamente en el <a href="tel:${contact.tel}">${contact.phone}</a> o utilizar los contactos por zonas del pie.</p><form class="ac-quick-form" data-ac-quick-form data-quote-form data-phone="${contact.wa}" hidden><div class="ac-field"><label for="ac-province">Provincia</label><select id="ac-province" name="province" required><option value="">Selecciona provincia</option>${provinces.map(p=>`<option value="${esc(p.slug)}"${p.slug===province?' selected':''}>${esc(p.name)}</option>`).join('')}</select></div><div class="ac-field"><label for="ac-locality">Pueblo, localidad o distrito</label><input id="ac-locality" name="locality" value="${esc(locality)}" required maxlength="120" placeholder="¿Dónde necesitas al técnico?" autocomplete="address-level2"></div><div class="ac-field"><label for="ac-service">Servicio o avería</label><select id="ac-service" name="service" required><option value="">Selecciona el servicio</option>${['reparación de antena TDT','instalación de antena o parabólica','amplificación o antena colectiva','reparación de portero automático','instalación o reparación de videoportero','TDT por satélite HD','otra consulta de la instalación'].map(s=>`<option>${esc(s)}</option>`).join('')}</select></div><div class="ac-field"><label for="ac-detail">Cuéntanos qué falla (opcional)</label><textarea id="ac-detail" name="detail" rows="3" maxlength="600" placeholder="Por ejemplo: no se ve la televisión en varias viviendas."></textarea></div><div class="ac-quick-bottom"><p class="ac-quick-recipient" data-ac-recipient aria-live="polite">${contact.phone}</p><button class="ac-quick-submit" type="submit">Preparar WhatsApp →</button></div><p class="ac-quick-note">Podrás revisar el mensaje en WhatsApp antes de enviarlo. Disponibilidad, desplazamiento y presupuesto se confirman con el técnico.</p></form></div></section>`;
+}
+export function transformMobile(html,route,provinces,locality=''){
+ if(html.includes('data-ac-mobile-release='))return html;
+ const slug=new URL(route,'https://antenistacerca.es').pathname.split('/').filter(Boolean)[0]||'';
+ const contact=region(route)?CENTRAL:NORTH;
+ let header=html.match(/<header\b[^>]*>[\s\S]*?<\/header>/i)?.[0];
+ const newHeader=!header;
+ if(!header)header=`<header><div class="wrap head"><a class="brand ac-brand-logo" href="/"><img src="/assets/logo-antenista-cerca-v1.webp" width="440" height="147" alt="ANTENISTA CERCA"><small>Tu antenista de confianza</small></a><nav></nav><div class="hcontact"><a class="tel" href="tel:${contact.tel}">${contact.phone}</a></div></div></header>`;
+ header=header.replace(/<header\b([^>]*)>/i,(_,attrs)=>`<header${attrs.replace(/\bclass="([^"]*)"/,'')} class="ac-header" data-ac-header>`);
+ const service=html.includes('id="servicios"')?'#servicios':'/#servicios',towns=html.includes('id="localidades"')?'#localidades':html.includes('id="zonas"')?'#zonas':html.includes('id="zona"')?'#zona':'/#zonas';
+ const nav=`<button class="ac-menu-toggle" data-ac-menu type="button" aria-controls="ac-navigation" aria-expanded="false" aria-label="Abrir menú"><span aria-hidden="true">☰</span><span>Menú</span></button><nav id="ac-navigation" aria-label="Navegación principal"><a href="/">Inicio</a><a href="${service}">Servicios</a><a href="${towns}">Pueblos</a><a href="#ac-consulta">Consulta rápida</a></nav>`;
+ header=header.replace(/<nav\b[^>]*>[\s\S]*?<\/nav>/i,nav);
+ header=header.replace(/(<a\b[^>]*class="tel"[^>]*>)[\s\S]*?<\/a>/,`$1${contact.phone}</a>`);
+ let result=newHeader?html.replace(/<body\b[^>]*>/i,'$&'+header):html.replace(/<header\b[^>]*>[\s\S]*?<\/header>/i,header);
+ const selected=provinces.some(p=>p.slug===slug)?slug:'';
+ result=result.replace(/<footer\b/i,quickForm(provinces,selected,locality,contact)+'<footer');
+ result=result.replace('</head>',`<link rel="stylesheet" href="${cssPath}"><script src="${jsPath}" defer></script></head>`).replace(/<body\b([^>]*)>/i,`<body$1 data-ac-mobile-release="${MOBILE_RELEASE}">`);
+ assert.equal((result.match(/id="ac-navigation"/g)||[]).length,1);
+ assert.equal((result.match(/id="ac-consulta"/g)||[]).length,1);
+ for(const re of [/<link\b[^>]*rel="canonical"[^>]*>/gi,/<meta\b[^>]*name="robots"[^>]*>/gi,/<h1\b[^>]*>[\s\S]*?<\/h1>/gi,/<img\b[^>]*>/gi]){
+  const before=[...html.matchAll(re)].map(m=>m[0]);const after=[...result.matchAll(re)].map(m=>m[0]);
+  assert.deepEqual(newHeader&&re.source.startsWith('<img')?after.slice(1):after,before,'Cambios en contenido o metadatos fuera del alcance');
+ }
+ auditHtml(result,route,true);
+ return result;
+}
+export function applyMobile(root='public'){
+ const data=JSON.parse(fs.readFileSync('src/localidades.json','utf8'));
+ const provinces=[...new Map(data.map(t=>[t.provinciaSlug,{slug:t.provinciaSlug,name:t.provincia}])).values()].sort((a,b)=>a.name.localeCompare(b.name,'es'));
+ const locals=new Map(data.map(t=>[`/${t.provinciaSlug}/${t.slug}/`,t.localidad]));
+ let count=0;const visit=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())visit(file);else if(entry.name.endsWith('.html')){
+  const h=fs.readFileSync(file,'utf8'),canonical=h.match(/rel="canonical"[^>]*href="([^"]+)"/)?.[1];if(!canonical)continue;const route=new URL(canonical).pathname;
+  const slug=route.split('/').filter(Boolean)[0];if(route!=='/'&&!provinces.some(p=>p.slug===slug))continue;
+  if(!/<footer\b/.test(h))continue;
+  const locality=locals.get(route)||(/\/[\w-]+\/[\w-]+\//.test(route)?h.match(/<h1[^>]*>(.*?)<\/h1>/)?.[1]?.replace(/<[^>]+>/g,'').replace(/^Antenista en /,'')||'':'');
+  fs.writeFileSync(file,transformMobile(h,route,provinces,locality));count++;
+ }}};visit(root);
+ fs.writeFileSync(path.join(root,cssPath),CSS);fs.writeFileSync(path.join(root,jsPath),JS);
+ const documents=new Map();const collect=dir=>{for(const e of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,e.name);if(e.isDirectory())collect(f);else if(e.name.endsWith('.html')){const h=fs.readFileSync(f,'utf8'),u=h.match(/rel="canonical"[^>]*href="([^"]+)"/)?.[1];if(u)documents.set(new URL(u).pathname,h);}}};collect(root);
+ for(const [route,html] of documents){if(!html.includes('data-ac-mobile-release='))continue;const nav=html.match(/<nav id="ac-navigation"[^>]*>([\s\S]*?)<\/nav>/)?.[1];assert(nav,route+': falta menú');for(const [,href] of nav.matchAll(/href="([^"]+)"/g)){const url=new URL(href,'https://antenistacerca.es'+route),target=documents.get(url.pathname);assert(target,route+': destino de menú inexistente '+href);if(url.hash)assert(target.includes('id="'+url.hash.slice(1)+'"'),route+': ancla de menú inexistente '+href);}}
+
+ console.log(`MÓVIL OK: ${count} páginas con menú y consulta regional; cabeceras, formulario, imágenes y contactos auditados.`);return count;
+}
+if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)applyMobile();

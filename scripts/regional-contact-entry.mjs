@@ -1,3 +1,4 @@
+import {applyMobile} from './mobile-experience.mjs';
 /** Complete Madrid content, district presentation and footers before regional contacts. */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -25,7 +26,7 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
  testFooter();
  if(process.argv.includes('--self-test')){console.log('PIES PROVINCIALES OK: contenido preservado, sin duplicados');}
  else {
-  const checks=spawnSync(process.execPath,['--test','tests/madrid-district-design.test.mjs','tests/madrid-seo-boost.test.mjs'],{stdio:'inherit'});
+  const checks=spawnSync(process.execPath,['--test','tests/madrid-district-design.test.mjs','tests/madrid-seo-boost.test.mjs','tests/mobile-experience.test.mjs'],{stdio:'inherit'});
   if(checks.error)throw checks.error;if(checks.status!==0)process.exit(checks.status||1);
   applyDistrictDesign('public');
   applyBoost('public');
@@ -37,5 +38,6 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
   if(result.error)throw result.error;
   if(result.status!==0)process.exit(result.status||1);
   auditBoost('public');
+  applyMobile('public');
  }
 }
