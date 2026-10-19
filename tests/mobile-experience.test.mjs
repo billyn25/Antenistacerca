@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
-import {runtime,quickForm,transformMobile} from '../scripts/mobile-experience.mjs';
+import {CSS,runtime,quickForm,transformMobile} from '../scripts/mobile-experience.mjs';
 import {transform,CENTRAL,NORTH} from '../scripts/regional-contact.mjs';
 const provinces=[{slug:'bizkaia',name:'Bizkaia'},{slug:'madrid',name:'Madrid'},{slug:'guadalajara',name:'Guadalajara'},{slug:'toledo',name:'Toledo'}];
 test('menú y formulario conservan canonical, H1, fotografía y teléfono regional',()=>{
@@ -29,4 +29,10 @@ test('aviso desde provincia norte cambia de destinatario al elegir centro y mant
   province.value=value;province.selectedIndex=index;events.change();events.submit({preventDefault(){}});const u=new URL(opened);assert.equal(u.pathname,'/'+phone);assert.equal(form.dataset.phone,phone);assert(u.searchParams.get('text').includes('Mi pueblo'));assert(u.searchParams.get('text').includes('No abre & no suena'));
  }
  assert.equal(form.hidden,false);
+});
+
+test('cabecera de provincias limita el logo en escritorio sin depender de header-brand',()=>{
+ assert.match(CSS,/@media\(min-width:901px\)\{\.ac-header a\.brand\.ac-brand-logo>img\{width:180px!important/);
+ assert.match(CSS,/max-height:64px!important/);
+ assert.match(CSS,/@media\(max-width:640px\)[\s\S]*?width:140px!important/);
 });
