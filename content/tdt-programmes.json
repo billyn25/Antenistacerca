@@ -1,0 +1,70 @@
+{
+  "reviewed": "2026-10-21",
+  "reference_label": "21/10/2026 · antes de la reorganización de noviembre",
+  "coverage": "Ejemplos de cadenas estatales, no relación exhaustiva. La asignación RF procede del área del municipio; no acredita recepción en una dirección.",
+  "sources": {
+    "operators": "https://television.digital.gob.es/television-digital/tdt/canales-tdt",
+    "historic_groups": "https://television.digital.gob.es/content/dam/televisiondigital/novedades/documents/2014-10-21_Configuracion_canales_TDT_%2026_octubre.pdf",
+    "changes": "https://television.digital.gob.es/atencion-a-la-ciudadania/notas-prensa/tdt/guia-facil-para-la-resintonizacion-de-la-tdt--todos-los-cambios-",
+    "resolution": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-16750"
+  },
+  "muxes": {
+    "RGE1": {
+      "examples": [
+        "La 1 HD",
+        "La 2 HD",
+        "24h HD"
+      ],
+      "change": "Clan tiene anunciado su traslado a RGE1 el 3 de noviembre de 2026."
+    },
+    "RGE2": {
+      "examples": [
+        "Clan HD",
+        "DKISS HD"
+      ],
+      "change": "El 5 de noviembre de 2026 está previsto el paso de RGE2 a DVB-T2 para emisiones UHD; Clan y DKISS cambian de múltiple."
+    },
+    "MPE1": {
+      "examples": [
+        "DMAX",
+        "Veo 7",
+        "Squirrel",
+        "Squirrel 2"
+      ],
+      "change": ""
+    },
+    "MPE2": {
+      "examples": [
+        "Antena 3 HD",
+        "laSexta HD",
+        "Neox HD",
+        "Nova HD"
+      ],
+      "change": "Atreseries tiene anunciado su traslado a MPE2 el 5 de noviembre de 2026."
+    },
+    "MPE3": {
+      "examples": [
+        "Telecinco HD",
+        "Cuatro HD",
+        "FDF HD",
+        "Divinity HD"
+      ],
+      "change": "Be Mad tiene anunciado su traslado a MPE3 el 5 de noviembre de 2026."
+    },
+    "MPE4": {
+      "examples": [
+        "TRECE HD"
+      ],
+      "change": ""
+    },
+    "MPE5": {
+      "examples": [
+        "Atreseries HD",
+        "Be Mad HD",
+        "Real Madrid TV",
+        "TEN"
+      ],
+      "change": "El 5 de noviembre de 2026 están previstos los traslados de Atreseries y Be Mad a otros múltiples, la llegada de DKISS y el inicio de La Séptima."
+    }
+  }
+}

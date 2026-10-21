@@ -1,0 +1,259 @@
+{
+  "reviewed": "2026-10-21",
+  "branch": "refactor-limpieza-segura",
+  "services": [
+    "Televisión para hoteles y alojamientos",
+    "IPTV y televisión por IP",
+    "Centrales programables y monocanales",
+    "Antenas para eventos",
+    "Proyectos ICT de vivienda nueva: redacción y firma por profesional competente"
+  ],
+  "professional_cases": 20,
+  "municipalities": 3549,
+  "official_tdt_areas": 27,
+  "generated_seo": {
+    "html_pages": 3595,
+    "duplicate_titles": 0,
+    "duplicate_descriptions": 0,
+    "duplicate_canonicals": 0,
+    "errors": []
+  },
+  "similarity_before": {
+    "sample_municipalities": 54,
+    "pairs": 1431,
+    "provinces": 18,
+    "method": "Jaccard sobre secuencias de 5 palabras; primer, medio y último slug de cada provincia; nombres municipales y provinciales normalizados; sin cabecera, pie, navegación, formulario, scripts ni SVG. Comparación editorial, no umbral de Google.",
+    "median": 33.3,
+    "maximum": 57.3,
+    "minimum": 23.58,
+    "sample": [
+      "alava/agurain-salvatierra",
+      "alava/lagran",
+      "alava/zuia",
+      "asturias/allande",
+      "asturias/nava",
+      "asturias/yernes-y-tameza",
+      "bizkaia/abadino",
+      "bizkaia/igorre",
+      "bizkaia/ziortza-bolibar",
+      "burgos/abajas",
+      "burgos/nava-de-roa",
+      "burgos/zuneda",
+      "cantabria/alfoz-de-lloredo",
+      "cantabria/pesaguero",
+      "cantabria/voto",
+      "gipuzkoa/abaltzisketa",
+      "gipuzkoa/hernialde",
+      "gipuzkoa/zumarraga",
+      "guadalajara/abanades",
+      "guadalajara/mazuecos",
+      "guadalajara/zorita-de-los-canes",
+      "la-rioja/abalos",
+      "la-rioja/ledesma-de-la-cogolla",
+      "la-rioja/zorraquin",
+      "leon/acebedo",
+      "leon/peranzanes",
+      "leon/zotes-del-paramo",
+      "madrid/ajalvir",
+      "madrid/miraflores-de-la-sierra",
+      "madrid/zarzalejo",
+      "navarra/abaigar",
+      "navarra/izagaondoa",
+      "navarra/zuniga",
+      "palencia/abarca-de-campos",
+      "palencia/osorno-la-mayor",
+      "palencia/villovieco",
+      "salamanca/abusejo",
+      "salamanca/lumbrales",
+      "salamanca/zorita-de-la-frontera",
+      "segovia/abades",
+      "segovia/marazoleja",
+      "segovia/zarzuela-del-pinar",
+      "soria/abejar",
+      "soria/la-riba-de-escalote",
+      "soria/yelo",
+      "toledo/ajofrin",
+      "toledo/montearagon",
+      "toledo/yuncos",
+      "valladolid/adalia",
+      "valladolid/pedrosa-del-rey",
+      "valladolid/zaratan",
+      "zamora/abezames",
+      "zamora/moreruela-de-los-infanzones",
+      "zamora/zamora"
+    ]
+  },
+  "similarity_after": {
+    "sample_municipalities": 54,
+    "pairs": 1431,
+    "provinces": 18,
+    "method": "Jaccard sobre secuencias de 5 palabras; primer, medio y último slug de cada provincia; nombres municipales y provinciales normalizados; sin cabecera, pie, navegación, formulario, scripts ni SVG. Comparación editorial, no umbral de Google.",
+    "median": 33.23,
+    "maximum": 49.82,
+    "minimum": 24.37,
+    "sample": [
+      "alava/agurain-salvatierra",
+      "alava/lagran",
+      "alava/zuia",
+      "asturias/allande",
+      "asturias/nava",
+      "asturias/yernes-y-tameza",
+      "bizkaia/abadino",
+      "bizkaia/igorre",
+      "bizkaia/ziortza-bolibar",
+      "burgos/abajas",
+      "burgos/nava-de-roa",
+      "burgos/zuneda",
+      "cantabria/alfoz-de-lloredo",
+      "cantabria/pesaguero",
+      "cantabria/voto",
+      "gipuzkoa/abaltzisketa",
+      "gipuzkoa/hernialde",
+      "gipuzkoa/zumarraga",
+      "guadalajara/abanades",
+      "guadalajara/mazuecos",
+      "guadalajara/zorita-de-los-canes",
+      "la-rioja/abalos",
+      "la-rioja/ledesma-de-la-cogolla",
+      "la-rioja/zorraquin",
+      "leon/acebedo",
+      "leon/peranzanes",
+      "leon/zotes-del-paramo",
+      "madrid/ajalvir",
+      "madrid/miraflores-de-la-sierra",
+      "madrid/zarzalejo",
+      "navarra/abaigar",
+      "navarra/izagaondoa",
+      "navarra/zuniga",
+      "palencia/abarca-de-campos",
+      "palencia/osorno-la-mayor",
+      "palencia/villovieco",
+      "salamanca/abusejo",
+      "salamanca/lumbrales",
+      "salamanca/zorita-de-la-frontera",
+      "segovia/abades",
+      "segovia/marazoleja",
+      "segovia/zarzuela-del-pinar",
+      "soria/abejar",
+      "soria/la-riba-de-escalote",
+      "soria/yelo",
+      "toledo/ajofrin",
+      "toledo/montearagon",
+      "toledo/yuncos",
+      "valladolid/adalia",
+      "valladolid/pedrosa-del-rey",
+      "valladolid/zaratan",
+      "zamora/abezames",
+      "zamora/moreruela-de-los-infanzones",
+      "zamora/zamora"
+    ]
+  },
+  "live_sample_before_deployment": [
+    {
+      "path": "/",
+      "status": 200,
+      "final": "https://antenistacerca.es/",
+      "xrobots": null,
+      "canonical": [
+        "<link rel=\"canonical\" href=\"https://antenistacerca.es/\">"
+      ],
+      "robots": [
+        "<meta name=\"robots\" content=\"index,follow,max-image-preview:large\">"
+      ],
+      "title": [
+        "Antenista Cerca | Instalación y reparación de antenas"
+      ],
+      "body": ""
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "final": "https://antenistacerca.es/robots.txt",
+      "xrobots": null,
+      "canonical": [],
+      "robots": [],
+      "title": [],
+      "body": "User-agent: *\nAllow: /\n\nSitemap: https://antenistacerca.es/sitemap.xml\n"
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "final": "https://antenistacerca.es/sitemap.xml",
+      "xrobots": null,
+      "canonical": [],
+      "robots": [],
+      "title": [],
+      "body": ""
+    },
+    {
+      "path": "/bizkaia/",
+      "status": 200,
+      "final": "https://antenistacerca.es/bizkaia/",
+      "xrobots": null,
+      "canonical": [
+        "<link rel=\"canonical\" href=\"https://antenistacerca.es/bizkaia/\">"
+      ],
+      "robots": [
+        "<meta name=\"robots\" content=\"index,follow,max-image-preview:large\">"
+      ],
+      "title": [
+        "Antenistas en Bizkaia | Directorio por municipios"
+      ],
+      "body": ""
+    },
+    {
+      "path": "/bizkaia/bilbao/",
+      "status": 200,
+      "final": "https://antenistacerca.es/bizkaia/bilbao/",
+      "xrobots": null,
+      "canonical": [
+        "<link rel=\"canonical\" href=\"https://antenistacerca.es/bizkaia/bilbao/\">"
+      ],
+      "robots": [
+        "<meta name=\"robots\" content=\"index,follow,max-image-preview:large\">"
+      ],
+      "title": [
+        "Antenista en Bilbao | Reparación e instalación de antenas"
+      ],
+      "body": ""
+    },
+    {
+      "path": "/navarra/tudela/",
+      "status": 200,
+      "final": "https://antenistacerca.es/navarra/tudela/",
+      "xrobots": null,
+      "canonical": [
+        "<link rel=\"canonical\" href=\"https://antenistacerca.es/navarra/tudela/\">"
+      ],
+      "robots": [
+        "<meta name=\"robots\" content=\"index,follow,max-image-preview:large\">"
+      ],
+      "title": [
+        "Antenista en Tudela | Reparación e instalación de antenas"
+      ],
+      "body": ""
+    },
+    {
+      "path": "/madrid/ajalvir/",
+      "status": 200,
+      "final": "https://antenistacerca.es/madrid/ajalvir/",
+      "xrobots": null,
+      "canonical": [
+        "<link rel=\"canonical\" href=\"https://antenistacerca.es/madrid/ajalvir/\">"
+      ],
+      "robots": [
+        "<meta name=\"robots\" content=\"index,follow,max-image-preview:large\">"
+      ],
+      "title": [
+        "Antenista en Ajalvir | Reparación e instalación de antenas"
+      ],
+      "body": ""
+    }
+  ],
+  "limitations": [
+    "No se ha accedido a Search Console: no puede confirmarse una acción manual ni el estado de indexación de cada URL.",
+    "La similitud es una medida editorial de la muestra, no un umbral de Google.",
+    "Los nombres de cadenas son ejemplos fechados antes de los cambios anunciados para noviembre de 2026; las frecuencias son planificación oficial, no cobertura garantizada.",
+    "La disponibilidad de servicios, proyecto ICT, titulado responsable, honorarios y derechos audiovisuales se confirma para cada encargo."
+  ]
+}

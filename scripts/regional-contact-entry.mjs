@@ -1,3 +1,4 @@
+import {updateSitemapDates} from '../professional-content.mjs';
 import {applyMobile} from './mobile-experience.mjs';
 /** Complete Madrid content, district presentation and footers before regional contacts. */
 import fs from 'node:fs';
@@ -39,5 +40,6 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
   if(result.status!==0)process.exit(result.status||1);
   auditBoost('public');
   applyMobile('public');
+  updateSitemapDates('public');
  }
 }
