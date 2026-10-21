@@ -1,3 +1,4 @@
+import {applyCompactContacts} from './compact-contact.mjs';
 import {updateSitemapDates} from '../professional-content.mjs';
 import {applyMobile} from './mobile-experience.mjs';
 /** Complete Madrid content, district presentation and footers before regional contacts. */
@@ -41,5 +42,6 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
   auditBoost('public');
   applyMobile('public');
   updateSitemapDates('public');
+  applyCompactContacts('public');
  }
 }
