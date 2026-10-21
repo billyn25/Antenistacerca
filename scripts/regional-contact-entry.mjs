@@ -1,3 +1,4 @@
+import {applyModernFooter} from './modern-footer.mjs';
 import {applyCompactContacts} from './compact-contact.mjs';
 import {updateSitemapDates} from '../professional-content.mjs';
 import {applyMobile} from './mobile-experience.mjs';
@@ -43,5 +44,6 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
   applyMobile('public');
   updateSitemapDates('public');
   applyCompactContacts('public');
+  applyModernFooter('public');
  }
 }
