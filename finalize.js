@@ -78,7 +78,10 @@ const homeBrands=`<div class="home-brands" aria-label="Marcas habituales"><div c
 function finalizeHome(){
   let h=fs.readFileSync(homeFile,'utf8');
   h=h.replace('<div class="kicker">Técnico de antenas cerca de ti</div>','<div class="kicker">Hoy estamos cerca de tu casa</div>');
-  h=h.replace(/(<div class="copy">[\s\S]*?<h1>)[\s\S]*?(<\/h1>\s*<h2>)[\s\S]*?(<\/h2>)/i,`$1Antenista cerca de tu vivienda$2${SUBTITLE}$3`);
+  h=h.replace(/(<div class="copy">[\s\S]*?<h1>)[\s\S]*?(<\/h1>\s*<h2>)[\s\S]*?(<\/h2>)/i,`$1Antenas y porteros cerca de ti$2Instalación y reparación para viviendas, comunidades y negocios.$3`);
+  h=h.replace('<body>', '<body data-ac-home="true">');
+  h=h.replace(/(<div class="copy">[\s\S]*?)<div class="kicker">[\s\S]*?<\/div>/i, '$1<div class="kicker">Servicio técnico de proximidad</div>');
+  h=h.replace(/(<div class="copy">[\s\S]*?)<ul class="checks">[\s\S]*?<\/ul>/i, '$1<ul class="checks"><li>Averías de señal</li><li>TDT y satélite</li><li>Porteros y videoporteros</li></ul>');
   h=h.replace('<strong>Trato directo con el técnico</strong>','<strong>Atención sin intermediarios</strong>');
   h=h.replace('Te atiende una persona que conoce el trabajo desde el primer contacto, sin centralitas ni intermediarios.','Hablas directamente con quien conoce el trabajo y puede orientarte desde el primer contacto.');
   h=h.replace(/<div class="brands-strip">[\s\S]*?<\/div>/i,homeBrands);
