@@ -1,3 +1,4 @@
+import {applyInteriorLayout} from './interior-content-layout.mjs';
 import {applyHomeLayout} from './home-content-layout.mjs';
 import {applyModernFooter} from './modern-footer.mjs';
 import {applyCompactContacts} from './compact-contact.mjs';
@@ -47,5 +48,6 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
   applyCompactContacts('public');
   applyModernFooter('public');
   applyHomeLayout('public');
+  applyInteriorLayout('public');
  }
 }
