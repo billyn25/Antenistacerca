@@ -79,7 +79,7 @@ function addSecondFaq(html,d,key){
 
 function replaceFirstParagraph(sectionHtml,text){return sectionHtml.replace(/<p>([\s\S]*?)<\/p>/i,`<p>${esc(text)}</p>`);}
 function rewriteSection(html,id,text){const re=new RegExp(`(<section\\b[^>]*id=["']${id}["'][^>]*>[\\s\\S]*?<\\/section>)`,'i');return html.replace(re,m=>replaceFirstParagraph(m,text));}
-function setHeroSubtitle(html){return html.replace(/(<div class="(?:copy|hero-copy)">[\s\S]*?<h1>[\s\S]*?<\/h1>\s*<h2>)[\s\S]*?(<\/h2>)/i,`$1${HERO_SUBTITLE}$2`);}
+function setHeroSubtitle(html){if(html.includes('data-ac-home="true"'))return html;return html.replace(/(<div class="(?:copy|hero-copy)">[\s\S]*?<h1>[\s\S]*?<\/h1>\s*<h2>)[\s\S]*?(<\/h2>)/i,`$1${HERO_SUBTITLE}$2`);}
 
 const homeFile=path.join(ROOT,'index.html');
 if(fs.existsSync(homeFile)){const home=setHeroSubtitle(fs.readFileSync(homeFile,'utf8'));fs.writeFileSync(homeFile,home);}
