@@ -65,7 +65,10 @@ function businessSchema(){return {'@type':'Organization','@id':`${DOMAIN}/#negoc
 function nearby(d){
   const sameProvince=d.cercanas.map(n=>byName.get(`${d.provinciaSlug}/${n.toLowerCase()}`)).filter(t=>t&&t.provinciaSlug===d.provinciaSlug&&t.slug!==d.slug);
   const links=sameProvince.map(t=>`<a href="/${t.provinciaSlug}/${t.slug}/">Antenista en ${esc(t.localidad)}</a>`).join('');
-  return `${links?`<div class="nearby-links">${links}</div>`:''}<p><a class="more" href="/${d.provinciaSlug}/">Directorio de municipios de ${esc(d.provincia)} →</a></p>`;
+  const capitals={bizkaia:'bilbao',burgos:'burgos',cantabria:'santander',leon:'leon',alava:'vitoria-gasteiz',gipuzkoa:'donostia-san-sebastian',navarra:'pamplona-iruna',asturias:'oviedo','la-rioja':'logrono',palencia:'palencia',valladolid:'valladolid',soria:'soria',zamora:'zamora',salamanca:'salamanca',segovia:'segovia'};
+  const capital=localidades.find(t=>t.provinciaSlug===d.provinciaSlug&&t.slug===capitals[d.provinciaSlug]);
+  const capitalLink=capital&&capital.slug!==d.slug&&!sameProvince.some(t=>t.slug===capital.slug)?`<p>Servicio en la capital: <a href="/${capital.provinciaSlug}/${capital.slug}/">Antenista en ${esc(capital.localidad)}</a></p>`:'';
+  return `${capitalLink}${links?`<div class="nearby-links">${links}</div>`:''}<p><a class="more" href="/${d.provinciaSlug}/">Directorio de municipios de ${esc(d.provincia)} →</a></p>`;
 }
 function schema(d){
   const url=`${DOMAIN}/${d.provinciaSlug}/${d.slug}/`;

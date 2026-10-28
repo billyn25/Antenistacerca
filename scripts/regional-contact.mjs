@@ -60,12 +60,15 @@ const assetHash=crypto.createHash('sha256').update(css+browser).digest('hex').sl
 const cssPath=`/assets/regional-contact.${assetHash}.css`,jsPath=`/assets/regional-contact.${assetHash}.js`;
 const withoutFooter=html=>html.replace(footerRE,'');
 function cleanFooter(footer){
+ // La información legal tiene contactos propios: no son botones duplicados.
+ const legal=[];
+ footer=footer.replace(/<details\b[^>]*id="ac-[^"]+"[^>]*>[\s\S]*?<\/details>/gi,block=>{legal.push(block);return `<!--AC-LEGAL-${legal.length-1}-->`;});
  let clean=footer.replace(/<section\b[^>]*data-regional-contact="v1"[^>]*>[\s\S]*?<\/section>/g,'');
  clean=clean.replace(/<a\b(?=[^>]*\bhref=["'](?:tel:|https:\/\/wa\.me\/|https:\/\/api\.whatsapp\.com\/))[^>]*>[\s\S]*?<\/a>/gi,'');
  for(const old of [...oldValues,CENTRAL.phone,CENTRAL.tel,CENTRAL.wa,'614789945'])clean=clean.replaceAll(old,'');
  clean=clean.replace(/<div>\s*<strong>Contacto<\/strong>\s*<p>\s*<\/p>\s*<\/div>/g,'')
   .replace(/Contacto y legal/g,'Información legal').replace(/<p(?:\s+class="[^"]*")?>\s*<\/p>/g,'');
- return clean.replace(/(<footer\b[^>]*>)/i,'$1'+panel());
+ return clean.replace(/<!--AC-LEGAL-(\d+)-->/g,(_,i)=>legal[Number(i)]).replace(/(<footer\b[^>]*>)/i,'$1'+panel());
 }
 function addProvinceChoice(html){
  if(!SETTINGS.formProvinces)return html;
@@ -100,8 +103,9 @@ export function auditHtml(html,route,hasFooter=true){
    const block=footer.match(new RegExp('<div class="rc-card" data-contact-zone="'+key+'">([\\s\\S]*?)</div>'))?.[1]||'';
    assert.ok(block.includes(esc(label))&&block.includes(c.phone)&&block.includes('href="tel:'+c.tel+'"')&&block.includes('href="https://wa.me/'+c.wa+'"'),route+': contacto de pie incorrecto '+key);
   }
-  assert.equal((footer.match(/href="tel:/g)||[]).length,2,route+': teléfono de pie duplicado');
-  assert.equal((footer.match(/href="https:\/\/wa.me\//g)||[]).length,2,route+': WhatsApp de pie duplicado');
+  const buttons=footer.replace(/<details\b[^>]*id="ac-[^"]+"[^>]*>[\s\S]*?<\/details>/gi,'');
+  assert.equal((buttons.match(/href="tel:/g)||[]).length,2,route+': teléfono de pie duplicado');
+  assert.equal((buttons.match(/href="https:\/\/wa.me\//g)||[]).length,2,route+': WhatsApp de pie duplicado');
  }
  const calls=[...external.matchAll(/\bhref=["']tel:([^"']+)["']/g)].map(m=>m[1]);
  const wa=[...external.matchAll(/\bhref=["']https:\/\/wa\.me\/([^?"'/]+)/g)].map(m=>m[1]);
