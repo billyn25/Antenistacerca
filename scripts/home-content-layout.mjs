@@ -22,7 +22,7 @@ export const northProvinces = [
 export function northNavigation(html){
  const links=northProvinces.filter(([slug])=>html.includes(`href="/${slug}/"`));
  assert.equal(links.length,northProvinces.length,'Faltan provincias del norte en el directorio de portada');
- return `<section class="section ac-north" id="provincias-norte" aria-labelledby="north-title"><div class="w"><h2 id="north-title">Antenistas en el norte y Castilla y León</h2><p>Elige tu provincia y después tu municipio para consultar el servicio de antenas TDT, parabólicas, porteros y videoporteros. Confirma disponibilidad y desplazamiento con el técnico.</p><nav class="towns" aria-label="Provincias del norte y Castilla y León">${links.map(([slug,name])=>`<a href="/${slug}/">${name}</a>`).join('')}</nav><p><a href="tel:+34641589394">Llamar al 641 589 394</a> · <a href="#ac-consulta">Preparar consulta por localidad</a></p></div></section>`;
+ return `<section class="section ac-north" id="provincias-norte" aria-labelledby="north-title"><div class="w"><h2 id="north-title">Antenistas en el norte y Castilla y León</h2><p>Elige tu provincia y después tu municipio para consultar el servicio de antenas TDT, parabólicas, porteros y videoporteros. Confirma disponibilidad y desplazamiento con el técnico.</p><div class="towns" role="navigation" aria-label="Provincias del norte y Castilla y León">${links.map(([slug,name])=>`<a href="/${slug}/">${name}</a>`).join('')}</div><p><a href="tel:+34641589394">Llamar al 641 589 394</a> · <a href="#ac-consulta">Preparar consulta por localidad</a></p></div></section>`;
 }
 export function layout(html){
  if(html.includes('data-ac-home-layout="v1"'))return html;
