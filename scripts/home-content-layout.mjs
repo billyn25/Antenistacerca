@@ -22,7 +22,7 @@ export const northProvinces = [
 export function northNavigation(html){
  const links=northProvinces.filter(([slug])=>html.includes(`href="/${slug}/"`));
  assert.equal(links.length,northProvinces.length,'Faltan provincias del norte en el directorio de portada');
- return `<section class="section ac-north" id="provincias-norte" aria-labelledby="north-title"><div class="w"><h2 id="north-title">Antenistas en el norte y Castilla y León</h2><p>Elige tu provincia y después tu municipio para consultar el servicio de antenas TDT, parabólicas, porteros y videoporteros. Confirma disponibilidad y desplazamiento con el técnico.</p><div class="towns" role="navigation" aria-label="Provincias del norte y Castilla y León">${links.map(([slug,name])=>`<a href="/${slug}/">${name}</a>`).join('')}</div><p><a href="tel:+34641589394">Llamar al 641 589 394</a> · <a href="#ac-consulta">Preparar consulta por localidad</a></p></div></section>`;
+ return `<section class="section ac-north" id="provincias-norte" aria-labelledby="north-title"><div class="w"><h2 id="north-title">Antenistas en el norte y Castilla y León</h2><p>Elige tu provincia y después tu municipio para consultar el servicio de antenas TDT, parabólicas, porteros y videoporteros. Confirma disponibilidad y desplazamiento con el técnico.</p><div class="towns" role="navigation" aria-label="Provincias del norte y Castilla y León">${links.map(([slug,name])=>`<a href="/${slug}/">${name}</a>`).join('')}</div><div class="ac-north-actions" role="group" aria-label="Contactar con el técnico de la zona norte"><a class="btn red" href="tel:+34641589394">Llamar al 641 589 394</a><a class="btn ac-north-consult" href="#ac-consulta">Consultar por localidad</a></div></div></section>`;
 }
 export function layout(html){
  if(html.includes('data-ac-home-layout="v1"'))return html;
@@ -43,8 +43,14 @@ export function layout(html){
  for(const re of [/<link\b[^>]*rel="canonical"[^>]*>/,/<meta\b[^>]*name="robots"[^>]*>/,/<header\b[\s\S]*?<\/header>/,/<div class="mobilebar"[\s\S]*?<\/div>/])assert.equal(output.match(re)?.[0],html.match(re)?.[0]);
  return output;
 }
-// Una única escala de lectura para la portada; no afecta a municipios.
+// Escala compartida por portada e interiores; mantiene el contenido y los metadatos.
 export const HOME_TYPOGRAPHY=`<style id="ac-home-typography">
+#provincias-norte .ac-north-actions{display:flex;flex-wrap:wrap;align-items:stretch;gap:12px;margin:24px 0 0}
+#provincias-norte .ac-north-actions .btn{box-sizing:border-box;min-height:48px;padding:13px 18px;font-size:16px;line-height:1.35;text-align:center;white-space:normal;font-weight:700}
+#provincias-norte .ac-north-actions .ac-north-consult{background:#eef5fa;border:1px solid #bfd0df;color:#0a3f73!important}
+#provincias-norte .ac-north-actions .btn:focus-visible{outline:3px solid #0a3f73;outline-offset:3px}
+@media(max-width:640px){#provincias-norte .ac-north-actions{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:20px}#provincias-norte .ac-north-actions .btn{width:100%;min-width:0}}
+
 body[data-ac-home-type]{font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;font-weight:400}
 body[data-ac-home-type] :is(h1,h2,h3,h4,p,a,span,strong,b,small,summary,label,input,select,textarea,button){font-family:inherit}
 body[data-ac-home-type] :is(button,input,select,textarea){font-family:Arial,Helvetica,sans-serif}
