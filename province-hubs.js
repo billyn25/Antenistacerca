@@ -84,6 +84,7 @@ for(const [slug,p] of groups){
   const file=path.join('public',slug,'index.html');
   if(!fs.existsSync(file)) throw new Error(`Province hubs: falta ${file}`);
   let h=fs.readFileSync(file,'utf8');
+  if(!['madrid','toledo','guadalajara'].includes(slug))h=h.replace(`<h1>Técnicos de antenas en ${esc(p.name)}</h1>`,`<h1>Servicio de antenas en la provincia de ${esc(p.name)}</h1>`);
   h=h.replace(/<style id="province-hub-css">[\s\S]*?<\/style>/i,'');
   h=h.replace(/<!-- PROVINCE-HUB-START -->[\s\S]*?<!-- PROVINCE-HUB-END -->/i,'');
   // Sustituimos el listado plano original por el hub mejorado, para que sea visible donde ya estaba la lista.

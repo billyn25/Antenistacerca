@@ -31,7 +31,7 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
  testFooter();
  if(process.argv.includes('--self-test')){console.log('PIES PROVINCIALES OK: contenido preservado, sin duplicados');}
  else {
-  const checks=spawnSync(process.execPath,['--test','tests/madrid-district-design.test.mjs','tests/madrid-seo-boost.test.mjs','tests/mobile-experience.test.mjs'],{stdio:'inherit'});
+  const checks=spawnSync(process.execPath,['--test','tests/north-seo.test.mjs','tests/madrid-district-design.test.mjs','tests/madrid-seo-boost.test.mjs','tests/mobile-experience.test.mjs'],{stdio:'inherit'});
   if(checks.error)throw checks.error;if(checks.status!==0)process.exit(checks.status||1);
   applyDistrictDesign('public');
   applyBoost('public');
