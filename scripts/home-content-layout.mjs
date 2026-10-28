@@ -43,5 +43,34 @@ export function layout(html){
  for(const re of [/<link\b[^>]*rel="canonical"[^>]*>/,/<meta\b[^>]*name="robots"[^>]*>/,/<header\b[\s\S]*?<\/header>/,/<div class="mobilebar"[\s\S]*?<\/div>/])assert.equal(output.match(re)?.[0],html.match(re)?.[0]);
  return output;
 }
-export function applyHomeLayout(root='public') {const file=path.join(root,'index.html');fs.writeFileSync(file,layout(fs.readFileSync(file,'utf8')));console.log('PORTADA OK: servicios, soluciones de canales, profesionales, atención, consulta y localidades agrupados.');}
+// Una única escala de lectura para la portada; no afecta a municipios.
+export const HOME_TYPOGRAPHY=`<style id="ac-home-typography">
+body[data-ac-home-type]{font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;font-weight:400}
+body[data-ac-home-type] :is(h1,h2,h3,h4,p,a,span,strong,b,small,summary,label,input,select,textarea,button){font-family:inherit}
+body[data-ac-home-type] :is(button,input,select,textarea){font-family:Arial,Helvetica,sans-serif}
+body[data-ac-home-type] main h1{font-size:48px!important;line-height:1.12!important;font-weight:700!important;letter-spacing:-.02em!important}
+body[data-ac-home-type] main h2,body[data-ac-home-type] footer.ac-modern-footer h2{font-size:30px!important;line-height:1.25!important;font-weight:700!important;letter-spacing:-.01em!important}
+body[data-ac-home-type] main h3{font-size:20px!important;line-height:1.35!important;font-weight:700!important;letter-spacing:normal}
+body[data-ac-home-type] main h4{font-size:17px;line-height:1.4;font-weight:700}
+body[data-ac-home-type] main :is(p,li){font-size:16px;line-height:1.6;font-weight:400}
+body[data-ac-home-type] main :is(.service-grid p,.home-brands-intro){font-size:14px;line-height:1.6}
+body[data-ac-home-type] main :is(.ac-pro-note,.home-brand,.home-brand-title,.trust-points span){font-size:13px;line-height:1.5}
+body[data-ac-home-type] :is(strong,b,.btn,.tel,.home-brand,.home-brand-title,.trust-phone,.ac-quick-submit,.ac-foot-cta,.ac-header-urgent,.ac-menu-toggle,.ac-foot-eyebrow,.home-brands-kicker){font-weight:700!important}
+body[data-ac-home-type] :is(.kicker,.home-brands-kicker,.ac-foot-eyebrow){font-size:12px;font-weight:700;letter-spacing:.08em}
+body[data-ac-home-type] .brand small{font-style:normal;font-family:Arial,Helvetica,sans-serif}
+body[data-ac-home-type] main .hero :is(.copy,.hero-copy)>h2{font-size:20px!important;line-height:1.5!important;font-weight:400!important;letter-spacing:normal!important}
+body[data-ac-home-type] main :is(.btn,.ac-quick-submit){font-size:16px;line-height:1.3}
+@media(max-width:640px){
+body[data-ac-home-type] main h1{font-size:34px!important}
+body[data-ac-home-type] main h2,body[data-ac-home-type] footer.ac-modern-footer h2{font-size:24px!important}
+body[data-ac-home-type] main h3{font-size:18px!important}
+body[data-ac-home-type] main .hero :is(.copy,.hero-copy)>h2{font-size:18px!important}
+}
+</style>`;
+export function homeTypography(html){
+ if(html.includes('id="ac-home-typography"'))return html;
+ assert(/<body\b/i.test(html)&&/<\/head>/i.test(html),'Portada incompleta');
+ return html.replace(/<body\b/i,'<body data-ac-home-type="v1"').replace('</head>',HOME_TYPOGRAPHY+'</head>');
+}
+export function applyHomeLayout(root='public') {const file=path.join(root,'index.html');fs.writeFileSync(file,homeTypography(layout(fs.readFileSync(file,'utf8'))));console.log('PORTADA OK: servicios, soluciones de canales, profesionales, atención, consulta y localidades agrupados.');}
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)applyHomeLayout();
