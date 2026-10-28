@@ -59,7 +59,7 @@ test('six guide pages have correct distinct canonicals schema and no inherited c
  for(const s of services){const result=servicePage(fixture(),s,origin),url=origin+serviceRoute(s);
  assert.ok(result.includes(`<link rel="canonical" href="${url}">`));assert.ok(result.includes(`<h1>${s.title}</h1>`));
  assert.equal(ids(result).length,new Set(ids(result)).size);assert.equal((result.match(/<h1>/g)||[]).length,1);
- const service=graph(result).find(n=>n['@type']==='Service');assert.equal(service.url,url);assert.equal(service.telephone,'+34614789945');assert.equal(service.name,s.title);
+ const service=graph(result).find(n=>n['@type']==='Service');assert.equal(service.url,url);assert.equal(Object.hasOwn(service,'telephone'),false);assert.equal(graph(result).find(n=>n['@type']==='Organization').telephone,'+34614789945');assert.equal(service.name,s.title);
  assert.ok(!JSON.stringify(graph(result)).includes('AggregateRating'));assert.ok(!JSON.stringify(graph(result)).includes('streetAddress'));
  for(const id of ['servicios','zona','faq','contacto'])assert.ok(ids(result).includes(id));
  assert.equal(get(result,/<footer>[\s\S]*?<\/footer>/),get(fixture(),/<footer>[\s\S]*?<\/footer>/));

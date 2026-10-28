@@ -149,7 +149,7 @@ export function servicePage(source,s,origin){
  const graph={'@context':'https://schema.org','@graph':[
   {'@type':'Organization','@id':origin+'/#negocio',name:'Antenista Cerca',url:origin+'/',telephone:TEL},
   {'@type':'WebPage','@id':url+'#pagina',url,name:title,description:s.description,inLanguage:'es',mainEntity:{'@id':url+'#servicio'},isPartOf:{'@id':origin+'/#website'}},
-  {'@type':'Service','@id':url+'#servicio',url,name:s.title,description:s.intro,serviceType:s.label,telephone:TEL,provider:{'@id':origin+'/#negocio'},areaServed:{'@type':'AdministrativeArea',name:'Comunidad de Madrid'}},
+  {'@type':'Service','@id':url+'#servicio',url,name:s.title,description:s.intro,serviceType:s.label,provider:{'@id':origin+'/#negocio'},areaServed:{'@type':'AdministrativeArea',name:'Comunidad de Madrid'}},
   {'@type':'BreadcrumbList',itemListElement:crumbs.map((c,i)=>({'@type':'ListItem',position:i+1,name:c.name,item:origin+c.route}))}
  ]};
  assert.equal([...html.matchAll(schemaRE)].length,1,'La plantilla debe tener un JSON-LD único');

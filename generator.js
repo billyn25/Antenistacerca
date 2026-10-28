@@ -75,7 +75,7 @@ function schema(d){
   return JSON.stringify({'@context':'https://schema.org','@graph':[
     businessSchema(),
     {'@type':'WebPage','@id':`${url}#pagina`,url,name:`Antenista en ${d.localidad} | Reparación e instalación`,description:d.descripcion,about:{'@id':`${DOMAIN}/#negocio`}},
-    {'@type':'Service','@id':`${url}#servicio`,name:`Antenista, reparación e instalación de antenas en ${d.localidad}`,provider:{'@id':`${DOMAIN}/#negocio`},telephone:TEL,serviceType:['Instalación y reparación de antenas individuales y colectivas','Antenas TDT','Antenas parabólicas','TDT por satélite HD','Reparación de antenas y amplificadores de antena','Cabeceras y módulos monocanal','Instalación, reparación y renovación de porteros automáticos y videoporteros','Antenas de telefonía móvil','Reparaciones eléctricas en el hogar','Urgencias 24 horas'],areaServed:{'@type':'AdministrativeArea',name:d.localidad}},
+    {'@type':'Service','@id':`${url}#servicio`,name:`Antenista, reparación e instalación de antenas en ${d.localidad}`,provider:{'@id':`${DOMAIN}/#negocio`},serviceType:['Instalación y reparación de antenas individuales y colectivas','Antenas TDT','Antenas parabólicas','TDT por satélite HD','Reparación de antenas y amplificadores de antena','Cabeceras y módulos monocanal','Instalación, reparación y renovación de porteros automáticos y videoporteros','Antenas de telefonía móvil','Reparaciones eléctricas en el hogar','Urgencias 24 horas'],areaServed:{'@type':'AdministrativeArea',name:d.localidad}},
     {'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'Inicio',item:`${DOMAIN}/`},{'@type':'ListItem',position:2,name:d.provincia,item:`${DOMAIN}/${d.provinciaSlug}/`},{'@type':'ListItem',position:3,name:d.localidad,item:url}]}
   ]});
 }
