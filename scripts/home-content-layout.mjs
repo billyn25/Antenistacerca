@@ -11,6 +11,19 @@ export function sections(main){
  }
  assert.equal(depth,0,'Secciones desequilibradas');return result;
 }
+// Enlaces a las provincias ya presentes en el directorio; no crea nuevas zonas.
+export const northProvinces = [
+ ['bizkaia','Bizkaia'],['burgos','Burgos'],['cantabria','Cantabria'],
+ ['alava','Álava'],['gipuzkoa','Gipuzkoa'],['navarra','Navarra'],
+ ['asturias','Asturias'],['la-rioja','La Rioja'],['leon','León'],
+ ['palencia','Palencia'],['valladolid','Valladolid'],['soria','Soria'],
+ ['zamora','Zamora'],['salamanca','Salamanca'],['segovia','Segovia']
+];
+export function northNavigation(html){
+ const links=northProvinces.filter(([slug])=>html.includes(`href="/${slug}/"`));
+ assert.equal(links.length,northProvinces.length,'Faltan provincias del norte en el directorio de portada');
+ return `<section class="section ac-north" id="provincias-norte" aria-labelledby="north-title"><div class="w"><h2 id="north-title">Antenistas en el norte y Castilla y León</h2><p>Elige tu provincia y después tu municipio para consultar el servicio de antenas TDT, parabólicas, porteros y videoporteros. Confirma disponibilidad y desplazamiento con el técnico.</p><nav class="towns" aria-label="Provincias del norte y Castilla y León">${links.map(([slug,name])=>`<a href="/${slug}/">${name}</a>`).join('')}</nav><p><a href="tel:+34641589394">Llamar al 641 589 394</a> · <a href="#ac-consulta">Preparar consulta por localidad</a></p></div></section>`;
+}
 export function layout(html){
  if(html.includes('data-ac-home-layout="v1"'))return html;
  const main=html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);assert(main);
@@ -23,7 +36,7 @@ export function layout(html){
  const about='<section class="ac-about" aria-label="Cómo trabajamos">'+local+trust+'</section>';
  const consultation=quick.replace('<div class="ac-quick-wrap">','<div class="ac-quick-wrap" id="contacto">');
  // El resumen estadístico repetía atención directa/24 horas y contaba nueve servicios de forma fija.
- let output=html.replace(quick,'').replace(main[0],'<main data-ac-home-layout="v1">'+hero+services+solutions+professional+about+consultation+madrid+zones+'</main>');
+ let output=html.replace(quick,'').replace(main[0],'<main data-ac-home-layout="v1">'+hero+northNavigation(zones)+services+solutions+professional+about+consultation+madrid+zones+'</main>');
  for(const id of ['servicios','zonas','contacto','ac-consulta','instalaciones-profesionales','soluciones-canales'])assert.equal((output.match(new RegExp('id="'+id+'"','g'))||[]).length,1,'Ancla duplicada o ausente: '+id);
  assert.equal(output.match(/<h1\b/g)?.length,1);
  for(const image of [...html.matchAll(/<img\b[^>]*>/g)].map(x=>x[0]))assert(output.includes(image),'Imagen eliminada');
