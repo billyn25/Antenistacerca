@@ -46,7 +46,7 @@ function finalizeTown(d){
   let h=fs.readFileSync(file,'utf8');
   const v=hash(`${d.provinciaSlug}/${d.slug}`)%townHeadings.length;
   h=ensureTownStyles(h);
-  h=h.replace(`<div class="kicker">Técnico de antenas en ${d.localidad}</div>`,'<div class="kicker">Hoy estamos cerca de tu casa</div>');
+  h=h.replace(`<div class="kicker">Técnico de antenas en ${d.localidad}</div>`,`<div class="kicker">Antenas y porteros en ${d.provincia}</div>`);
   h=h.replace(/(<div class="hero-copy">[\s\S]*?<h1>[\s\S]*?<\/h1>\s*<h2>)[\s\S]*?(<\/h2>)/i,`$1${SUBTITLE}$2`);
   if(!h.includes('class="old-doorphones"')){
     h=h.replace(/(<section class="band" id="porteros">[\s\S]*?<h2>Instalación, reparación y renovación de porteros automáticos y videoporteros en [^<]+<\/h2>[\s\S]*?<p>[^<]*<\/p>)/i,`$1${doorphoneGallery(d)}`);

@@ -67,10 +67,10 @@ const secondFaqVariants=[
 (d)=>[`¿Atendéis antenas parabólicas en ${d.localidad}?`,`Sí. Se puede revisar orientación, fijaciones, LNB, conectores y cableado, además de la distribución interior cuando la señal de satélite no llega correctamente.`]
 ];
 function usefulLocalBlock(d,key){
-  const comarca=String(d.comarca||'').trim();
-  const context=comarca?` en la zona de ${comarca}, ${d.provincia}`:` en ${d.provincia}`;
+  const sameName=(a,b)=>a.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()===b.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  const context=sameName(d.localidad,d.provincia)?'':`, ${d.provincia}`;
   const text=pick(usefulVariants,key,'util')(d);
-  return `<section class="band local-value" id="preparar-aviso"><div class="wrap detail"><div><div class="kicker">Preparar la revisión</div><h2>Antes de pedir asistencia técnica en ${esc(d.localidad)}</h2><p>${esc(text)}</p><p>La página corresponde al servicio en ${esc(d.localidad)}${esc(context)}. El teléfono de contacto es <a href="tel:+34641589394">641 589 394</a>.</p></div><aside class="help"><strong>Información útil</strong><span>Localidad, tipo de instalación, síntoma y a cuántos puntos o viviendas afecta.</span><a href="tel:+34641589394">Llamar 641 589 394</a></aside></div></section>`;
+  return `<section class="band local-value" id="preparar-aviso"><div class="wrap detail"><div><div class="kicker">Preparar la revisión</div><h2>Antes de pedir asistencia técnica en ${esc(d.localidad)}</h2><p>${esc(text)}</p><p>Servicio en ${esc(d.localidad)}${esc(context)}. Teléfono de contacto: <a href="tel:+34641589394">641 589 394</a>.</p></div><aside class="help"><strong>Información útil</strong><span>Localidad, tipo de instalación, síntoma y a cuántos puntos o viviendas afecta.</span><a href="tel:+34641589394">Llamar 641 589 394</a></aside></div></section>`;
 }
 function addSecondFaq(html,d,key){
   const pair=pick(secondFaqVariants,key,'faq2')(d);

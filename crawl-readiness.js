@@ -2,17 +2,20 @@ import fs from 'node:fs';
 import path from 'node:path';
 import localidades from './src/localidades.json' with { type: 'json' };
 import {madridDistricts} from './src/madrid-districts.mjs';
+import services from './content/madrid-services.json' with {type:'json'};
 
 const ROOT='public';
 const DOMAIN='https://antenistacerca.es';
 const OLD_DOMAIN='https://www.antenistacerca.es';
+const finalOutput=process.argv.includes('--final');
+const serviceUrls=finalOutput?services.map(s=>`${DOMAIN}/madrid/servicios/${s.slug}/`):[];
 const errors=[];
 const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
 
 if(!fs.existsSync(ROOT)) throw new Error('CRAWL: falta public/');
 const htmlFiles=walk(ROOT).filter(f=>f.endsWith('.html'));
 const provinceSlugs=[...new Set(localidades.map(x=>x.provinciaSlug))].sort((a,b)=>a.localeCompare(b,'es'));
-const expectedCount=localidades.length+madridDistricts.length+provinceSlugs.length+1;
+const expectedCount=localidades.length+madridDistricts.length+provinceSlugs.length+serviceUrls.length+1;
 
 if(localidades.length<1000) errors.push(`dataset demasiado pequeño para producción: ${localidades.length} localidades`);
 if(htmlFiles.length!==expectedCount) errors.push(`HTML=${htmlFiles.length}; esperados=${expectedCount}`);
@@ -29,6 +32,8 @@ for(const file of htmlFiles){
     canonicals.push(canon[0]);
     if(!canon[0].startsWith(DOMAIN+'/')) errors.push(`${rel}: canonical fuera del dominio final`);
     if(canon[0].startsWith(OLD_DOMAIN)) errors.push(`${rel}: canonical usa www`);
+    const route='/'+rel.replace(/index\.html$/,'');
+    if(canon[0]!==DOMAIN+route) errors.push(`${rel}: canonical no corresponde a su ruta`);
   }
   if(h.includes(OLD_DOMAIN)) errors.push(`${rel}: referencia al dominio www antiguo`);
   if(/<meta\s+http-equiv=["']refresh["']/i.test(h)) errors.push(`${rel}: meta refresh detectado`);
@@ -43,7 +48,7 @@ else {
   const xml=fs.readFileSync(sitemapFile,'utf8');
   if(!xml.includes('<sitemapindex')) errors.push('sitemap.xml no es un sitemap index');
   if(xml.includes(OLD_DOMAIN)) errors.push('sitemap index contiene www');
-  const children=[...xml.matchAll(/<sitemap>\s*<loc>([^<]+)<\/loc>\s*<\/sitemap>/g)].map(m=>m[1]);
+  const children=[...xml.matchAll(/<sitemap>\s*<loc>([^<]+)<\/loc>(?:\s*<lastmod>[^<]+<\/lastmod>)?\s*<\/sitemap>/g)].map(m=>m[1]);
   if(children.length!==provinceSlugs.length+1) errors.push(`sitemap index=${children.length} hijos; esperados=${provinceSlugs.length+1}`);
   if(new Set(children).size!==children.length) errors.push('sitemap index con hijos duplicados');
 
@@ -59,7 +64,7 @@ else {
     const childXml=fs.readFileSync(file,'utf8');
     if(!childXml.includes('<urlset')) errors.push(`${rel}: no es urlset`);
     if(childXml.includes(OLD_DOMAIN)) errors.push(`${rel}: contiene www`);
-    const urls=[...childXml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<\/url>/g)].map(m=>m[1]);
+    const urls=[...childXml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>(?:\s*<lastmod>[^<]+<\/lastmod>)?\s*<\/url>/g)].map(m=>m[1]);
     if(new Set(urls).size!==urls.length) errors.push(`${rel}: URLs duplicadas`);
     if(urls.some(u=>!u.startsWith(DOMAIN+'/'))) errors.push(`${rel}: URL fuera del dominio final`);
     allSitemapUrls.push(...urls);
@@ -78,7 +83,7 @@ else {
     const xmlProvince=fs.readFileSync(file,'utf8');
     const urls=[...xmlProvince.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
     const towns=localidades.filter(x=>x.provinciaSlug===slug);
-    const expected=new Set([`${DOMAIN}/${slug}/`,...towns.map(t=>`${DOMAIN}/${slug}/${t.slug}/`),...(slug==='madrid'?madridDistricts.map(d=>`${DOMAIN}${d.route}`):[])]);
+    const expected=new Set([`${DOMAIN}/${slug}/`,...towns.map(t=>`${DOMAIN}/${slug}/${t.slug}/`),...(slug==='madrid'?[...madridDistricts.map(d=>`${DOMAIN}${d.route}`),...serviceUrls]:[])]);
     if(urls.length!==expected.size) errors.push(`sitemap-${slug}: ${urls.length} URLs; esperadas ${expected.size}`);
     for(const url of expected) if(!urls.includes(url)) errors.push(`sitemap-${slug}: falta ${url}`);
     for(const url of urls) if(!expected.has(url)) errors.push(`sitemap-${slug}: URL inesperada ${url}`);
@@ -103,7 +108,11 @@ else {
 }
 
 const home=fs.readFileSync(path.join(ROOT,'index.html'),'utf8');
-const homeTownLinks=[...home.matchAll(/href=["']\/(?:[^"'\/]+)\/(?:[^"'\/]+)\/["']/g)].length;
+const municipalRoutes=new Set(localidades.map(d=>`/${d.provinciaSlug}/${d.slug}/`));
+// El límite corresponde al directorio; otros bloques pueden enlazar un servicio municipal.
+const homeDirectory=home.match(/<section\b[^>]*\bid=["']zonas["'][^>]*>[\s\S]*?<\/section>/i)?.[0]||'';
+if(!homeDirectory)errors.push('portada: falta el directorio de zonas');
+const homeTownLinks=new Set([...homeDirectory.matchAll(/href=["'](\/[^"'\/]+\/[^"'\/]+\/)["']/g)].map(m=>m[1]).filter(url=>municipalRoutes.has(url))).size;
 const maxHomeTownLinks=provinceSlugs.length*16;
 if(homeTownLinks>maxHomeTownLinks) errors.push(`portada: demasiados enlaces municipales directos (${homeTownLinks}); máximo previsto=${maxHomeTownLinks}`);
 if(/class=["']town-more(?:-links)?["']/.test(home)) errors.push('portada: vuelve a incluir el censo completo de municipios; debe vivir en los hubs provinciales');
@@ -125,4 +134,4 @@ if(errors.length){
   process.exit(1);
 }
 
-console.log(`CRAWL READINESS OK: ${localidades.length} localidades, ${madridDistricts.length} distritos Madrid, ${provinceSlugs.length} provincias, ${htmlFiles.length} HTML indexables, sitemap index + sitemaps provinciales completos, robots abierto, canonicals únicos y enlazado provincial completo.`);
+console.log(`CRAWL READINESS${finalOutput?' FINAL':''} OK: ${localidades.length} localidades, ${madridDistricts.length} distritos Madrid, ${provinceSlugs.length} provincias, ${serviceUrls.length} guías de servicio, ${htmlFiles.length} HTML indexables, sitemap index + sitemaps provinciales completos, robots abierto, canonicals únicos y enlazado provincial completo.`);

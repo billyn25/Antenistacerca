@@ -1,10 +1,10 @@
 {
-  "reviewed": "2026-10-21",
-  "reference_label": "21/10/2026 · antes de la reorganización de noviembre",
+  "reviewed": "2026-11-18",
+  "reference_label": "18/11/2026 · tras la reorganización de noviembre",
   "coverage": "Ejemplos de cadenas estatales, no relación exhaustiva. La asignación RF procede del área del municipio; no acredita recepción en una dirección.",
   "sources": {
     "operators": "https://television.digital.gob.es/television-digital/tdt/canales-tdt",
-    "historic_groups": "https://television.digital.gob.es/content/dam/televisiondigital/novedades/documents/2014-10-21_Configuracion_canales_TDT_%2026_octubre.pdf",
+    "rtve_uhd": "https://www.rtve.es/rtve/20261005/rtve-prepara-nueva-etapa-tdt-2-ultra-alta-definicion-rne-accesible/17254282.shtml",
     "changes": "https://television.digital.gob.es/atencion-a-la-ciudadania/notas-prensa/tdt/guia-facil-para-la-resintonizacion-de-la-tdt--todos-los-cambios-",
     "resolution": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-16750"
   },
@@ -13,23 +13,26 @@
       "examples": [
         "La 1 HD",
         "La 2 HD",
-        "24h HD"
+        "24h HD",
+        "Clan HD"
       ],
-      "change": "Clan tiene anunciado su traslado a RGE1 el 3 de noviembre de 2026."
+      "change": "Clan se incorpora a RGE1 desde el 3 de noviembre de 2026."
     },
     "RGE2": {
       "examples": [
-        "Clan HD",
-        "DKISS HD"
+        "La 1 UHD",
+        "La 2 UHD",
+        "Antena 3 UHD",
+        "Telecinco UHD"
       ],
-      "change": "El 5 de noviembre de 2026 está previsto el paso de RGE2 a DVB-T2 para emisiones UHD; Clan y DKISS cambian de múltiple."
+      "change": "Desde el 5 de noviembre de 2026, RGE2 utiliza DVB-T2 para emisiones UHD; Clan está en RGE1 y DKISS en MPE5."
     },
     "MPE1": {
       "examples": [
         "DMAX",
         "Veo 7",
         "Squirrel",
-        "Squirrel 2"
+        "Squirrel Dos"
       ],
       "change": ""
     },
@@ -38,18 +41,20 @@
         "Antena 3 HD",
         "laSexta HD",
         "Neox HD",
-        "Nova HD"
+        "Nova HD",
+        "Atreseries HD"
       ],
-      "change": "Atreseries tiene anunciado su traslado a MPE2 el 5 de noviembre de 2026."
+      "change": "Atreseries está en MPE2 desde el 5 de noviembre de 2026."
     },
     "MPE3": {
       "examples": [
         "Telecinco HD",
         "Cuatro HD",
         "FDF HD",
-        "Divinity HD"
+        "Divinity HD",
+        "Be Mad HD"
       ],
-      "change": "Be Mad tiene anunciado su traslado a MPE3 el 5 de noviembre de 2026."
+      "change": "Be Mad está en MPE3 desde el 5 de noviembre de 2026."
     },
     "MPE4": {
       "examples": [
@@ -59,12 +64,12 @@
     },
     "MPE5": {
       "examples": [
-        "Atreseries HD",
-        "Be Mad HD",
+        "DKISS HD",
         "Real Madrid TV",
-        "TEN"
+        "TEN",
+        "La Séptima HD"
       ],
-      "change": "El 5 de noviembre de 2026 están previstos los traslados de Atreseries y Be Mad a otros múltiples, la llegada de DKISS y el inicio de La Séptima."
+      "change": "Desde el 5 de noviembre de 2026, MPE5 incorpora DKISS y La Séptima; Atreseries pasa a MPE2 y Be Mad a MPE3."
     }
   }
 }

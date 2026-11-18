@@ -49,5 +49,12 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
   applyModernFooter('public');
   applyHomeLayout('public');
   applyInteriorLayout('public');
+  // Validar lo que se publicará, incluidas las guías y fechas añadidas después del primer audit.
+  // Las vistas previas conservan su bloqueo de indexación.
+  if(/^Allow:\s*\/$/mi.test(fs.readFileSync('public/robots.txt','utf8'))){
+   const finalCrawl=spawnSync(process.execPath,['crawl-readiness.js','--final'],{stdio:'inherit'});
+   if(finalCrawl.error)throw finalCrawl.error;
+   if(finalCrawl.status!==0)process.exit(finalCrawl.status||1);
+  }
  }
 }
