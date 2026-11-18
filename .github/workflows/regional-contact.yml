@@ -11,7 +11,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    # Playwright 1.56.1 admite Ubuntu 24.04; evitar cambios de SO al mover ubuntu-latest.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
       CONTEXT: production
